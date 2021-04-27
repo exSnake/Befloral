@@ -28,7 +28,7 @@
 	
 	<!-- BIG PHOTO OF STORE -->
 	<p>BIG PHOTO</p>
-	<img alt="BIG PHOTO OF STORE" src="images/bigLogPage.jpeg" width="1024" height="860">
+	<img alt="BIG PHOTO OF STORE" src="<c:url value='/images/bigLogPage.jpeg'/>" width="1024" height="860">
 	<img alt="BIG PHOTO OF STORE" src="<%=getServletContext().getContextPath()%>/images/bigLogPage.jpeg" width="1024" height="860">
 
 	<br>

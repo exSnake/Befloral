@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class HomeServlet
  */
-@WebServlet("/")
+@WebServlet("/Home")
 public class HomeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -21,6 +21,7 @@ public class HomeServlet extends HttpServlet {
      */
     public HomeServlet() {
         super();
+        System.out.println("init");
         // TODO Auto-generated constructor stub
     }
 
@@ -28,8 +29,10 @@ public class HomeServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("test");
 		RequestDispatcher dispatcher = getServletContext()
                 .getRequestDispatcher("/WEB-INF/views/index.jsp");
+		
         dispatcher.forward(request, response);
 	}
 
