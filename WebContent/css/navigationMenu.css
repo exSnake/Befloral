@@ -1,13 +1,16 @@
 @charset "ISO-8859-1";
 
+
+
 ul{
   justify-content: center;
   display: flex; 
   list-style-type: none;
-  margin: 0;
-  padding: 0;
+  margin : 0;
+  padding: 15;
   overflow: hidden;
   background-color: #333333;
+
 }
 
 li {
@@ -27,6 +30,11 @@ li a:hover {
 }
 
 
+
+
+
+
+
 .divCopyright {
 	background-color:#252525;
 	font-size: 20px; 
@@ -36,6 +44,41 @@ li a:hover {
 	padding: 16px; 
 	text-decoration: none;	
 }
+
+
+
+.divImage {
+    object-fit: fill;
+    object-position: 100% 0;
+	width: 1475;
+	height: 500;
+    overflow: hidden;
+}
+
+.cropped {
+	width: 1475;
+	height: 500;
+    overflow: hidden;
+
+}
+
+
+.imgRotate {
+
+transform:rotate(45deg);
+
+-ms-transform: rotate(90deg); /* IE 9 */
+
+-webkit-transform: rotate(90deg); /* Safari e Chrome */
+
+}
+
+
+
+
+
+
+
 
 
 

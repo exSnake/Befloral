@@ -3,9 +3,11 @@
 
 <html>
 	<head>
-		<%-- Load a css file --%>
-		<style><%@include file="/css/navigationMenu.css"%></style>
-		
+
+<%-- Including a stylesheet <style><%@include file="/css/navigationMenu.css"%></style> --%>
+<%-- Including a stylesheet  --%>
+<style><%@include file="/css/anchorBefloral.css"%></style>
+
 	</head>
 </html>
 
@@ -15,9 +17,9 @@
 	<div style="padding: 0">
 	
  	<ul>	
-		<li><a href="#facebook">Facebook</a></li>
-		<li><a href="#twitter">Twitter</a></li>
-		<li><a href="#instagram">Instagram</a></li>		
+		<li><a href="#facebook"><i class="fab fa-facebook fa-2x"></i><br>Facebook</a></li>
+		<li><a href="#twitter"><i class="fab fa-twitter fa-2x"></i><br>Twitter</a></li>
+		<li><a href="#instagram"><i class="fab fa-instagram fa-2x"></i><br>Instagram</a></li>		
 	</ul>
 	
 	</div>
@@ -25,7 +27,7 @@
  
   <!-- Copyright -->
 	<div class="divCopyright" ">© 2021 Copyright:
-		<a href="#Home">Befloral.com</a>
+		<a class="anchorBefloral" href="/befloral">Befloral.com</a>
 	</div>	
 	
 	

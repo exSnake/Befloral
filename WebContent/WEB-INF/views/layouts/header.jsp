@@ -3,46 +3,61 @@
 
 <html>
 	<head>
-		<%-- Load a css file --%>
-		<style><%@include file="/css/navigationMenu.css"%></style>
+	
+<%-- Including a stylesheet <style><%@include file="/css/navigationMenu.css"%></style> --%>
 		
 	</head>
 </html>
 
 <body>
 
-
-  
   <!-- Navbar -->
   
-	<ul  >
+  
+  <!-- fristBar -->
+<div>
+	<ul>
 	
-		<li style="top: 0;left: 0;"><a><img alt="LOGO" src="images/logoHorizzontal.jpg"></a> </li>
-		<li><a href="#products">Products</a></li>
-		<li><a href="#cart">Cart</a></li>
-		<li><a href="#login">Login</a></li>
+		<!-- Logo -->
+		<li style="float: left; position: relative;   " >
+		<a "><img alt="LOGO" src="images/logoHorizzontal-removebg.png" width="60" height="60"></a> 
+		</li>
+		<!-- Logo -->
+		
+		<!-- search bar -->
+		<li style=" height: 300%; "> 
+		 
+		 <form action="/action_page.php">
+	      	<input type="text" placeholder="Search.." name="search" size="120">
+	      	<button style="padding-top: 20px;"type="submit"><i class="fas fa-search fa-2x"></i></button>
+   		 </form>
+		
+		</li>
+		<!-- search bar -->
+		
+		<!-- Products/Cart/Login -->
+		<li><a href="#products"><i class="fas fa-store fa-2x"></i><br>Products</a></li>
+		<li><a href="#cart"><i class="fas fa-shopping-cart fa-2x"></i><br>Cart</a></li>
+		<li><a href="#login"><i class="fas fa-sign-in-alt fa-2x"></i><br>Login</a></li>
+		<!-- Products/Cart/Login -->
 		
 	</ul>
-
-	<br>
-	
-	<!-- BIG PHOTO OF STORE -->
-	<p>BIG PHOTO</p>
-	<img alt="BIG PHOTO OF STORE" src="<c:url value='/images/bigLogPage.jpeg'/>" width="1024" height="860">
-	<img alt="BIG PHOTO OF STORE" src="<%=getServletContext().getContextPath()%>/images/bigLogPage.jpeg" width="1024" height="860">
-
-	<br>
-<div>	
+</div >	
+  <!-- fristBar -->
+		
+		
+  <!-- secondBar -->				
+<div >	
 	<ul>
-		<li><a href="#contact">Contact</a></li>
-		<li><a href="#news">News</a></li>		
-		<li><a href="#about">About</a></li>
+		<li><a style="mix-blend-mode: hard-light;" href="#contact"><i class="fab fa-weixin fa-2x"></i><br></i>Contact</a></li>
+		<li><a href="#news"><i class="far fa-newspaper fa-2x "></i><br>News</a></li>		
+		<li><a href="#about"><i class="fas fa-child fa-2x "></i><br>About Us</a></li>
 	</ul>
-
-
-  <!-- Navbar -->
-  
-  
 </div>
+  <!-- secondBar -->
+  
+
+
+   <!-- Navbar -->
 
  </body>
