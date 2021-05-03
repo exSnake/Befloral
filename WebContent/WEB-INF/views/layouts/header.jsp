@@ -27,7 +27,7 @@
 		<!-- search bar -->
 		<li style=" height: 300%; "> 
 		 
-		 <form action="/action_page.php">
+		 <form action="ActionPage">
 	      	<input type="text" placeholder="Search.." name="search" size="120">
 	      	<button style="padding-top: 20px;"type="submit"><i class="fas fa-search fa-2x"></i></button>
    		 </form>

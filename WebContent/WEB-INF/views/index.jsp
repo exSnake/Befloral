@@ -15,7 +15,7 @@
 
 <%-- Load a css file --%>
 <style><%@include file="/css/navigationMenu.css"%></style>
-
+<style><%@include file="/css/product.css"%></style>
 
 
 
@@ -36,7 +36,7 @@
 	</div>
 	
 
-	
+	<jsp:include page="layouts/productV.jsp"></jsp:include>
 	<p>Site under construction!</p>
 
 	
