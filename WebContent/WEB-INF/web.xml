@@ -4,4 +4,24 @@
   <welcome-file-list>
     <welcome-file>redirect.jsp</welcome-file>  
   </welcome-file-list>
+
+
+
+
+<servlet>
+	<servlet-name>servo</servlet-name>
+	<servlet-class>servo</servlet-class>
+	</servlet>
+	<servlet-mapping>
+	<servlet-name>servo</servlet-name>
+	<url-pattern>/it/befloral/controller/servo</url-pattern>
+</servlet-mapping>
+
 </web-app>
+
+
+
+
+
+
+

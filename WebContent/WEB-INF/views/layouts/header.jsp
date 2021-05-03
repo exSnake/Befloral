@@ -27,7 +27,11 @@
 		<!-- search bar -->
 		<li style=" height: 300%; "> 
 		 
+<<<<<<< HEAD
 		 <form action="ActionPage">
+=======
+		 <form action="servo" method="get" >
+>>>>>>> 15cd3b6151218e91f56802eec5c3e8d6dee7df32
 	      	<input type="text" placeholder="Search.." name="search" size="120">
 	      	<button style="padding-top: 20px;"type="submit"><i class="fas fa-search fa-2x"></i></button>
    		 </form>
