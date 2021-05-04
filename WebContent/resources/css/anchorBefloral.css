@@ -1,0 +1,21 @@
+
+a.anchorBefloral:link{
+	color: #006C7B ;
+}
+
+a.anchorBefloral:hover{
+	font-size: 150%;
+	cursor: pointer;	
+	color: #90B79C ;
+}
+
+a.anchorBefloral:active{
+	color: #529A89 ;
+}
+
+a.anchorBefloral:visited {
+	color: #529A89 ;
+}
+a.anchorBefloral:after {
+	color: #529A89 ;
+}
