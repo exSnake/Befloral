@@ -1,6 +1,7 @@
 package it.befloral.beans;
 
 import java.io.Serializable;
+import java.text.NumberFormat;
 
 public class ProductBean  implements Serializable{
 
@@ -106,6 +107,10 @@ public class ProductBean  implements Serializable{
 
 	public void setWeight(String weight) {
 		this.weight = weight;
+	}
+	
+	public String getPriceToString() {
+		return String.format("%.2f", price);
 	}
 
 	public double getPrice() {

@@ -24,7 +24,7 @@ public class ProductDAO implements ModelDAO<ProductBean>{
 			Context initCtx = new InitialContext();
 			Context envCtx = (Context) initCtx.lookup("java:comp/env");
 
-			ds = (DataSource) envCtx.lookup("jdbc/storage");
+			ds = (DataSource) envCtx.lookup("jdbc/befloral");
 		}catch (NamingException e) {
 			System.out.println("Error:" + e.getMessage());
 		}
@@ -32,7 +32,7 @@ public class ProductDAO implements ModelDAO<ProductBean>{
 	
 	////////////////METHODS////////////////////////////////////////////
 	
-	private static final String TABLE_NAME = "product";
+	private static final String TABLE_NAME = "products";
 
 	@Override
 	public synchronized ProductBean doRetriveByKey(int code) throws SQLException {
@@ -41,7 +41,7 @@ public class ProductDAO implements ModelDAO<ProductBean>{
 		PreparedStatement stmt = null;
 		ProductBean bean = new ProductBean();
 		
-		String selectSQL = "SELECT * FROM "+ ProductDAO.TABLE_NAME + " WERE idproduct = ? "; 
+		String selectSQL = "SELECT * FROM "+ ProductDAO.TABLE_NAME + " WHERE idproduct = ? "; 
 				
 		try {
 			conn = ds.getConnection();
