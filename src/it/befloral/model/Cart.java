@@ -10,19 +10,21 @@ public class Cart {
 	}
 	
 	public void addProduct(ProductBean product) {
-		if(products.contains(product)) {
-			var prod = products.get(products.indexOf(product));
+		CartProductBean cartProd= new CartProductBean(product);
+		if(products.contains(cartProd)) {
+			var prod = products.get(products.indexOf(cartProd));
 			prod.setQuantity(prod.getQuantity() + 1);
 		} else {
-			CartProductBean p = new CartProductBean();
-			p.setQuantity(1);
-			products.add(p);
+			
+			cartProd.setQuantity(1);
+			products.add(cartProd);
 		}
 	}
 	
 	public void deleteProduct(ProductBean product) {
-		for(CartProductBean prod : products) {
-			if(prod.getId() == product.getId()) {
+		CartProductBean cartProd= new CartProductBean(product);
+		for(CartProductBean prod : products) {	
+			if(prod.equals(cartProd)) {
 				products.remove(prod);
 				break;
 			}
@@ -40,6 +42,22 @@ public class Cart {
 		}
 		return sum;
 	}
+
+	public void deleteAll() {
+		products=new ArrayList<CartProductBean>();
+		
+	}
+
+	public void updateProduct(ProductBean product, int quantity) {
+		CartProductBean cartProd= new CartProductBean(product);
+		if(products.contains(cartProd)) {
+			var prod = products.get(products.indexOf(cartProd));
+			prod.setQuantity(quantity);
+		}
+	}
+	
+		
+	
 	
 	
 }

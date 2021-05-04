@@ -28,8 +28,8 @@
 			if(request.getSession().getAttribute("cart") != null)
 				cart = (Cart) request.getSession().getAttribute("cart"); 
 			%>
-			<a class="ml-2" href="Products"><i class="fas fa-store fa-2x"></i>(<%= cart == null ? 0 : cart.getTotalProductsQuantity() %>)</a>
-			<a class="ml-2" href="Cart"><i class="fas fa-shopping-cart fa-2x"></i></a> 
+			<a class="ml-2" href="Products"><i class="fas fa-store fa-2x"></i></a>
+			<a class="ml-2" href="Cart"><i class="fas fa-shopping-cart fa-2x"></i>(<%= cart == null ? 0 : cart.getTotalProductsQuantity() %>)</a> 
 			<a class="ml-2" href="#login"><i class="fas fa-sign-in-alt fa-2x"></i></a>
 		</div>
 	</div>
