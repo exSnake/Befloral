@@ -1,4 +1,5 @@
 <!-- Navbar -->
+<%@page import="it.befloral.model.Cart"%>
 <link rel="shortcut icon" type="image/x-icon" href="<%=getServletContext().getContextPath()%>/resources/images/logoHorizzontal-removebg.png">
 
 <script src="https://kit.fontawesome.com/442bbb4090.js"	crossorigin="anonymous"></script>
@@ -23,7 +24,11 @@
 	</div>
 	<div class="nav-right">
 		<div id="nav-tools">
-			<a class="ml-2" href="Products"><i class="fas fa-store fa-2x"></i></a>
+			<% Cart cart = null;
+			if(request.getSession().getAttribute("cart") != null)
+				cart = (Cart) request.getSession().getAttribute("cart"); 
+			%>
+			<a class="ml-2" href="Products"><i class="fas fa-store fa-2x"></i>(<%= cart == null ? 0 : cart.getTotalProductsQuantity() %>)</a>
 			<a class="ml-2" href="Cart"><i class="fas fa-shopping-cart fa-2x"></i></a> 
 			<a class="ml-2" href="#login"><i class="fas fa-sign-in-alt fa-2x"></i></a>
 		</div>

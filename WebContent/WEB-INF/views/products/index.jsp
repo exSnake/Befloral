@@ -47,19 +47,15 @@
 					"
 				</p>
 
-				<!-- 		Control -->
 				<div class="control">
 					<!-- Start Button buying -->
 					<form action="Cart" method="post">
-						<input type="hidden" value="<%=bean.getId()%>">
+						<input type="hidden" id="id" name="id" value="<%=bean.getId()%>">
+						<input type="hidden" id="action" name="action" value="add">
 						<button class="btn">
-							<!-- 		the Price -->
 							<span class="price"><%=bean.getPriceToString() %> &euro;</span>
-							<!-- 		shopping cart icon-->
-							<span class="shopping-cart"><i class="fa fa-shopping-cart"
-								aria-hidden="true"></i></span>
-							<!-- 		Buy Now / ADD to Cart-->
-							<span class="buy">Buy Now</span>
+							<span class="shopping-cart"><i class="fa fa-shopping-cart" aria-hidden="true"></i></span>
+							<span class="buy">Add to Cart</span>
 						</button>
 					</form>
 					<!-- End Button buying -->
