@@ -57,6 +57,3 @@ pom.xml.versionsBackup
 pom.xml.next
 release.properties
 dependency-reduced-pom.xml
-/bin/
-
-WebContent/META-INF/context.xml
