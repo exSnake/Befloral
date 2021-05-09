@@ -17,7 +17,7 @@ public class ProductBean  implements Serializable{
 	
 	/////////////////////////ATTRIBUTES///////////////////////////////////
 	private String  name , description , shortDescription ,
-		metaDescription , metaKeyword , weight;
+		metaDescription , metaKeyword , weight, imagePath;
 	
 	private double price , discount ;
 	
@@ -152,6 +152,14 @@ public class ProductBean  implements Serializable{
 	public void setAvailable(boolean available) {
 		this.available = available;
 	}
+	
+	public String getImagePath() {
+		return imagePath;
+	}
+
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
+	}
 
 
 	
@@ -240,6 +248,8 @@ public class ProductBean  implements Serializable{
 			return false;
 		return true;
 	}
+
+	
 
 	
 	

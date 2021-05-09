@@ -1,35 +1,19 @@
-<%@page import="java.io.File"%>
-<%@page import="java.util.Iterator"%>
-<%@page import="it.befloral.beans.ProductBean"%>
-<%@page import="java.util.Collection"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-
-<link
-	href="<%=getServletContext().getContextPath()%>/resources/css/product.css"
-	rel="stylesheet" type="text/css">
-<title>Products</title>
-</head>
-<body>
-	<jsp:include page="/WEB-INF/views/layouts/header.jsp"></jsp:include>
-	<div class="container">
-		<%
-		Collection<ProductBean> products = (Collection<ProductBean>) request.getAttribute("products");
-		if (products != null && products.size() != 0) {
-			Iterator<?> it = products.iterator();
-			while (it.hasNext()) {
-				ProductBean bean = (ProductBean) it.next();
-		%>
+<%@taglib prefix="z" tagdir="/WEB-INF/tags"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<link href="resources/css/product.css" rel="stylesheet" type="text/css">
+<z:layout pageTitle="Products List">
+		<form action="Products" method="get">
+			<input type="hidden" name="action" value="create">
+			<button type="submit" class="btn btn-primary mt-2">Add New Product</button>
+		</form> 
+		<c:forEach items="${products}" var="bean">
 		<!-- single product -->
 		<div id="product-container">
 
 			<!-- Start	Product details -->
 			<div class="product-details">
-
 				<!-- 	Product Name -->
-				<h1><%=bean.getName()%></h1>
+				<h1>${bean.getName()}</h1>
 				<!-- 		<span class="hint new">New</span> -->
 				<!-- 		<span class="hint free-shipping">Free Shipping</span> -->
 				<!-- 		the Product rating -->
@@ -39,21 +23,15 @@
 					class="fa fa-star-half-o" aria-hidden="true"></i> <i
 					class="fa fa-star-o" aria-hidden="true"></i>
 				</span>
-
 				<!-- The most important information about the product -->
-				<p class="information">
-					"
-					<%=bean.getDescription()%>
-					"
-				</p>
-
-				<div class="control">
+				<p class="information">"${bean.getDescription()}"</p>
+				<div class="">
 					<!-- Start Button buying -->
 					<form action="Cart" method="post">
-						<input type="hidden" id="id" name="id" value="<%=bean.getId()%>">
+						<input type="hidden" id="id" name="id" value="${bean.getId()}">
 						<input type="hidden" id="action" name="action" value="add">
-						<button class="btn">
-							<span class="price"><%=bean.getPriceToString() %> &euro;</span>
+						<button class="product-btn">
+							<span class="price">${bean.getPriceToString()}" &euro;</span>
 							<span class="shopping-cart"><i class="fa fa-shopping-cart" aria-hidden="true"></i></span>
 							<span class="buy">Add to Cart</span>
 						</button>
@@ -62,25 +40,9 @@
 				</div>
 			</div>
 			<!-- 	End	Product details   -->
-
 			<!-- 	Start product image & Information -->
-
 			<div class="product-image">
-				<%
-				String path = getServletContext().getRealPath("/resources/images/products/" + bean.getId() + ".jpg");
-				File file = new File(path);
-				if (file.exists()) {
-				%>
-				<img alt="alt-product"
-					src="<%=getServletContext().getContextPath()%>/resources/images/products/<%=bean.getId()%>.jpg">
-				<%
-				} else {
-				%>
-				<img alt="alt-product"
-					src="<%=getServletContext().getContextPath()%>/resources/images/products/error.png">
-				<%
-				}
-				%>
+				<img alt="alt-product" src="${bean.getImagePath()}"/>">
 				<!-- 	product Information-->
 				<div class="info">
 					<h2>The Description</h2>
@@ -89,7 +51,7 @@
 						<li><strong>Soil Needs: </strong>Damp</li>
 						<li><strong>Zones: </strong>9 - 11</li>
 						<li><strong>Height: </strong>2 - 3 feet</li>
-						<li><strong>Blooms in: </strong>MidâSummer - MidâFall</li>
+						<li><strong>Blooms in: </strong>MidSummer - Mid�Fall</li>
 						<li><strong>Features: </strong>Tolerates heat</li>
 					</ul>
 				</div>
@@ -97,11 +59,5 @@
 			<!--  End product image  -->
 		</div>
 		<!-- end single product -->
-		<%
-			}
-		}
-		%>
-	</div>
-	<jsp:include page="/WEB-INF/views/layouts/footer.jsp"></jsp:include>
-</body>
-</html>
+		</c:forEach>
+</z:layout>

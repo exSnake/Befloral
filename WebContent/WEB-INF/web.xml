@@ -5,9 +5,6 @@
     <welcome-file>redirect.jsp</welcome-file>  
   </welcome-file-list>
 
-
-
-
 <servlet>
 	<servlet-name>servo</servlet-name>
 	<servlet-class>servo</servlet-class>
@@ -16,6 +13,17 @@
 	<servlet-name>servo</servlet-name>
 	<url-pattern>/it/befloral/controller/servo</url-pattern>
 </servlet-mapping>
+
+<jsp-config>
+    <jsp-property-group>
+        <url-pattern>*.jsp</url-pattern>
+        <scripting-invalid>false</scripting-invalid>
+    </jsp-property-group>
+    <jsp-property-group>
+        <url-pattern>*.tag</url-pattern>                
+        <scripting-invalid>false</scripting-invalid>
+    </jsp-property-group>
+</jsp-config>
 
 </web-app>
 

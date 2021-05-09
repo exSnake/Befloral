@@ -84,7 +84,7 @@
 
 /* control */
 
-.control {
+.product-control {
     position: absolute;
     bottom: 20%;
     left: 22.8%;
@@ -92,7 +92,7 @@
 }
 
 /* the Button */
-.btn {
+.product-btn {
     transform: translateY(0px);
     transition: 0.3s linear;
     background: #49C608;
@@ -108,11 +108,11 @@
 
 }
 
-.btn:hover {
+.product-btn:hover {
     transform: translateY(-4px);
 }
 
-.btn span {
+.product-btn span {
     font-family: 'Farsan', cursive;
     transition: transform 0.3s;
     display: inline-block;
@@ -123,39 +123,40 @@
 }
 
 /* shopping cart icon */
-.btn .price,
+.product-btn .price,
 .shopping-cart {
     background: #333;
     border: 0;
     margin: 0;
 }
 
-.btn .price {
+.product-btn .price {
     transform: translateX(-10%);
     padding-right: 15px;
 }
 
 /* the Icon */
-.btn .shopping-cart {
+.product-btn .shopping-cart {
     transform: translateX(-100%);
     position: absolute;
     background: #333;
     z-index: 1;
     left: 0;
     top: 0;
+    padding: 15px;
 }
 
 /* buy */
-.btn .buy {
+.product-btn .buy {
     z-index: 3;
     font-weight: bolder;
 }
 
-.btn:hover .price {
+.product-btn:hover .price {
     transform: translateX(-110%);
 }
 
-.btn:hover .shopping-cart {
+.product-btn:hover .shopping-cart {
     transform: translateX(0%);
 }
 

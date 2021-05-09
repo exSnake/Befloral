@@ -1,5 +1,6 @@
 package it.befloral.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import it.befloral.beans.ProductBean;
 import it.befloral.model.ProductModelDS;
 
 /**
@@ -26,15 +28,7 @@ public class ProductServlet extends HttpServlet {
      */
     public ProductServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
-
-	/**
-	 * @see Servlet#init(ServletConfig)
-	 */
-	public void init(ServletConfig config) throws ServletException {
-		// TODO Auto-generated method stub
-	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -42,25 +36,45 @@ public class ProductServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//Acquire all products from db
 		String sort = request.getParameter("sort");
-
+	
 		try {
-			request.removeAttribute("products");
-			request.setAttribute("products", model.doRetrieveAll(sort));
+			var action =request.getParameter("action"); 
+			if(action != null) {
+			//Create page
+				if(action.equals("create")) {
+					RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/products/create.jsp");
+					dispatcher.forward(request, response);
+				}
+			//View page
+			} else if(request.getParameter("id") != null) {
+				int id = Integer.parseInt(request.getParameter("id"));
+				var prod = model.doRetriveByKey(id);
+				request.setAttribute("product", prod);
+				RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/products/view.jsp");
+				dispatcher.forward(request, response);
+			} else {
+			//index page
+				request.removeAttribute("products");
+				var imageRoot = getServletContext().getContextPath() + "/resources/images/products/";
+				var realPath = getServletContext().getRealPath("/resources/images/products/");
+				var products = model.doRetrieveAll(sort);
+				for (ProductBean p : products) {
+					p.setImagePath(new File(realPath + p.getId() + ".jpg").exists() ? imageRoot + p.getId() + ".jpg" : imageRoot + "error.png");
+				}
+				request.setAttribute("products", products);
+				
+				RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/products/index.jsp");
+				dispatcher.forward(request, response);
+			}
 		} catch (SQLException e) {
 			System.out.println("Error:" + e.getMessage());
 		}
-
-		//Add products to request
-		RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/products/index.jsp");
-		dispatcher.forward(request, response);
-		//Redirect to product page 'products/index.jsp'
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 
