@@ -9,8 +9,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import it.befloral.beans.ProductBean;
 import it.befloral.model.Cart;
-import it.befloral.model.ProductModelDS;
+import it.befloral.model.GenericDAO;
+import it.befloral.model.ProductDAO;
 
 /**
  * Servlet implementation class CartServlet
@@ -19,7 +21,7 @@ import it.befloral.model.ProductModelDS;
 public class CartServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	static ProductModelDS model = new ProductModelDS();
+	static GenericDAO<ProductBean> model = new ProductDAO();
 
 	/**
 	 * @see HttpServlet#HttpServlet()

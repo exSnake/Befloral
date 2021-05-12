@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,8 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import it.befloral.beans.ProductBean;
-import it.befloral.model.Product;
-import it.befloral.model.ProductModelDS;
+import it.befloral.model.GenericDAO;
+import it.befloral.model.ProductDAO;
 
 /**
  * Servlet implementation class ProductServlet
@@ -22,7 +21,7 @@ import it.befloral.model.ProductModelDS;
 @WebServlet("/Products")
 public class ProductServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	static ProductModelDS model = new ProductModelDS();
+	static GenericDAO<ProductBean> model = new ProductDAO();
 	
     /**
      * @see HttpServlet#HttpServlet()
@@ -45,21 +44,6 @@ public class ProductServlet extends HttpServlet {
 				if(action.equals("create")) {
 					RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/products/create.jsp");
 					dispatcher.forward(request, response);
-					ProductModelDS products= new ProductModelDS();
-					int id=Integer.parseInt(request.getParameter("id"));
-					String name=request.getParameter("name");
-					String description=request.getParameter("description");
-					String shortDescription=request.getParameter("shortdescription");
-					String metaDescription=request.getParameter("metadescription");
-					String metaKeyword=request.getParameter("metakeyword");
-					Double price=Double.parseDouble(request.getParameter("price"));
-					String weight=request.getParameter("weight");
-					boolean available=Boolean.parseBoolean(request.getParameter("available"));
-					double discount=Double.parseDouble(request.getParameter("discount"));
-					int onSale=Integer.parseInt(request.getParameter("onsale"));
-					int quantity=Integer.parseInt(request.getParameter("quantity"));
-					Product product= new Product(id,name,description,shortDescription,metaDescription,metaKeyword,price,weight,available,onSale,quantity);
-					products.insertProduct(product);
 				}
 			//View page
 			} else if(request.getParameter("id") != null) {

@@ -1,8 +1,6 @@
 package it.befloral.controller;
 
 import java.io.IOException;
-import java.sql.SQLException;
-
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,10 +9,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
-import java.util.List;
-import it.befloral.beans.ProductBean;
-import it.befloral.dao.ProductDAO;
 
 /**
  * Servlet implementation class HomeServlet

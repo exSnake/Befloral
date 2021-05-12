@@ -10,9 +10,8 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import it.befloral.beans.*;
-import it.befloral.dao.ProductDAO;
 
-public class ProductModelDS {
+public class ProductDAO implements GenericDAO<ProductBean> {
 	private static DataSource ds;
 	private static final String TABLE_NAME = "products";
 
@@ -26,13 +25,14 @@ public class ProductModelDS {
 		}
 	}
 
+	@Override
 	public synchronized Collection<ProductBean> doRetrieveAll(String order) throws SQLException {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 
-		Collection<ProductBean> products = new LinkedList<ProductBean>();
+		Collection<ProductBean> products = new LinkedList<>();
 
-		String selectSQL = "SELECT * FROM " + ProductModelDS.TABLE_NAME;
+		String selectSQL = "SELECT * FROM " + ProductDAO.TABLE_NAME;
 
 		if (order != null && !order.equals("")) {
 			selectSQL += " ORDER BY " + order;
@@ -47,14 +47,14 @@ public class ProductModelDS {
 			while (rs.next()) {
 				ProductBean bean = new ProductBean();
 
-				bean.setId(rs.getInt("idproduct"));
+				bean.setId(rs.getInt("id"));
 				bean.setName(rs.getString("name"));
 				bean.setDescription(rs.getString("description"));
 				bean.setShortDescription(rs.getString("shortDescription"));
 				bean.setMetaDescription(rs.getString("metaDescription"));
 				bean.setMetaKeyword(rs.getString("metaKeyword"));
 				bean.setPrice(rs.getDouble("price"));
-				bean.setWeight(rs.getString("weight"));
+				bean.setWeight(rs.getDouble("weight"));
 				bean.setAvailable(rs.getBoolean("available"));
 				bean.setDiscount(rs.getDouble("discount"));
 				bean.setOnSale(rs.getInt("onSale"));
@@ -74,36 +74,32 @@ public class ProductModelDS {
 		return products;
 	}
 
+	@Override
 	public synchronized ProductBean doRetriveByKey(int code) throws SQLException {
-
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ProductBean bean = new ProductBean();
-
-		String selectSQL = "SELECT * FROM " + TABLE_NAME + " WHERE idproduct = ? ";
-
+		String selectSQL = "SELECT * FROM " + TABLE_NAME + " WHERE id = ? ";
 		try {
 			conn = ds.getConnection();
 			stmt = conn.prepareStatement(selectSQL);
 			stmt.setInt(1, code);
 
 			ResultSet rs = stmt.executeQuery();
-
 			while (rs.next()) {
-				bean.setId(rs.getInt("idProduct"));
+				bean.setId(rs.getInt("id"));
 				bean.setName(rs.getString("name"));
 				bean.setDescription(rs.getString("description"));
 				bean.setShortDescription(rs.getString("shortdescription"));
 				bean.setMetaDescription(rs.getString("metadescription"));
 				bean.setMetaKeyword(rs.getString("metakeyword"));
 				bean.setPrice(rs.getDouble("price"));
-				bean.setWeight(rs.getString("weight"));
+				bean.setWeight(rs.getDouble("weight"));
 				bean.setAvailable(rs.getBoolean("available"));
 				bean.setDiscount(rs.getDouble("discount"));
 				bean.setOnSale(rs.getInt("onsale"));
 				bean.setQuantity(rs.getInt("quantity"));
 			}
-
 		} finally {
 			try {
 				if (stmt != null)
@@ -115,51 +111,78 @@ public class ProductModelDS {
 		}
 		return bean;
 	}
-	
-
-	
 
 	// Create or insert user
-	public void insertProduct(Product product) throws SQLException{
-		Connection connection = null;
-		PreparedStatement preparedStatement = null;
+	@Override
+	public synchronized void doSave(ProductBean dao) throws SQLException {
+		Connection conn = null;
+		PreparedStatement stmt = null;
 
-		String insertSQL = "INSERT INTO " + ProductModelDS.TABLE_NAME
-				+ " (NAME, DESCRIPTION, PRICE, QUANTITY) VALUES (?, ?, ?, ?)";
+		String inserSQL = "INSERT INTO " + ProductDAO.TABLE_NAME + " (name,description,shortDescription,"
+				+ "metaDescription,metaKeyword,price,weight,available,"
+				+ "discount,onSale,quantity) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
 		try {
-			connection = ds.getConnection();
-			preparedStatement = connection.prepareStatement(insertSQL);
-			preparedStatement.setInt(1, product.getId()); 
-			preparedStatement.setString(2,product.getName()); 
-			preparedStatement.setString(3,product.getDescription());
-			preparedStatement.setString(4,product.getShortDescription());
-			preparedStatement.setString(5,product.getMetaDescription());
-			preparedStatement.setString(6,product.getMetaKeyword());
-			preparedStatement.setDouble(7,product.getPrice());
-			preparedStatement.setString(8, product.getWeight());
-			preparedStatement.setBoolean(9, product.isAvailable());
-			preparedStatement.setDouble(10,product.getDiscount());
-			preparedStatement.setInt(11,product.getOnSale());
-			preparedStatement.setInt(12,product.getQuantity());
-			preparedStatement.executeUpdate();
+			conn = ds.getConnection();
+			stmt = conn.prepareStatement(inserSQL);
 
-			connection.commit();
+			stmt.setString(1, dao.getName());
+			stmt.setString(2, dao.getDescription());
+			stmt.setString(3, dao.getShortDescription());
+			stmt.setString(4, dao.getMetaDescription());
+			stmt.setString(5, dao.getMetaKeyword());
+			stmt.setDouble(6, dao.getPrice());
+			stmt.setDouble(7, dao.getWeight());
+			stmt.setBoolean(8, dao.isAvailable());
+			stmt.setDouble(9, dao.getDiscount());
+			stmt.setInt(10, dao.getOnSale());
+			stmt.setInt(11, dao.getQuantity());
+
 		} finally {
 			try {
-				if (preparedStatement != null)
-					preparedStatement.close();
+				if (stmt != null)
+					stmt.close();
 			} finally {
-				if (connection != null)
-					connection.close();
+				if (conn != null)
+					conn.close();
 			}
 		}
+
 	}
 
-		
+	@Override
+	public synchronized void doUpdate(ProductBean dao) throws SQLException {
+		Connection conn = null;
+		PreparedStatement stmt = null;
 
-		
-		
+		doSave(dao);
 	}
 
-	
+	@Override
+	public synchronized boolean doDelete(int code) throws SQLException {
+		Connection conn = null;
+		PreparedStatement stmt = null;
 
+		int result = 0;
+
+		String deleteSQL = "DELETE FROM " + ProductDAO.TABLE_NAME + " WHERE id = ?";
+
+		try {
+			conn = ds.getConnection();
+			stmt = conn.prepareStatement(deleteSQL);
+			stmt.setInt(1, code);
+
+			result = stmt.executeUpdate();
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+			} finally {
+				if (conn != null)
+					conn.close();
+			}
+		}
+
+		return (result != 0);
+	}
+}
