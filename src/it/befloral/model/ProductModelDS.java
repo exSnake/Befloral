@@ -115,4 +115,51 @@ public class ProductModelDS {
 		}
 		return bean;
 	}
-}
+	
+
+	
+
+	// Create or insert user
+	public void insertProduct(Product product) throws SQLException{
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+
+		String insertSQL = "INSERT INTO " + ProductModelDS.TABLE_NAME
+				+ " (NAME, DESCRIPTION, PRICE, QUANTITY) VALUES (?, ?, ?, ?)";
+		try {
+			connection = ds.getConnection();
+			preparedStatement = connection.prepareStatement(insertSQL);
+			preparedStatement.setInt(1, product.getId()); 
+			preparedStatement.setString(2,product.getName()); 
+			preparedStatement.setString(3,product.getDescription());
+			preparedStatement.setString(4,product.getShortDescription());
+			preparedStatement.setString(5,product.getMetaDescription());
+			preparedStatement.setString(6,product.getMetaKeyword());
+			preparedStatement.setDouble(7,product.getPrice());
+			preparedStatement.setString(8, product.getWeight());
+			preparedStatement.setBoolean(9, product.isAvailable());
+			preparedStatement.setDouble(10,product.getDiscount());
+			preparedStatement.setInt(11,product.getOnSale());
+			preparedStatement.setInt(12,product.getQuantity());
+			preparedStatement.executeUpdate();
+
+			connection.commit();
+		} finally {
+			try {
+				if (preparedStatement != null)
+					preparedStatement.close();
+			} finally {
+				if (connection != null)
+					connection.close();
+			}
+		}
+	}
+
+		
+
+		
+		
+	}
+
+	
+

@@ -4,7 +4,7 @@
 <z:layout pageTitle="BeFloral">
 		<div class="divImage" style="text-align: center; ">
 			<img class="cropped" alt="BIG PHOTO OF STORE" 
-			src="<%=getServletContext().getContextPath()%>/resources/images/screenlogo.jpg">
+			src="resources/images/screenlogo.jpg">
 		</div>
 		
 		<p>Site under construction!</p>

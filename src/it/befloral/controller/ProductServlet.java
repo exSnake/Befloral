@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import it.befloral.beans.ProductBean;
+import it.befloral.model.Product;
 import it.befloral.model.ProductModelDS;
 
 /**
@@ -44,6 +45,21 @@ public class ProductServlet extends HttpServlet {
 				if(action.equals("create")) {
 					RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/products/create.jsp");
 					dispatcher.forward(request, response);
+					ProductModelDS products= new ProductModelDS();
+					int id=Integer.parseInt(request.getParameter("id"));
+					String name=request.getParameter("name");
+					String description=request.getParameter("description");
+					String shortDescription=request.getParameter("shortdescription");
+					String metaDescription=request.getParameter("metadescription");
+					String metaKeyword=request.getParameter("metakeyword");
+					Double price=Double.parseDouble(request.getParameter("price"));
+					String weight=request.getParameter("weight");
+					boolean available=Boolean.parseBoolean(request.getParameter("available"));
+					double discount=Double.parseDouble(request.getParameter("discount"));
+					int onSale=Integer.parseInt(request.getParameter("onsale"));
+					int quantity=Integer.parseInt(request.getParameter("quantity"));
+					Product product= new Product(id,name,description,shortDescription,metaDescription,metaKeyword,price,weight,available,onSale,quantity);
+					products.insertProduct(product);
 				}
 			//View page
 			} else if(request.getParameter("id") != null) {
