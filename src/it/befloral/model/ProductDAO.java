@@ -120,7 +120,7 @@ public class ProductDAO implements GenericDAO<ProductBean> {
 
 		String inserSQL = "INSERT INTO " + ProductDAO.TABLE_NAME + " (name,description,shortDescription,"
 				+ "metaDescription,metaKeyword,price,weight,available,"
-				+ "discount,onSale,quantity) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+				+ "discount,onSale,quantity) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		try {
 			conn = ds.getConnection();
@@ -137,6 +137,7 @@ public class ProductDAO implements GenericDAO<ProductBean> {
 			stmt.setDouble(9, dao.getDiscount());
 			stmt.setInt(10, dao.getOnSale());
 			stmt.setInt(11, dao.getQuantity());
+			stmt.execute();
 
 		} finally {
 			try {
@@ -185,4 +186,5 @@ public class ProductDAO implements GenericDAO<ProductBean> {
 
 		return (result != 0);
 	}
+	
 }

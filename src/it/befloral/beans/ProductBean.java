@@ -53,6 +53,13 @@ public class ProductBean  implements Serializable{
 	
 	//////////GETTER&SETTERS//////////////////////////////////////////////////
 	
+	public ProductBean(String name, String description, String shortDescription, String metaDescription,
+			String metaKeyword, double weight, double price, double discount, int quantity, int onSale,
+			boolean available) {
+		this(0,name,description,shortDescription,metaDescription,metaKeyword,weight,price,discount,quantity,onSale,available);
+		
+	}
+
 	public int getId() {
 		return id;
 	}
