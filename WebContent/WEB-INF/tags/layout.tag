@@ -1,6 +1,7 @@
 <%@ tag body-content="scriptless"%>
 <%@ attribute name="pageTitle" required="true" type="java.lang.String"%>
 <%@ tag import="it.befloral.model.Cart"%>
+<%@ tag import="it.befloral.loggedControl.User"%>
 
 <html>
 <head>
@@ -40,11 +41,18 @@
 				if (request.getSession().getAttribute("cart") != null)
 					cart = (Cart) request.getSession().getAttribute("cart");
 				%>
+				<%
+				User user = null;
+				if (request.getSession().getAttribute("user") != null)
+					user = (User) request.getSession().getAttribute("user");
+				%>
+				
+				
 				<a class="ml-2" href="Products"><i class="fas fa-store fa-2x"></i></a>
 				<a class="ml-2" href="Cart"><i
 					class="fas fa-shopping-cart fa-2x"></i>(<%=cart == null ? 0 : cart.getTotalProductsQuantity()%>)</a>
-				<a class="ml-2" href="#login"><i
-					class="fas fa-sign-in-alt fa-2x"></i></a>
+				<a class="ml-2" href="Login"><i
+					class="fas fa-sign-in-alt fa-2x"></i><%= user == null ? "Accedi" : user.getWelcome() %></a>
 			</div>
 		</div>
 	</div>

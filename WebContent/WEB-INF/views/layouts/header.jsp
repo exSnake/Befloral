@@ -17,7 +17,7 @@
 	<div class="navbar">
 		<div class="nav-left">
 			<div id="nav-logo">
-				<a href="/"><img style="height: 80px; max-width: 100%"
+				<a href="Home"><img style="height: 80px; max-width: 100%"
 					alt="LOGO"
 					src="resources/images/logoHorizzontal-removebg.png"></a>
 			</div>
@@ -40,7 +40,7 @@
 				<a class="ml-2" href="Cart">
 					<i class="fas fa-shopping-cart fa-2x"></i>(${cart == null ? 0 : cart.getTotalProductsQuantity()})	
 				</a>
-				<a class="ml-2" href="#login">
+				<a class="ml-2" href="Login">
 					<i class="fas fa-sign-in-alt fa-2x"></i>
 				</a>
 			</div>
