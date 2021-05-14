@@ -58,14 +58,16 @@ public class ProductServlet extends HttpServlet {
 					dispatcher.forward(request, response);
 				}
 				// View page
-			} else if (request.getParameter("id") != null) {
-				int id = Integer.parseInt(request.getParameter("id"));
-				var prod = model.doRetriveByKey(id);
-				if (action.equals("show")) {
+				if (request.getParameter("action").equals("read") && (request.getParameter("id") != null)) {
+					int id = Integer.parseInt(request.getParameter("id"));
+					var prod = model.doRetriveByKey(id);
+					System.out.println("sdfghjklòàcdfcvgbhnjmk,l.");
 					request.setAttribute("bean", prod);
 					RequestDispatcher dispatcher = request.getServletContext()
 							.getRequestDispatcher("/WEB-INF/views/products/view.jsp");
 					dispatcher.forward(request, response);
+					
+
 				}
 			} else {
 				// index page
@@ -83,6 +85,7 @@ public class ProductServlet extends HttpServlet {
 						.getRequestDispatcher("/WEB-INF/views/products/index.jsp");
 				dispatcher.forward(request, response);
 			}
+
 		} catch (SQLException e) {
 			System.out.println("Error:" + e.getMessage());
 		}
@@ -92,18 +95,22 @@ public class ProductServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
+	
+	
+	//Double.parseDouble(request.getParameter("weight") != null? request.getParameter("weight").replace(",", ".") : "0.0" )
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		// if(request.getParameter("action").equals("create")) {
+		if(request.getParameter("action").equals("create")) {
 		ProductDAO products = new ProductDAO();
 		ProductBean product = new ProductBean(request.getParameter("name"), request.getParameter("description"),
 				request.getParameter("shortDescription"), request.getParameter("metaDescription"),
 				request.getParameter("metaKeyword"),
-				Double.parseDouble(request.getParameter("weight").replace(",", ".")),
+				Double.parseDouble(request.getParameter("weight")),
 				Double.parseDouble(request.getParameter("price")), Double.parseDouble(request.getParameter("discount")),
 				Integer.parseInt(request.getParameter("quantity")), Integer.parseInt(request.getParameter("onSale")),
 				(request.getParameter("available") == null ? false : true));
+		
 		try {
 			products.doSave(product);
 
@@ -114,16 +121,19 @@ public class ProductServlet extends HttpServlet {
 		RequestDispatcher dispatcher = request.getServletContext()
 				.getRequestDispatcher("/WEB-INF/views/products/create.jsp");
 		dispatcher.forward(request, response);
-
+		}
 		if (request.getParameter("action").equals("put")) {
 			doPut(request, response);
 		}
 		if (request.getParameter("action").equals("read")) {
-			dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/products/view.jsp");
+			RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/products/view.jsp");
 			dispatcher.forward(request, response);
+			return;
 		}
 		if (request.getParameter("action").equals("delete")) {
 			doDelete(request, response);
+			response.sendRedirect("Products");
+			return;
 		}
 
 	}

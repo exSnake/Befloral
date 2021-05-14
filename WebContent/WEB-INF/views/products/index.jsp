@@ -55,7 +55,7 @@
 					<!-- Update button -->
 					<form action="Products" method="get">
 						<input type="hidden" id="id" name="id" value="${bean.getId()}">
-						<input type="hidden" name="action" value="show">
+						<input type="hidden" name="action" value="read">
 						<button type="submit" class="btn btn-primary mt-2">Show Single Product</button>		
 					</form>
 					<!-- Show Button -->
