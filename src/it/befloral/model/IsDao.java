@@ -118,28 +118,28 @@ public abstract class IsDao<T> implements GenericDAO<T>{
 	}
 
 	
-	public synchronized void doUpdate(T dao) throws SQLException{
+	public synchronized int doUpdate(T dao) throws SQLException{
 
         T valueObject  = dao;
         Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet result = null;
-		
+		boolean flag ;
         try {
         	 conn = ds.getConnection();
              stmt = conn.prepareStatement(updateSQL());
 
              setParam(valueObject, stmt);
 
-             stmt.execute();
+             flag =  stmt.execute();
 
         } finally {
             if (stmt != null)
                 stmt.close();
         }
 
-
-  }
+        return (flag==true ?  1  : 0) ;
+}
 	
 	public synchronized boolean doDelete(int code) throws SQLException{
         
