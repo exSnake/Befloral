@@ -48,6 +48,7 @@ public class LoginServlet extends HttpServlet {
 		
 		//If session have user
 		User user = (User) request.getSession().getAttribute("user");
+		
 		if(user==null) {
 			//Pagina di login if not loggato
 			RequestDispatcher dispatcher = getServletContext()
