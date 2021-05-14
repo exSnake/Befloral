@@ -35,4 +35,8 @@
 		<input type="hidden" id="action" name="action" value="removeAll">
 		<button class="btn btn-danger">Remove All</button>
 	</form>
+	<form action="Cart" method="post">
+		<input type="hidden" id="action" name="action" value="buy">
+		<button class="btn btn-danger">Buy Now</button>
+	</form>
 </z:layout>

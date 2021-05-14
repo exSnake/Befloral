@@ -1,0 +1,17 @@
+.container {
+	display: flex
+	
+}
+
+.images-small {
+	display: grid;
+	margin-right: 10px;
+}
+
+.right {
+	margin-left: 10px
+}
+
+.left {
+	display: flex;
+}

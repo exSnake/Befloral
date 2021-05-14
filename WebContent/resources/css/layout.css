@@ -1,5 +1,5 @@
 /*#region Default Layout Css */
-
+@import url('https://fonts.googleapis.com/css?family=Abel|Aguafina+Script|Artifika|Athiti|Condiment|Dosis|Droid+Serif|Farsan|Gurajada|Josefin+Sans|Lato|Lora|Merriweather|Noto+Serif|Open+Sans+Condensed:300|Playfair+Display|Rasa|Sahitya|Share+Tech|Text+Me+One|Titillium+Web');
 body {
     margin: 0;
     padding: 0;
@@ -17,6 +17,7 @@ body {
   padding-left: 15px;
   margin-right: auto;
   margin-left: auto;
+  margin-bottom: 15px;
 }
 @media (min-width: 768px) {
   .container {
@@ -74,9 +75,10 @@ input.block {
 }
 
 .form-check {
-    position: relative;
     display: block;
-    padding-left: 1.25rem;
+    min-height: 1.5rem;
+    padding-left: 1.5em;
+    margin-bottom: .125rem;
 }
 
 .form-check-input {

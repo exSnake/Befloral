@@ -76,37 +76,27 @@ public class ProductDAO implements GenericDAO<ProductBean> {
 
 	@Override
 	public synchronized ProductBean doRetriveByKey(int code) throws SQLException {
-		Connection conn = null;
-		PreparedStatement stmt = null;
 		ProductBean bean = new ProductBean();
 		String selectSQL = "SELECT * FROM " + TABLE_NAME + " WHERE id = ? ";
-		try {
-			conn = ds.getConnection();
-			stmt = conn.prepareStatement(selectSQL);
-			stmt.setInt(1, code);
-
-			ResultSet rs = stmt.executeQuery();
-			while (rs.next()) {
-				bean.setId(rs.getInt("id"));
-				bean.setName(rs.getString("name"));
-				bean.setDescription(rs.getString("description"));
-				bean.setShortDescription(rs.getString("shortdescription"));
-				bean.setMetaDescription(rs.getString("metadescription"));
-				bean.setMetaKeyword(rs.getString("metakeyword"));
-				bean.setPrice(rs.getDouble("price"));
-				bean.setWeight(rs.getDouble("weight"));
-				bean.setAvailable(rs.getBoolean("available"));
-				bean.setDiscount(rs.getDouble("discount"));
-				bean.setOnSale(rs.getInt("onsale"));
-				bean.setQuantity(rs.getInt("quantity"));
+		try(var conn = ds.getConnection()) {
+			try(var stmt = conn.prepareStatement(selectSQL)){
+				stmt.setInt(1, code);
+	
+				ResultSet rs = stmt.executeQuery();
+				while (rs.next()) {
+					bean.setId(rs.getInt("id"));
+					bean.setName(rs.getString("name"));
+					bean.setDescription(rs.getString("description"));
+					bean.setShortDescription(rs.getString("shortdescription"));
+					bean.setMetaDescription(rs.getString("metadescription"));
+					bean.setMetaKeyword(rs.getString("metakeyword"));
+					bean.setPrice(rs.getDouble("price"));
+					bean.setWeight(rs.getDouble("weight"));
+					bean.setAvailable(rs.getBoolean("available"));
+					bean.setDiscount(rs.getDouble("discount"));
+					bean.setOnSale(rs.getInt("onsale"));
+					bean.setQuantity(rs.getInt("quantity"));
 			}
-		} finally {
-			try {
-				if (stmt != null)
-					stmt.close();
-			} finally {
-				if (conn != null)
-					conn.close();
 			}
 		}
 		return bean;

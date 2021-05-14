@@ -1,6 +1,7 @@
 package it.befloral.controller;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -9,9 +10,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import it.befloral.beans.CartProductBean;
+import it.befloral.beans.OrderBean;
+import it.befloral.beans.OrderItemBean;
 import it.befloral.beans.ProductBean;
+import it.befloral.beans.UserBean;
 import it.befloral.model.Cart;
 import it.befloral.model.GenericDAO;
+import it.befloral.model.OrderDAO;
 import it.befloral.model.ProductDAO;
 
 /**
@@ -87,18 +93,53 @@ public class CartServlet extends HttpServlet {
 					}
 					response.sendRedirect("Cart");
 					return;
+				} else if (action.equals("buy")) {
+					if(request.getSession().getAttribute("user") == null) {
+						response.sendRedirect("Login");
+						return;
+					} else if (!cart.getProducts().isEmpty()) {
+						doBuy(request, response);
+					}
 				}
 			}
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-		// else if action == update
-		// edit item in cart
+	}
 
-		// delete item from cart
-
-		// delete every items from cart
+	private void doBuy(HttpServletRequest request, HttpServletResponse response) {
+		/***
+		 * TODO Redirect to a page where the user can select 
+		 * if is a gift, the address of the shipment, 
+		 * payment method and gift message
+		 */
+		Cart cart = (Cart) request.getSession().getAttribute("cart");
+		UserBean user = (UserBean) request.getSession().getAttribute("user");
+		OrderBean order = new OrderBean();
+		order.setDestination("TODO Set Customer Default Address");
+		order.setTotalPaid(cart.getTotalPrice());
+		order.setTotalProducts(cart.getTotalProductsQuantity());
+		order.setTrackNumber("");
+		order.setUser(user);
+		order.setGift(false);
+		for(CartProductBean prod : cart.getProducts()) {
+			OrderItemBean bean = new OrderItemBean();
+			bean.setDescription(prod.getProduct().getDescription());
+			bean.setDiscount(prod.getProduct().getDiscount());
+			bean.setName(prod.getProduct().getName());
+			bean.setPrice(prod.getTotalPrice());
+			bean.setQuantity(prod.getQuantity());
+			bean.setShortDescription(prod.getProduct().getShortDescription());
+			bean.setWeight(prod.getProduct().getWeight());
+			order.addItem(bean);
+		}
+		OrderDAO dao = new OrderDAO();
+		try {
+			dao.doSave(order);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

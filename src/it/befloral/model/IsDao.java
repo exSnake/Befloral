@@ -94,7 +94,6 @@ public abstract class IsDao<T> implements GenericDAO<T>{
 	
 	
 	public synchronized void doSave(T dao) throws SQLException{
-	
         		
         T valueObject  = dao;
         Connection conn = null;

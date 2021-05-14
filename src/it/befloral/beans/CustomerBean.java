@@ -1,6 +1,7 @@
 package it.befloral.beans;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 public class CustomerBean implements Cloneable, Serializable {
 
@@ -8,21 +9,24 @@ public class CustomerBean implements Cloneable, Serializable {
 	
 	
 	private int id ;
-    private String fristname;
-    private String lastname;
-    private String email;
+    private String firstName;
+    private String lastName;
     private int gender;
-    private int active;
-    private String newsletter;
-    private String password;
-    private java.sql.Date birthday;
-
+    private boolean subscription;
+    private LocalDate birthday;
+    private UserBean user;
 
     public CustomerBean () {
 
     }
-
     
+    public UserBean getUser() {
+    	return user;
+    }
+    public void setUser(UserBean user) {
+    	this.user = user;
+    }
+
     public int getId() {
           return this.id ;
     }
@@ -30,25 +34,18 @@ public class CustomerBean implements Cloneable, Serializable {
           this.id  = idIn;
     }
 
-    public String getFristname() {
-          return this.fristname;
+    public String getFirstName() {
+          return this.firstName;
     }
-    public void setFristname(String fristnameIn) {
-          this.fristname = fristnameIn;
-    }
-
-    public String getLastname() {
-          return this.lastname;
-    }
-    public void setLastname(String lastnameIn) {
-          this.lastname = lastnameIn;
+    public void setFirstName(String firstName) {
+          this.firstName = firstName;
     }
 
-    public String getEmail() {
-          return this.email;
+    public String getLastName() {
+          return this.lastName;
     }
-    public void setEmail(String emailIn) {
-          this.email = emailIn;
+    public void setLastName(String lastName) {
+          this.lastName = lastName;
     }
 
     public int getGender() {
@@ -58,52 +55,28 @@ public class CustomerBean implements Cloneable, Serializable {
           this.gender = genderIn;
     }
 
-    public int getActive() {
-          return this.active;
+    public boolean isSubscripted() {
+          return this.subscription;
     }
-    public void setActive(int activeIn) {
-          this.active = activeIn;
-    }
-
-    public String getNewsletter() {
-          return this.newsletter;
-    }
-    public void setNewsletter(String newsletterIn) {
-          this.newsletter = newsletterIn;
+    public void setSubscription(boolean subscription) {
+          this.subscription = subscription;
     }
 
-    public String getPassword() {
-          return this.password;
-    }
-    public void setPassword(String passwordIn) {
-          this.password = passwordIn;
-    }
-
-    public java.sql.Date getBirthday() {
+    public LocalDate getBirthday() {
           return this.birthday;
     }
-    public void setBirthday(java.sql.Date birthdayIn) {
+    public void setBirthday(LocalDate birthdayIn) {
           this.birthday = birthdayIn;
     }
 
 
-    public void setAll(int idIn,
-          String fristnameIn,
-          String lastnameIn,
-          String emailIn,
-          int genderIn,
-          int activeIn,
-          String newsletterIn,
-          String passwordIn,
-          java.sql.Date birthdayIn) {
+    public void setAll(int idIn,String firstNameIn,String lastNameIn,int genderIn,
+        boolean subscription,LocalDate birthdayIn) {
           this.id  = idIn;
-          this.fristname = fristnameIn;
-          this.lastname = lastnameIn;
-          this.email = emailIn;
+          this.firstName = firstNameIn;
+          this.lastName = lastNameIn;
           this.gender = genderIn;
-          this.active = activeIn;
-          this.newsletter = newsletterIn;
-          this.password = passwordIn;
+          this.subscription = subscription;
           this.birthday = birthdayIn;
     }
 
@@ -114,40 +87,19 @@ public class CustomerBean implements Cloneable, Serializable {
           if (valueObject.getId() != this.id ) {
                     return(false);
           }
-          if (this.fristname == null) {
-                    if (valueObject.getFristname() != null)
+          if (this.firstName == null) {
+                    if (valueObject.getFirstName() != null)
                            return(false);
-          } else if (!this.fristname.equals(valueObject.getFristname())) {
+          } else if (!this.firstName.equals(valueObject.getFirstName())) {
                     return(false);
           }
-          if (this.lastname == null) {
-                    if (valueObject.getLastname() != null)
+          if (this.lastName == null) {
+                    if (valueObject.getLastName() != null)
                            return(false);
-          } else if (!this.lastname.equals(valueObject.getLastname())) {
-                    return(false);
-          }
-          if (this.email == null) {
-                    if (valueObject.getEmail() != null)
-                           return(false);
-          } else if (!this.email.equals(valueObject.getEmail())) {
+          } else if (!this.lastName.equals(valueObject.getLastName())) {
                     return(false);
           }
           if (valueObject.getGender() != this.gender) {
-                    return(false);
-          }
-          if (valueObject.getActive() != this.active) {
-                    return(false);
-          }
-          if (this.newsletter == null) {
-                    if (valueObject.getNewsletter() != null)
-                           return(false);
-          } else if (!this.newsletter.equals(valueObject.getNewsletter())) {
-                    return(false);
-          }
-          if (this.password == null) {
-                    if (valueObject.getPassword() != null)
-                           return(false);
-          } else if (!this.password.equals(valueObject.getPassword())) {
                     return(false);
           }
           if (this.birthday == null) {
@@ -166,8 +118,8 @@ public class CustomerBean implements Cloneable, Serializable {
 
     @Override
 	public String toString() {
-		return "CustomerBean [id=" + id  + ", fristname=" + fristname + ", lastname=" + lastname + ", email=" + email
-				+ ", gender=" + gender + ", active=" + active + ", newsletter=" + newsletter + ", password=" + password
+		return "CustomerBean [id=" + id  + ", fristname=" + firstName + ", lastname=" + lastName
+				+ ", gender=" + gender + ", newsletter=" + isSubscripted()
 				+ ", birthday=" + birthday + "]";
 	}
 
@@ -176,20 +128,14 @@ public class CustomerBean implements Cloneable, Serializable {
         CustomerBean cloned = new CustomerBean();
 
         cloned.setId(this.id ); 
-        if (this.fristname != null)
-             cloned.setFristname(new String(this.fristname)); 
-        if (this.lastname != null)
-             cloned.setLastname(new String(this.lastname)); 
-        if (this.email != null)
-             cloned.setEmail(new String(this.email)); 
+        if (this.firstName != null)
+             cloned.setFirstName(new String(this.firstName)); 
+        if (this.lastName != null)
+             cloned.setLastName(new String(this.lastName)); 
         cloned.setGender(this.gender); 
-        cloned.setActive(this.active); 
-        if (this.newsletter != null)
-             cloned.setNewsletter(new String(this.newsletter)); 
-        if (this.password != null)
-             cloned.setPassword(new String(this.password)); 
+        cloned.setSubscription(this.isSubscripted()); 
         if (this.birthday != null)
-             cloned.setBirthday((java.sql.Date)this.birthday.clone()); 
+             cloned.setBirthday((LocalDate)this.birthday); 
         return cloned;
     }
 

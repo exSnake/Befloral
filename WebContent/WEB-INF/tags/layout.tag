@@ -1,8 +1,8 @@
 <%@ tag body-content="scriptless"%>
 <%@ attribute name="pageTitle" required="true" type="java.lang.String"%>
 <%@ tag import="it.befloral.model.Cart"%>
-<%@ tag import="it.befloral.loggedControl.User"%>
-
+<%@ tag import="it.befloral.beans.UserBean"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html>
 <head>
 <link href="resources/css/layout.css" rel="stylesheet" type="text/css">
@@ -19,7 +19,7 @@
 	<div class="navbar">
 		<div class="nav-left">
 			<div id="nav-logo">
-				<a href="/"><img style="height: 80px; max-width: 100%"
+				<a href="Home"><img style="height: 80px; max-width: 100%"
 					alt="LOGO"
 					src="resources/images/logoHorizzontal-removebg.png"></a>
 			</div>
@@ -37,22 +37,20 @@
 		<div class="nav-right">
 			<div id="nav-tools">
 				<%
-				Cart cart = null;
-				if (request.getSession().getAttribute("cart") != null)
-					cart = (Cart) request.getSession().getAttribute("cart");
-				%>
-				<%
-				User user = null;
+				UserBean user = null;
 				if (request.getSession().getAttribute("user") != null)
-					user = (User) request.getSession().getAttribute("user");
+					user = (UserBean) request.getSession().getAttribute("user");
 				%>
 				
 				
 				<a class="ml-2" href="Products"><i class="fas fa-store fa-2x"></i></a>
-				<a class="ml-2" href="Cart"><i
-					class="fas fa-shopping-cart fa-2x"></i>(<%=cart == null ? 0 : cart.getTotalProductsQuantity()%>)</a>
-				<a class="ml-2" href="Login"><i
-					class="fas fa-sign-in-alt fa-2x"></i><%= user == null ? "Accedi" : user.getWelcome() %></a>
+				<a class="ml-2" href="Cart"><i class="fas fa-shopping-cart fa-2x"></i>(${cart == null ? 0 : cart.getTotalProductsQuantity() })</a>
+				<c:if test="${user == null}">
+					<a class="ml-2" href="Login"><i	class="fas fa-sign-in-alt fa-2x"></i>"Accedi"</a>
+				</c:if>
+				<c:if test="${user != null}">
+					<a class="ml-2" href="Customer?action=viewOrders"><img src="https://picsum.photos/id/0/50/50"></a>
+				</c:if>
 			</div>
 		</div>
 	</div>
