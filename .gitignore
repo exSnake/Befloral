@@ -60,3 +60,4 @@ dependency-reduced-pom.xml
 /bin/
 
 WebContent/META-INF/context.xml
+.vscode/launch.json

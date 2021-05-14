@@ -8,8 +8,8 @@
     border-radius: 5px;
     overflow: hidden;
     margin: 5em auto;
-    height: 350px;
-    width: 700px
+    height: 500px;
+    width: 1000px;
 }
 
 /* 	Product details  */
@@ -51,7 +51,7 @@
     margin: 0;
     animation: chan-sh 6s ease infinite;
 
-}
+} 
 
 @keyframes chan-sh {
     from {

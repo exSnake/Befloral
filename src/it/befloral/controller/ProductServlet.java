@@ -48,14 +48,25 @@ public class ProductServlet extends HttpServlet {
 							.getRequestDispatcher("/WEB-INF/views/products/create.jsp");
 					dispatcher.forward(request, response);
 				}
+
+				// Update page
+				if (action.equals("update")) {
+					var prod = model.doRetriveByKey(Integer.parseInt(request.getParameter("id")));
+					request.setAttribute("bean", prod);
+					RequestDispatcher dispatcher = request.getServletContext()
+							.getRequestDispatcher("/WEB-INF/views/products/update.jsp");
+					dispatcher.forward(request, response);
+				}
 				// View page
 			} else if (request.getParameter("id") != null) {
 				int id = Integer.parseInt(request.getParameter("id"));
 				var prod = model.doRetriveByKey(id);
-				request.setAttribute("product", prod);
-				RequestDispatcher dispatcher = request.getServletContext()
-						.getRequestDispatcher("/WEB-INF/views/products/view.jsp");
-				dispatcher.forward(request, response);
+				if (action.equals("show")) {
+					request.setAttribute("bean", prod);
+					RequestDispatcher dispatcher = request.getServletContext()
+							.getRequestDispatcher("/WEB-INF/views/products/view.jsp");
+					dispatcher.forward(request, response);
+				}
 			} else {
 				// index page
 				request.removeAttribute("products");
@@ -83,25 +94,38 @@ public class ProductServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
-		ProductDAO products = new ProductDAO();
 
-		ProductBean product= new ProductBean(
-				request.getParameter("name"),request.getParameter("description"),request.getParameter("shortDescription"),
-				request.getParameter("metaDescription"),request.getParameter("metaKeyword"),Double.parseDouble(request.getParameter("weight").replace(",", ".")),
-				Double.parseDouble(request.getParameter("price")),Double.parseDouble(request.getParameter("discount")),Integer.parseInt(request.getParameter("quantity")),
-				Integer.parseInt(request.getParameter("onSale")),(request.getParameter("available")==null?false:true)
-				);
-				
-		
+		// if(request.getParameter("action").equals("create")) {
+		ProductDAO products = new ProductDAO();
+		ProductBean product = new ProductBean(request.getParameter("name"), request.getParameter("description"),
+				request.getParameter("shortDescription"), request.getParameter("metaDescription"),
+				request.getParameter("metaKeyword"),
+				Double.parseDouble(request.getParameter("weight").replace(",", ".")),
+				Double.parseDouble(request.getParameter("price")), Double.parseDouble(request.getParameter("discount")),
+				Integer.parseInt(request.getParameter("quantity")), Integer.parseInt(request.getParameter("onSale")),
+				(request.getParameter("available") == null ? false : true));
 		try {
 			products.doSave(product);
+
 		} catch (SQLException e) {
 			System.out.println("Error insert Product");
 			e.printStackTrace();
 		}
-		RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/products/create.jsp");
+		RequestDispatcher dispatcher = request.getServletContext()
+				.getRequestDispatcher("/WEB-INF/views/products/create.jsp");
 		dispatcher.forward(request, response);
+
+		if (request.getParameter("action").equals("put")) {
+			doPut(request, response);
+		}
+		if (request.getParameter("action").equals("read")) {
+			dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/products/view.jsp");
+			dispatcher.forward(request, response);
+		}
+		if (request.getParameter("action").equals("delete")) {
+			doDelete(request, response);
+		}
+
 	}
 
 	/**
@@ -109,7 +133,34 @@ public class ProductServlet extends HttpServlet {
 	 */
 	protected void doPut(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		String error = null;
+		ProductDAO products = new ProductDAO();
+		ProductBean product = new ProductBean(Integer.parseInt(request.getParameter("id")),
+				request.getParameter("name"), request.getParameter("description"),
+				request.getParameter("shortDescription"), request.getParameter("metaDescription"),
+				request.getParameter("metaKeyword"),
+				Double.parseDouble(request.getParameter("weight").replace(",", ".")),
+				Double.parseDouble(request.getParameter("price")), Double.parseDouble(request.getParameter("discount")),
+				Integer.parseInt(request.getParameter("quantity")), Integer.parseInt(request.getParameter("onSale")),
+				(request.getParameter("available") == null ? false : true));
+		try {
+			if (products.doUpdate(product) > 0) {
+				response.sendRedirect("Products");
+				return;
+			} else {
+				error = "Update Failed";
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		request.setAttribute("error", error);
+		RequestDispatcher dispatcher = request.getServletContext()
+				.getRequestDispatcher("/WEB-INF/views/products/update.jsp");
+		dispatcher.forward(request, response);
+
+		// response.sendRedirect("/WEB-INF/views/products/update.jsp");
+
 	}
 
 	/**
@@ -117,7 +168,18 @@ public class ProductServlet extends HttpServlet {
 	 */
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		ProductDAO product = new ProductDAO();
+		try {
+			product.doDelete(Integer.parseInt(request.getParameter("id")));
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+			System.out.println("Error with delete product id" + request.getParameter("id"));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		RequestDispatcher dispatcher = request.getServletContext()
+				.getRequestDispatcher("/WEB-INF/views/products/index.jsp");
+		dispatcher.forward(request, response);
 	}
 
 }

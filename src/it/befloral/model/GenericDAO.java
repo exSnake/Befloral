@@ -13,7 +13,7 @@ public interface GenericDAO<T> {
 
 	void doSave(T dao) throws SQLException;
 
-	void doUpdate(T dao) throws SQLException;
+	int doUpdate(T dao) throws SQLException;
 
 	boolean doDelete(int code) throws SQLException;
 

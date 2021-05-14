@@ -152,11 +152,52 @@ public class ProductDAO implements GenericDAO<ProductBean> {
 	}
 
 	@Override
-	public synchronized void doUpdate(ProductBean dao) throws SQLException {
+	public synchronized int doUpdate(ProductBean dao) throws SQLException {
+		String updateSQL = "UPDATE products p  "
+				+ "SET p.name = ?,"
+				+ "p.description = ?,"
+				+ "p.shortDescription = ?,"
+				+ "p.metaDescription = ?,"
+				+ "p.metaDescription = ?,"
+				+ "p.price = ?,"
+				+ "p.weight = ?,"
+				+ "p.available = ?,"
+				+ "p.discount = ?,"
+				+ "p.onSale = ?,"
+				+ "p.quantity = ? "
+				+ "WHERE p.id = ? ";
 		Connection conn = null;
 		PreparedStatement stmt = null;
+		var result=0;
+		try {
+			conn = ds.getConnection();
+			stmt = conn.prepareStatement(updateSQL);
 
-		doSave(dao);
+			stmt.setString(1, dao.getName());
+			stmt.setString(2, dao.getDescription());
+			stmt.setString(3, dao.getShortDescription());
+			stmt.setString(4, dao.getMetaDescription());
+			stmt.setString(5, dao.getMetaKeyword());
+			stmt.setDouble(6, dao.getPrice());
+			stmt.setDouble(7, dao.getWeight());
+			stmt.setBoolean(8, dao.isAvailable());
+			stmt.setDouble(9, dao.getDiscount());
+			stmt.setInt(10, dao.getOnSale());
+			stmt.setInt(11, dao.getQuantity());
+			stmt.setInt(12, dao.getId());
+			result=stmt.executeUpdate();
+
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+			} finally {
+				if (conn != null)
+					conn.close();
+			}
+		}
+
+		return result;
 	}
 
 	@Override
