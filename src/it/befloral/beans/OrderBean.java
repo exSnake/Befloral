@@ -10,6 +10,7 @@ public class OrderBean {
 	private int totalProducts;
 	private double totalPaid;
 	private String trackNumber;
+	private String status;
 	private boolean gift;
 	private String  giftMessage;
 	private Collection<OrderItemBean> items;
@@ -64,6 +65,12 @@ public class OrderBean {
 	}
 	public void setTrackNumber(String trackNumber) {
 		this.trackNumber = trackNumber;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	public boolean isGift() {
 		return gift;

@@ -14,16 +14,16 @@ import it.befloral.beans.UserBean;
 import it.befloral.model.OrderDAO;
 
 /**
- * Servlet implementation class CustomerServlet
+ * Servlet implementation class UserServlet
  */
-@WebServlet("/Orders")
-public class OrderServlet extends HttpServlet {
+@WebServlet("/User")
+public class UserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public OrderServlet() {
+    public UserServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -32,21 +32,20 @@ public class OrderServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		var action = request.getAttribute("action");
-		var user = request.getSession().getAttribute("user");
-		if(user == null) {
-			response.sendError(404);
-			return;
-		}
-		
-		if(action != null) {
-			if(action.equals("view")) {
-				//view detail order
+		System.out.println("/User");
+		UserBean user = (UserBean) request.getSession().getAttribute("user");
+		if(user != null) {
+			OrderDAO orderDao = new OrderDAO();
+			try {
+				request.getSession().setAttribute("orders", orderDao.doRetriveByUser(user));
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
-		} else {
-			response.sendRedirect("User");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/users/view.jsp");
+			dispatcher.forward(request, response);
 			return;
+		} else {
+			response.sendRedirect("Login");
 		}
 	}
 

@@ -25,11 +25,19 @@
 			</div>
 			
 			<div class="product-action">
-			<form action="Cart" method="post">
-				<input type="hidden" name="action" value="add">
-				<input type="hidden" name="id" value="${bean.getId()}">
-				<button type="submit" class="btn btn-primary">Add to cart</button>
-			</form> 
+				<form action="Cart" method="post">
+					<input type="hidden" name="action" value="add">
+					<input type="hidden" name="id" value="${bean.getId()}">
+					<button type="submit" class="btn btn-success">Add to cart</button>
+				</form> 
+				<form action="Products" method="post">
+					<input type="hidden" name="action" value="delete">
+					<input type="hidden" name="id" value="${bean.getId()}">
+					<button type="submit" class="btn btn-danger">Delete Product</button>
+				</form> 
+				<a href="Products?action=edit&id=${bean.getId()}">
+					<button type="submit" class="btn btn-primary">Edit Product</button>
+				</a>
 			</div>
 		</div>
 	</div>	

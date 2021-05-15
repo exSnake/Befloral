@@ -12,6 +12,11 @@ body {
     background-color: #fff;
 }
 
+main {
+	background: #f3f9fd;
+	padding: 32px;
+}
+
 .container {
   padding-right: 15px;
   padding-left: 15px;
@@ -348,9 +353,9 @@ a:link{
 }
 
 a:hover{
-	font-size: 150%;
+	font-weight: 600;
 	cursor: pointer;	
-	color: #90B79C;
+	color: #41d5ab;
 }
 
 a:active{
@@ -374,7 +379,6 @@ a:after {
 .navbar {
 	padding-left:30px;
 	padding-right:30px;
-	margin-bottom: 30px;
 	display: flex;
     background: beige;
     justify-content: space-between;

@@ -40,6 +40,7 @@ public class LoginServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		
 		UserBean user = null;
 		// If session have user
 		if(request.getSession().getAttribute("user") != null)
@@ -60,7 +61,7 @@ public class LoginServlet extends HttpServlet {
 		} else {
 			// Profile page
 			RequestDispatcher dispatcher = getServletContext()
-					.getRequestDispatcher("/WEB-INF/views/profile/profile.jsp");
+					.getRequestDispatcher("/WEB-INF/views/users/index.jsp");
 			dispatcher.forward(request, response);
 		}
 

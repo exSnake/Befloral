@@ -36,30 +36,23 @@
 		</div>
 		<div class="nav-right">
 			<div id="nav-tools">
-				<%
-				UserBean user = null;
-				if (request.getSession().getAttribute("user") != null)
-					user = (UserBean) request.getSession().getAttribute("user");
-				%>
-				
-				
 				<a class="ml-2" href="Products"><i class="fas fa-store fa-2x"></i></a>
 				<a class="ml-2" href="Cart"><i class="fas fa-shopping-cart fa-2x"></i>(${cart == null ? 0 : cart.getTotalProductsQuantity() })</a>
 				<c:if test="${user == null}">
 					<a class="ml-2" href="Login"><i	class="fas fa-sign-in-alt fa-2x"></i>"Accedi"</a>
 				</c:if>
 				<c:if test="${user != null}">
-					<a class="ml-2" href="Customer?action=viewOrders"><img src="https://picsum.photos/id/0/50/50"></a>
+					<a class="ml-2" href="User"><img src="https://picsum.photos/id/0/50/50"></a>
 				</c:if>
 			</div>
 		</div>
 	</div>
 	<!-- Navbar -->
-
-	<div class="container">
-		<jsp:doBody />
-	</div>
-	
+	<main>
+		<div class="container">
+			<jsp:doBody />
+		</div>
+	</main>
 	<!-- Footer colors #2e2e2e   and #252525  -->
 	<div class="footer">
 		<div class=footer-left>

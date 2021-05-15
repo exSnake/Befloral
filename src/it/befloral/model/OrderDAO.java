@@ -44,6 +44,7 @@ public class OrderDAO implements GenericDAO<OrderBean> {
 					bean.setDestination(rs.getString("destination"));
 					bean.setTotalProducts(rs.getInt("totalProducts"));
 					bean.setTotalPaid(rs.getDouble("totalPaid"));
+					bean.setStatus(rs.getString("status"));
 					bean.setGift(rs.getBoolean("gift"));
 					bean.setGiftMessage(rs.getString("giftMessage"));
 					bean.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
@@ -95,10 +96,10 @@ public class OrderDAO implements GenericDAO<OrderBean> {
 			stmt.executeUpdate();
 			ResultSet rs = stmt.getGeneratedKeys();
             if(rs.next()){
-                int last_inserted_id = rs.getInt(1); 
+                int lastInsertedId = rs.getInt(1); 
                 for(OrderItemBean item : dao.getItems()) {
     				var stmt2 = conn.prepareStatement(insertItem);
-    				stmt2.setInt(1, last_inserted_id);
+    				stmt2.setInt(1, lastInsertedId);
     				stmt2.setString(2, item.getName());
     				stmt2.setString(3, item.getDescription());
     				stmt2.setString(4, item.getShortDescription());
@@ -140,6 +141,7 @@ public class OrderDAO implements GenericDAO<OrderBean> {
 					bean.setDestination(rs.getString("destination"));
 					bean.setTotalProducts(rs.getInt("totalProducts"));
 					bean.setTotalPaid(rs.getDouble("totalPaid"));
+					bean.setStatus(rs.getString("status"));
 					bean.setGift(rs.getBoolean("gift"));
 					bean.setGiftMessage(rs.getString("giftMessage"));
 					bean.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());

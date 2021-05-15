@@ -2,6 +2,7 @@
 <z:layout pageTitle="Product View">
 	<h1>Create new Product</h1>
 	<form action="Products" method="post">
+		<input type="hidden" name="action" value="create">
 		<div class="form-group">
 		    <label for="name">Name</label>
 		    <input type="text" class="form-control" name="name" id="name" aria-describedby="nameHelp" placeholder="Enter Product Name" required>
