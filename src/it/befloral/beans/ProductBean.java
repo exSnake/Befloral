@@ -17,9 +17,9 @@ public class ProductBean  implements Serializable{
 	
 	/////////////////////////ATTRIBUTES///////////////////////////////////
 	private String  name , description , shortDescription ,
-		metaDescription , metaKeyword , weight;
+		metaDescription , metaKeyword , imagePath;
 	
-	private double price , discount ;
+	private double price , discount, weight ;
 	
 	private int  quantity , onSale ,id ;
 	
@@ -29,7 +29,7 @@ public class ProductBean  implements Serializable{
 	
 	//////////BUILDER/////////////////////////////////////////////////////////
 	public ProductBean(int id, String name, String description, String shortDescription, String metaDescription,
-			String metaKeyword, String weight, double price, double discount, int quantity, int onSale,
+			String metaKeyword, double weight, double price, double discount, int quantity, int onSale,
 			boolean available) {
 		super();
 		this.id = id;
@@ -53,6 +53,13 @@ public class ProductBean  implements Serializable{
 	
 	//////////GETTER&SETTERS//////////////////////////////////////////////////
 	
+	public ProductBean(String name, String description, String shortDescription, String metaDescription,
+			String metaKeyword, double weight, double price, double discount, int quantity, int onSale,
+			boolean available) {
+		this(0,name,description,shortDescription,metaDescription,metaKeyword,weight,price,discount,quantity,onSale,available);
+		
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -101,11 +108,11 @@ public class ProductBean  implements Serializable{
 		this.metaKeyword = metaKeyword;
 	}
 
-	public String getWeight() {
+	public double getWeight() {
 		return weight;
 	}
 
-	public void setWeight(String weight) {
+	public void setWeight(double weight) {
 		this.weight = weight;
 	}
 	
@@ -152,6 +159,14 @@ public class ProductBean  implements Serializable{
 	public void setAvailable(boolean available) {
 		this.available = available;
 	}
+	
+	public String getImagePath() {
+		return imagePath;
+	}
+
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
+	}
 
 
 	
@@ -183,7 +198,8 @@ public class ProductBean  implements Serializable{
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime * result + quantity;
 		result = prime * result + ((shortDescription == null) ? 0 : shortDescription.hashCode());
-		result = prime * result + ((weight == null) ? 0 : weight.hashCode());
+		temp = Double.doubleToLongBits(weight);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
 		return result;
 	}
 
@@ -233,13 +249,12 @@ public class ProductBean  implements Serializable{
 				return false;
 		} else if (!shortDescription.equals(other.shortDescription))
 			return false;
-		if (weight == null) {
-			if (other.weight != null)
-				return false;
-		} else if (!weight.equals(other.weight))
+		if (Double.doubleToLongBits(weight) != Double.doubleToLongBits(other.weight))
 			return false;
 		return true;
 	}
+
+	
 
 	
 	

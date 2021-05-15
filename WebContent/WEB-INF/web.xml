@@ -5,9 +5,6 @@
     <welcome-file>redirect.jsp</welcome-file>  
   </welcome-file-list>
 
-
-
-
 <servlet>
 	<servlet-name>servo</servlet-name>
 	<servlet-class>servo</servlet-class>
@@ -17,9 +14,49 @@
 	<url-pattern>/it/befloral/controller/servo</url-pattern>
 </servlet-mapping>
 
+<jsp-config>
+    <jsp-property-group>
+        <url-pattern>*.jsp</url-pattern>
+        <scripting-invalid>false</scripting-invalid>
+    </jsp-property-group>
+    <jsp-property-group>
+        <url-pattern>*.tag</url-pattern>                
+        <scripting-invalid>false</scripting-invalid>
+    </jsp-property-group>
+</jsp-config>
+
+
+
+
+
+
+<error-page>
+    <!-- Missing login -->
+    <error-code>401</error-code>
+    <location>/WEB-INF/errors/errorLogin.jsp</location>
+</error-page>
+<error-page>
+    <!-- Forbidden directory listing -->
+    <error-code>403</error-code>
+    <location>/WEB-INF/errors/errorLogin.jsp</location>
+</error-page>
+<error-page>
+    <!-- Missing resource -->
+    <error-code>404</error-code>
+    <location>/WEB-INF/errors/errorLogin.jsp</location>
+</error-page>
+<error-page>
+    <!-- Uncaught exception -->
+    <error-code>500</error-code>
+    <location>/WEB-INF/errors/errorLogin.jsp</location>
+</error-page>
+<error-page>
+    <!-- Unsupported servlet method -->
+    <error-code>503</error-code>
+    <location>/WEB-INF/errors/errorLogin.jsp</location>
+</error-page>
+
 </web-app>
-
-
 
 
 

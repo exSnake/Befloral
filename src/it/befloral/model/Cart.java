@@ -42,6 +42,14 @@ public class Cart {
 		}
 		return sum;
 	}
+	
+	public double getTotalPrice() {
+		var sum = 0;
+		for(CartProductBean prod : products) {
+			sum += prod.getTotalPrice();
+		}
+		return sum;
+	}
 
 	public void deleteAll() {
 		products=new ArrayList<CartProductBean>();

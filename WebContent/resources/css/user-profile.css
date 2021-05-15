@@ -1,0 +1,78 @@
+.flex {
+	display:flex;
+	
+}
+.flex-spaced {
+	display: flex;
+	justify-content: space-between;
+	flex-basis: 100%;
+}
+.user-profile {
+	display:flex;
+}
+
+.user-profile-menu {
+	padding-right: 25px;
+	flex-basis: 25%;
+}
+
+.user-profile-menu ul {
+	flex-direction: column;
+	padding: 24px 0 24px 24px;
+	text-align: left;
+	background: #fff;
+}
+
+.user-logout {
+	color: #41d5ab !important;
+	display: block;
+	flex-direction: column;
+	padding: 16px 0 16px 24px;
+	text-align: left;
+	background: #fff;
+}
+
+.user-profile ul {
+	list-style-type:none;
+}
+
+.user-profile .right {
+	margin-left: 20px;
+	flex-basis: 75%;
+}
+
+.order-details {
+	display: flex;
+	padding: 20px;
+	background: white;
+	margin-bottom: 10px;
+}
+
+.order-details-image {
+	max-height: 120px;
+	max-width: 120px;
+	margin-right: 20px;
+}
+
+.order-details ul {
+	list-style-type:none;
+	padding-inline-start: 0;
+	margin-top: 0;
+}
+
+.delivery-date {
+	font-size: 14px;
+	font-weight: 700;
+}
+
+.user-profile .active {
+	font-weight: 700;
+}
+
+.links {
+	padding: 8px 16px;
+    background: #41d5ab;
+    border-radius: 6px;
+    margin: 0 auto;
+    color: white !important;
+}
