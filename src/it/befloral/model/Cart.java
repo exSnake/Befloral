@@ -1,71 +1,68 @@
 package it.befloral.model;
+
 import it.befloral.beans.*;
 import java.util.*;
 
 public class Cart {
-	List<CartProductBean> products;
-	
+	List<CartProduct> products;
+
 	public Cart() {
-		products = new ArrayList<CartProductBean>();
+		products = new ArrayList<>();
 	}
-	
-	public void addProduct(ProductBean product) {
-		CartProductBean cartProd= new CartProductBean(product);
-		if(products.contains(cartProd)) {
+
+	public void addProduct(Product product) {
+		CartProduct cartProd = new CartProduct(product);
+		if (products.contains(cartProd)) {
 			var prod = products.get(products.indexOf(cartProd));
 			prod.setQuantity(prod.getQuantity() + 1);
 		} else {
-			
+
 			cartProd.setQuantity(1);
 			products.add(cartProd);
 		}
 	}
-	
-	public void deleteProduct(ProductBean product) {
-		CartProductBean cartProd= new CartProductBean(product);
-		for(CartProductBean prod : products) {	
-			if(prod.equals(cartProd)) {
+
+	public void deleteProduct(Product product) {
+		CartProduct cartProd = new CartProduct(product);
+		for (CartProduct prod : products) {
+			if (prod.equals(cartProd)) {
 				products.remove(prod);
 				break;
 			}
 		}
 	}
-	
-	public List<CartProductBean> getProducts() {
+
+	public List<CartProduct> getProducts() {
 		return products;
 	}
-	
+
 	public int getTotalProductsQuantity() {
 		var sum = 0;
-		for(CartProductBean prod : products) {
+		for (CartProduct prod : products) {
 			sum += prod.getQuantity();
 		}
 		return sum;
 	}
-	
+
 	public double getTotalPrice() {
 		var sum = 0;
-		for(CartProductBean prod : products) {
+		for (CartProduct prod : products) {
 			sum += prod.getTotalPrice();
 		}
 		return sum;
 	}
 
 	public void deleteAll() {
-		products=new ArrayList<CartProductBean>();
-		
+		products = new ArrayList<>();
+
 	}
 
-	public void updateProduct(ProductBean product, int quantity) {
-		CartProductBean cartProd= new CartProductBean(product);
-		if(products.contains(cartProd)) {
+	public void updateProduct(Product product, int quantity) {
+		CartProduct cartProd = new CartProduct(product);
+		if (products.contains(cartProd)) {
 			var prod = products.get(products.indexOf(cartProd));
 			prod.setQuantity(quantity);
 		}
 	}
-	
-		
-	
-	
-	
+
 }

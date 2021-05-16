@@ -9,9 +9,9 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import it.befloral.beans.UserBean;
+import it.befloral.beans.User;
 
-public class UserDAO implements GenericDAO<UserBean> {
+public class UserDAO implements GenericDAO<User> {
 	public static final String TABLE_NAME = "users";
 	private static DataSource ds;
 
@@ -24,20 +24,19 @@ public class UserDAO implements GenericDAO<UserBean> {
 			System.out.println("Error:" + e.getMessage());
 		}
 	}
-	
+
 	@Override
-	public Collection<UserBean> doRetrieveAll(String order)
-			throws SQLException {
+	public Collection<User> doRetrieveAll(String order) throws SQLException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public UserBean doRetriveByKey(int code) throws SQLException {
+	public User doRetriveByKey(int code) throws SQLException {
 		String sql = "SELECT * FROM " + UserDAO.TABLE_NAME + " WHERE id = ?";
-		UserBean bean = new UserBean();
-		try(var conn = ds.getConnection()) {
-			try(var stmt = conn.prepareStatement(sql)){
+		User bean = new User();
+		try (var conn = ds.getConnection()) {
+			try (var stmt = conn.prepareStatement(sql)) {
 				stmt.setInt(1, code);
 				ResultSet rs = stmt.executeQuery();
 				while (rs.next()) {
@@ -48,13 +47,13 @@ public class UserDAO implements GenericDAO<UserBean> {
 					bean.setActive(rs.getBoolean("active"));
 				}
 			}
-			
-		} 
+
+		}
 		return bean;
 	}
 
 	@Override
-	public void doSave(UserBean dao) throws SQLException {
+	public void doSave(User dao) throws SQLException {
 		String sql = "INSERT INTO " + TABLE_NAME + " (email, password, role, active) VALUES (?, ?, ?, ?) ";
 		try (var conn = ds.getConnection()) {
 			try (var stmt = conn.prepareStatement(sql)) {
@@ -68,7 +67,7 @@ public class UserDAO implements GenericDAO<UserBean> {
 	}
 
 	@Override
-	public int doUpdate(UserBean dao) throws SQLException {
+	public int doUpdate(User dao) throws SQLException {
 		// TODO Auto-generated method stub
 		return 0;
 	}
@@ -79,11 +78,11 @@ public class UserDAO implements GenericDAO<UserBean> {
 		return false;
 	}
 
-	public UserBean doRetriveByUsername(String username) throws SQLException {
+	public User doRetriveByUsername(String username) throws SQLException {
 		String sql = "SELECT * FROM " + UserDAO.TABLE_NAME + " WHERE email = ?";
-		UserBean bean = new UserBean();
-		try(var conn = ds.getConnection()) {
-			try(var stmt = conn.prepareStatement(sql)){
+		User bean = new User();
+		try (var conn = ds.getConnection()) {
+			try (var stmt = conn.prepareStatement(sql)) {
 				stmt.setString(1, username);
 				ResultSet rs = stmt.executeQuery();
 				while (rs.next()) {
@@ -94,7 +93,7 @@ public class UserDAO implements GenericDAO<UserBean> {
 					bean.setActive(rs.getBoolean("active"));
 				}
 			}
-		} 
+		}
 		return bean;
 	}
 

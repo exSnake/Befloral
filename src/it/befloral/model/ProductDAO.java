@@ -11,7 +11,7 @@ import javax.sql.DataSource;
 
 import it.befloral.beans.*;
 
-public class ProductDAO implements GenericDAO<ProductBean> {
+public class ProductDAO implements GenericDAO<Product> {
 	private static DataSource ds;
 	private static final String TABLE_NAME = "products";
 
@@ -26,11 +26,11 @@ public class ProductDAO implements GenericDAO<ProductBean> {
 	}
 
 	@Override
-	public synchronized Collection<ProductBean> doRetrieveAll(String order) throws SQLException {
+	public synchronized Collection<Product> doRetrieveAll(String order) throws SQLException {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 
-		Collection<ProductBean> products = new LinkedList<>();
+		Collection<Product> products = new LinkedList<>();
 
 		String selectSQL = "SELECT * FROM " + ProductDAO.TABLE_NAME;
 
@@ -45,7 +45,7 @@ public class ProductDAO implements GenericDAO<ProductBean> {
 			ResultSet rs = preparedStatement.executeQuery();
 
 			while (rs.next()) {
-				ProductBean bean = new ProductBean();
+				Product bean = new Product();
 
 				bean.setId(rs.getInt("id"));
 				bean.setName(rs.getString("name"));
@@ -75,13 +75,13 @@ public class ProductDAO implements GenericDAO<ProductBean> {
 	}
 
 	@Override
-	public synchronized ProductBean doRetriveByKey(int code) throws SQLException {
-		ProductBean bean = new ProductBean();
+	public synchronized Product doRetriveByKey(int code) throws SQLException {
+		Product bean = new Product();
 		String selectSQL = "SELECT * FROM " + TABLE_NAME + " WHERE id = ? ";
-		try(var conn = ds.getConnection()) {
-			try(var stmt = conn.prepareStatement(selectSQL)){
+		try (var conn = ds.getConnection()) {
+			try (var stmt = conn.prepareStatement(selectSQL)) {
 				stmt.setInt(1, code);
-	
+
 				ResultSet rs = stmt.executeQuery();
 				while (rs.next()) {
 					bean.setId(rs.getInt("id"));
@@ -96,7 +96,7 @@ public class ProductDAO implements GenericDAO<ProductBean> {
 					bean.setDiscount(rs.getDouble("discount"));
 					bean.setOnSale(rs.getInt("onsale"));
 					bean.setQuantity(rs.getInt("quantity"));
-			}
+				}
 			}
 		}
 		return bean;
@@ -104,7 +104,7 @@ public class ProductDAO implements GenericDAO<ProductBean> {
 
 	// Create or insert user
 	@Override
-	public synchronized void doSave(ProductBean dao) throws SQLException {
+	public synchronized void doSave(Product dao) throws SQLException {
 		Connection conn = null;
 		PreparedStatement stmt = null;
 
@@ -142,23 +142,13 @@ public class ProductDAO implements GenericDAO<ProductBean> {
 	}
 
 	@Override
-	public synchronized int doUpdate(ProductBean dao) throws SQLException {
-		String updateSQL = "UPDATE products p  "
-				+ "SET p.name = ?,"
-				+ "p.description = ?,"
-				+ "p.shortDescription = ?,"
-				+ "p.metaDescription = ?,"
-				+ "p.metaDescription = ?,"
-				+ "p.price = ?,"
-				+ "p.weight = ?,"
-				+ "p.available = ?,"
-				+ "p.discount = ?,"
-				+ "p.onSale = ?,"
-				+ "p.quantity = ? "
-				+ "WHERE p.id = ? ";
+	public synchronized int doUpdate(Product dao) throws SQLException {
+		String updateSQL = "UPDATE products p  " + "SET p.name = ?," + "p.description = ?," + "p.shortDescription = ?,"
+				+ "p.metaDescription = ?," + "p.metaDescription = ?," + "p.price = ?," + "p.weight = ?,"
+				+ "p.available = ?," + "p.discount = ?," + "p.onSale = ?," + "p.quantity = ? " + "WHERE p.id = ? ";
 		Connection conn = null;
 		PreparedStatement stmt = null;
-		var result=0;
+		var result = 0;
 		try {
 			conn = ds.getConnection();
 			stmt = conn.prepareStatement(updateSQL);
@@ -175,7 +165,7 @@ public class ProductDAO implements GenericDAO<ProductBean> {
 			stmt.setInt(10, dao.getOnSale());
 			stmt.setInt(11, dao.getQuantity());
 			stmt.setInt(12, dao.getId());
-			result=stmt.executeUpdate();
+			result = stmt.executeUpdate();
 
 		} finally {
 			try {
@@ -217,5 +207,5 @@ public class ProductDAO implements GenericDAO<ProductBean> {
 
 		return (result != 0);
 	}
-	
+
 }

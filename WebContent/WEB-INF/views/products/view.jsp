@@ -2,7 +2,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <link href="resources/css/product-view.css" rel="stylesheet" type="text/css">
 <z:layout pageTitle="Product View">
-	<!-- Page to view details of a product -->	
+	<!-- Page to view details of a product -->
 	<div class="container">
 		<div class="left">
 			<div class="images-small">
@@ -23,22 +23,22 @@
 			<div class="product-description">
 				<p>${bean.getDescription()}</p>
 			</div>
-			
+
 			<div class="product-action">
 				<form action="Cart" method="post">
 					<input type="hidden" name="action" value="add">
 					<input type="hidden" name="id" value="${bean.getId()}">
 					<button type="submit" class="btn btn-success">Add to cart</button>
-				</form> 
+				</form>
 				<form action="Products" method="post">
 					<input type="hidden" name="action" value="delete">
 					<input type="hidden" name="id" value="${bean.getId()}">
 					<button type="submit" class="btn btn-danger">Delete Product</button>
-				</form> 
+				</form>
 				<a href="Products?action=edit&id=${bean.getId()}">
 					<button type="submit" class="btn btn-primary">Edit Product</button>
 				</a>
 			</div>
 		</div>
-	</div>	
+	</div>
 </z:layout>

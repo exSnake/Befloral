@@ -10,25 +10,25 @@
 			<th>Actions</th>
 		</tr>
 		<c:forEach items="${cart.getProducts()}" var="bean">
-		<tr>
-			<td></td>
-			<td>${bean.getQuantity()}</td>
-			<td>${bean.getProduct().getPriceToString()}</td>
-			<td>${bean.getTotalPriceToString()}</td>
-			<td>
-				<form action="Cart" method="post">
-					<input type="hidden" id="id" name="id" value="${bean.getId()}">
-					<input type="hidden" id="action" name="action" value="remove">
-					<button class="btn btn-danger">Delete</button>
-				</form>
-				<form action="Cart" method="post">
-					<input type="hidden" id="id" name="id" value="${bean.getId()}">
-					<input type="hidden" id="action" name="action" value="update">
-					 <input type="number" id="quantity" name="quantity" min="1" value="${bean.getQuantity()}">
-					<button class="btn btn-info">Update</button>
-				</form>
-			</td>
-		</tr>
+			<tr>
+				<td></td>
+				<td>${bean.getQuantity()}</td>
+				<td>${bean.getProduct().getPriceToString()}</td>
+				<td>${bean.getTotalPriceToString()}</td>
+				<td>
+					<form action="Cart" method="post">
+						<input type="hidden" id="id" name="id" value="${bean.getId()}">
+						<input type="hidden" id="action" name="action" value="remove">
+						<button class="btn btn-danger">Delete</button>
+					</form>
+					<form action="Cart" method="post">
+						<input type="hidden" id="id" name="id" value="${bean.getId()}">
+						<input type="hidden" id="action" name="action" value="update">
+						<input type="number" id="quantity" name="quantity" min="1" value="${bean.getQuantity()}">
+						<button class="btn btn-info">Update</button>
+					</form>
+				</td>
+			</tr>
 		</c:forEach>
 	</table>
 	<form action="Cart" method="post">

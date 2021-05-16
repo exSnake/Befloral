@@ -3,32 +3,39 @@ package it.befloral.beans;
 import java.io.Serializable;
 import java.text.NumberFormat;
 
-public class ProductBean  implements Serializable{
+public class Product implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	///////////STATIC///////////////////////////////////////////////////
+	/////////// STATIC///////////////////////////////////////////////////
 	public static int NO_ITEM = -1;
-	static boolean isProductInizialize(ProductBean b) {
-		if(b.getId() == NO_ITEM) return false;
-		else return true;
+
+	static boolean isProductInizialize(Product b) {
+		return b.getId() != NO_ITEM;
 	}
 	///////////////////////////////////////////////////////////////////
-	
-	/////////////////////////ATTRIBUTES///////////////////////////////////
-	private String  name , description , shortDescription ,
-		metaDescription , metaKeyword , imagePath;
-	
-	private double price , discount, weight ;
-	
-	private int  quantity , onSale ,id ;
-	
+
+	///////////////////////// ATTRIBUTES///////////////////////////////////
+	private int id;
+	private String name; 
+	private String description; 
+	private String shortDescription; 
+	private String metaDescription; 
+	private String metaKeyword; 
+	private String imagePath;
+
+	private double price;
+	private double discount;
+	private double weight;
+
+	private int quantity;
+	private int onSale;
+
 	private boolean available;
 	//////////////////////////////////////////////////////////////////////////
-	
-	
-	//////////BUILDER/////////////////////////////////////////////////////////
-	public ProductBean(int id, String name, String description, String shortDescription, String metaDescription,
+
+	////////// BUILDER/////////////////////////////////////////////////////////
+	public Product(int id, String name, String description, String shortDescription, String metaDescription,
 			String metaKeyword, double weight, double price, double discount, int quantity, int onSale,
 			boolean available) {
 		super();
@@ -46,19 +53,18 @@ public class ProductBean  implements Serializable{
 		this.available = available;
 	}
 	
-	public ProductBean() {
-		this.id=NO_ITEM;
+	public Product(String name, String description, String shortDescription, String metaDescription, String metaKeyword,
+			double weight, double price, double discount, int quantity, int onSale, boolean available) {
+		this(0, name, description, shortDescription, metaDescription, metaKeyword, weight, price, discount, quantity,
+				onSale, available);
+
 	}
-	
-	
-	//////////GETTER&SETTERS//////////////////////////////////////////////////
-	
-	public ProductBean(String name, String description, String shortDescription, String metaDescription,
-			String metaKeyword, double weight, double price, double discount, int quantity, int onSale,
-			boolean available) {
-		this(0,name,description,shortDescription,metaDescription,metaKeyword,weight,price,discount,quantity,onSale,available);
-		
+
+	public Product() {
+		this.id = NO_ITEM;
 	}
+
+	////////// GETTER&SETTERS//////////////////////////////////////////////////
 
 	public int getId() {
 		return id;
@@ -115,7 +121,7 @@ public class ProductBean  implements Serializable{
 	public void setWeight(double weight) {
 		this.weight = weight;
 	}
-	
+
 	public String getPriceToString() {
 		return String.format("%.2f", price);
 	}
@@ -159,7 +165,7 @@ public class ProductBean  implements Serializable{
 	public void setAvailable(boolean available) {
 		this.available = available;
 	}
-	
+
 	public String getImagePath() {
 		return imagePath;
 	}
@@ -168,10 +174,8 @@ public class ProductBean  implements Serializable{
 		this.imagePath = imagePath;
 	}
 
+	//////////////////////////////////////////////////////////////////////////
 
-	
-	//////////////////////////////////////////////////////////////////////////	
-	
 	@Override
 	public String toString() {
 		return "ProductBean [id=" + id + ", name=" + name + ", description=" + description + ", shortDescription="
@@ -211,7 +215,7 @@ public class ProductBean  implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ProductBean other = (ProductBean) obj;
+		Product other = (Product) obj;
 		if (available != other.available)
 			return false;
 		if (description == null) {
@@ -254,8 +258,4 @@ public class ProductBean  implements Serializable{
 		return true;
 	}
 
-	
-
-	
-	
 }

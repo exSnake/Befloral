@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import it.befloral.beans.ProductBean;
+import it.befloral.beans.Product;
 import it.befloral.model.GenericDAO;
 import it.befloral.model.ProductDAO;
 
@@ -21,7 +21,7 @@ import it.befloral.model.ProductDAO;
 @WebServlet("/Products")
 public class ProductServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	static GenericDAO<ProductBean> model = new ProductDAO();
+	static GenericDAO<Product> model = new ProductDAO();
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -72,7 +72,7 @@ public class ProductServlet extends HttpServlet {
 				var imageRoot = getServletContext().getContextPath() + "/resources/images/products/";
 				var realPath = getServletContext().getRealPath("/resources/images/products/");
 				var products = model.doRetrieveAll(sort);
-				for (ProductBean p : products) {
+				for (Product p : products) {
 					p.setImagePath(new File(realPath + p.getId() + ".jpg").exists() ? imageRoot + p.getId() + ".jpg"
 							: imageRoot + "error.png");
 				}
@@ -92,24 +92,25 @@ public class ProductServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	
-	
-	//Double.parseDouble(request.getParameter("weight") != null? request.getParameter("weight").replace(",", ".") : "0.0" )
+
+	// Double.parseDouble(request.getParameter("weight") != null?
+	// request.getParameter("weight").replace(",", ".") : "0.0" )
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		if(request.getParameter("action").equals("create")) {
+		if (request.getParameter("action").equals("create")) {
 			ProductDAO products = new ProductDAO();
-			ProductBean product = new ProductBean(request.getParameter("name"), request.getParameter("description"),
-			request.getParameter("shortDescription"), request.getParameter("metaDescription"),
-			request.getParameter("metaKeyword"),
-			Double.parseDouble(request.getParameter("weight")),
-			Double.parseDouble(request.getParameter("price")), Double.parseDouble(request.getParameter("discount")),
-			Integer.parseInt(request.getParameter("quantity")), Integer.parseInt(request.getParameter("onSale")),
-			(request.getParameter("available") == null ? false : true));
+			Product product = new Product(request.getParameter("name"), request.getParameter("description"),
+					request.getParameter("shortDescription"), request.getParameter("metaDescription"),
+					request.getParameter("metaKeyword"), Double.parseDouble(request.getParameter("weight")),
+					Double.parseDouble(request.getParameter("price")),
+					Double.parseDouble(request.getParameter("discount")),
+					Integer.parseInt(request.getParameter("quantity")),
+					Integer.parseInt(request.getParameter("onSale")),
+					(request.getParameter("available") == null ? false : true));
 			try {
 				products.doSave(product);
-	
+
 			} catch (SQLException e) {
 				System.out.println("Error insert Product");
 				e.printStackTrace();
@@ -120,7 +121,8 @@ public class ProductServlet extends HttpServlet {
 		} else if (request.getParameter("action").equals("put")) {
 			doPut(request, response);
 		} else if (request.getParameter("action").equals("view")) {
-			RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/products/view.jsp");
+			RequestDispatcher dispatcher = request.getServletContext()
+					.getRequestDispatcher("/WEB-INF/views/products/view.jsp");
 			dispatcher.forward(request, response);
 			return;
 		} else if (request.getParameter("action").equals("delete")) {
@@ -137,10 +139,9 @@ public class ProductServlet extends HttpServlet {
 			throws ServletException, IOException {
 		String error = null;
 		ProductDAO products = new ProductDAO();
-		ProductBean product = new ProductBean(Integer.parseInt(request.getParameter("id")),
-				request.getParameter("name"), request.getParameter("description"),
-				request.getParameter("shortDescription"), request.getParameter("metaDescription"),
-				request.getParameter("metaKeyword"),
+		Product product = new Product(Integer.parseInt(request.getParameter("id")), request.getParameter("name"),
+				request.getParameter("description"), request.getParameter("shortDescription"),
+				request.getParameter("metaDescription"), request.getParameter("metaKeyword"),
 				Double.parseDouble(request.getParameter("weight").replace(",", ".")),
 				Double.parseDouble(request.getParameter("price")), Double.parseDouble(request.getParameter("discount")),
 				Integer.parseInt(request.getParameter("quantity")), Integer.parseInt(request.getParameter("onSale")),

@@ -11,12 +11,11 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import it.befloral.beans.OrderBean;
-import it.befloral.beans.OrderItemBean;
-import it.befloral.beans.ProductBean;
-import it.befloral.beans.UserBean;
+import it.befloral.beans.Order;
+import it.befloral.beans.OrderItem;
+import it.befloral.beans.User;
 
-public class OrderDAO implements GenericDAO<OrderBean> {
+public class OrderDAO implements GenericDAO<Order> {
 	private static DataSource ds;
 	private static final String TABLE_NAME = "orders";
 
@@ -29,17 +28,16 @@ public class OrderDAO implements GenericDAO<OrderBean> {
 			System.out.println("Error:" + e.getMessage());
 		}
 	}
-	
+
 	@Override
-	public Collection<OrderBean> doRetrieveAll(String order)
-			throws SQLException {
-		Collection<OrderBean> orders = new LinkedList<>();
+	public Collection<Order> doRetrieveAll(String order) throws SQLException {
+		Collection<Order> orders = new LinkedList<>();
 		String selectSQL = "SELECT * FROM " + TABLE_NAME;
-		try(var conn = ds.getConnection()) {
-			try(var stmt = conn.prepareStatement(selectSQL)){
+		try (var conn = ds.getConnection()) {
+			try (var stmt = conn.prepareStatement(selectSQL)) {
 				ResultSet rs = stmt.executeQuery();
 				while (rs.next()) {
-					OrderBean bean = new OrderBean();
+					Order bean = new Order();
 					bean.setId(rs.getInt("id"));
 					bean.setDestination(rs.getString("destination"));
 					bean.setTotalProducts(rs.getInt("totalProducts"));
@@ -56,11 +54,11 @@ public class OrderDAO implements GenericDAO<OrderBean> {
 	}
 
 	@Override
-	public OrderBean doRetriveByKey(int code) throws SQLException {
+	public Order doRetriveByKey(int code) throws SQLException {
 		String selectSQL = "SELECT * FROM " + TABLE_NAME + " WHERE id = ? LEFT JOIN order_items s WHERE s.oid = id ";
-		OrderBean order = new OrderBean();
-		try(var conn = ds.getConnection()) {
-			try(var stmt = conn.prepareStatement(selectSQL)){
+		Order order = new Order();
+		try (var conn = ds.getConnection()) {
+			try (var stmt = conn.prepareStatement(selectSQL)) {
 				stmt.setInt(1, code);
 				ResultSet rs = stmt.executeQuery();
 				while (rs.next()) {
@@ -77,14 +75,14 @@ public class OrderDAO implements GenericDAO<OrderBean> {
 	}
 
 	@Override
-	public void doSave(OrderBean dao) throws SQLException {
+	public void doSave(Order dao) throws SQLException {
 		String insertOrder = "INSERT INTO orders (`uid`, `destination`, `totalProducts`, `totalPaid`, `trackNumber`, `gift`, `giftMessage`) "
 				+ "VALUES (?, ?, ?, ?, ?, ?, ?)";
 		String insertItem = "INSERT INTO order_items "
 				+ "(`oid`, `name`, `description`, `shortDescription`, `price`, `weight`, `discount`, `quantity`) "
 				+ "VALUES (? , ?, ?, ?, ?, ?, ?, ?)";
 		var conn = ds.getConnection();
-		try{
+		try {
 			var stmt = conn.prepareStatement(insertOrder, Statement.RETURN_GENERATED_KEYS);
 			stmt.setInt(1, dao.getUser().getId());
 			stmt.setString(2, dao.getDestination());
@@ -95,30 +93,30 @@ public class OrderDAO implements GenericDAO<OrderBean> {
 			stmt.setString(7, dao.getGiftMessage());
 			stmt.executeUpdate();
 			ResultSet rs = stmt.getGeneratedKeys();
-            if(rs.next()){
-                int lastInsertedId = rs.getInt(1); 
-                for(OrderItemBean item : dao.getItems()) {
-    				var stmt2 = conn.prepareStatement(insertItem);
-    				stmt2.setInt(1, lastInsertedId);
-    				stmt2.setString(2, item.getName());
-    				stmt2.setString(3, item.getDescription());
-    				stmt2.setString(4, item.getShortDescription());
-    				stmt2.setDouble(5, item.getPrice());
-    				stmt2.setDouble(6, item.getWeight());
-    				stmt2.setDouble(7, item.getDiscount());
-    				stmt2.setInt(8, item.getQuantity());
-    				stmt2.execute();
-    			}
-            }
-		} catch (SQLException e ) {
+			if (rs.next()) {
+				int lastInsertedId = rs.getInt(1);
+				for (OrderItem item : dao.getItems()) {
+					var stmt2 = conn.prepareStatement(insertItem);
+					stmt2.setInt(1, lastInsertedId);
+					stmt2.setString(2, item.getName());
+					stmt2.setString(3, item.getDescription());
+					stmt2.setString(4, item.getShortDescription());
+					stmt2.setDouble(5, item.getPrice());
+					stmt2.setDouble(6, item.getWeight());
+					stmt2.setDouble(7, item.getDiscount());
+					stmt2.setInt(8, item.getQuantity());
+					stmt2.execute();
+				}
+			}
+		} catch (SQLException e) {
 			e.printStackTrace();
 			conn.rollback();
 		}
-		
+
 	}
 
 	@Override
-	public int doUpdate(OrderBean dao) throws SQLException {
+	public int doUpdate(Order dao) throws SQLException {
 		// TODO Auto-generated method stub
 		return 0;
 	}
@@ -129,14 +127,14 @@ public class OrderDAO implements GenericDAO<OrderBean> {
 		return false;
 	}
 
-	public Collection<OrderBean> doRetriveByUser(UserBean userBean) throws SQLException {
-		Collection<OrderBean> orders = new LinkedList<OrderBean>();
+	public Collection<Order> doRetriveByUser(User userBean) throws SQLException {
+		Collection<Order> orders = new LinkedList<Order>();
 		String selectSQL = "SELECT * FROM " + TABLE_NAME;
-		try(var conn = ds.getConnection()) {
-			try(var stmt = conn.prepareStatement(selectSQL)){
+		try (var conn = ds.getConnection()) {
+			try (var stmt = conn.prepareStatement(selectSQL)) {
 				ResultSet rs = stmt.executeQuery();
 				while (rs.next()) {
-					OrderBean bean = new OrderBean();
+					Order bean = new Order();
 					bean.setId(rs.getInt("id"));
 					bean.setDestination(rs.getString("destination"));
 					bean.setTotalProducts(rs.getInt("totalProducts"));

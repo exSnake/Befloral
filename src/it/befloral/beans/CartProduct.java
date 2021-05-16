@@ -1,18 +1,18 @@
 package it.befloral.beans;
 
-public class CartProductBean {
-	private ProductBean product;
-
-	public ProductBean getProduct() {
-		return product;
-	}
-
+public class CartProduct {
 	private static final long serialVersionUID = 1L;
 	int quantity;
+	private Product product;
 
-	public CartProductBean(ProductBean product) {
+	public CartProduct(Product product) {
+		super();
 		this.setQuantity(0);
 		this.product = product;
+	}
+
+	public Product getProduct() {
+		return product;
 	}
 
 	public int getQuantity() {
@@ -38,11 +38,11 @@ public class CartProductBean {
 			return true;
 		}
 		/* Se non e' un istanza di className o obj e' null, ritorna false */
-		if (!(obj instanceof CartProductBean)) {
+		if (!(obj instanceof CartProduct)) {
 			return false;
 		}
 		// typecast a className in modo da poterli comparare
-		CartProductBean prod = (CartProductBean) obj;
+		CartProduct prod = (CartProduct) obj;
 		return prod.getId() == this.getId();
 	}
 

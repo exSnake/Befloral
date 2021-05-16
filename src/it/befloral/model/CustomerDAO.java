@@ -10,10 +10,10 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import it.befloral.beans.CustomerBean;
-import it.befloral.beans.UserBean;
+import it.befloral.beans.Customer;
+import it.befloral.beans.User;
 
-public class CustomerDAO implements GenericDAO<CustomerBean> {
+public class CustomerDAO implements GenericDAO<Customer> {
 
 	private static DataSource ds;
 	public static final String TABLE_NAME = "customers";
@@ -28,9 +28,10 @@ public class CustomerDAO implements GenericDAO<CustomerBean> {
 		}
 	}
 
-	public CustomerDAO() {	}
+	public CustomerDAO() {
+	}
 
-	public CustomerBean doRetriveByEmail(String email) throws SQLException {
+	public Customer doRetriveByEmail(String email) throws SQLException {
 		String sql = "SELECT * FROM " + TABLE_NAME + " WHERE email = ? ";
 
 		ResultSet result = null;
@@ -39,7 +40,7 @@ public class CustomerDAO implements GenericDAO<CustomerBean> {
 			try (var stmt = conn.prepareStatement(sql)) {
 				stmt.setString(1, email);
 				result = stmt.executeQuery();
-				CustomerBean temp = null;
+				Customer temp = null;
 				if (result.next()) {
 					temp = getParam(result);
 				}
@@ -48,21 +49,20 @@ public class CustomerDAO implements GenericDAO<CustomerBean> {
 		}
 	}
 
-
-	public Collection<CustomerBean> doRetrieveAll(String order)
-			throws SQLException {
+	public Collection<Customer> doRetrieveAll(String order) throws SQLException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public CustomerBean doRetriveByKey(int code) throws SQLException {
-		String sql = "SELECT * FROM " + TABLE_NAME + "c WHERE id = ? LEFT JOIN "+ UserDAO.TABLE_NAME +" u ON u.id = c.uid  ";
+	public Customer doRetriveByKey(int code) throws SQLException {
+		String sql = "SELECT * FROM " + TABLE_NAME + "c WHERE id = ? LEFT JOIN " + UserDAO.TABLE_NAME
+				+ " u ON u.id = c.uid  ";
 		try (var conn = ds.getConnection()) {
 			try (var stmt = conn.prepareStatement(sql)) {
 				stmt.setInt(1, code);
 				ResultSet result = stmt.executeQuery();
-				CustomerBean temp = null;
+				Customer temp = null;
 				if (result.next()) {
 					temp = getParam(result);
 				}
@@ -72,13 +72,13 @@ public class CustomerDAO implements GenericDAO<CustomerBean> {
 	}
 
 	@Override
-	public void doSave(CustomerBean dao) throws SQLException {
+	public void doSave(Customer dao) throws SQLException {
 		String sql = "INSERT INTO " + TABLE_NAME + " (uid, firstName, lastName, "
 				+ "gender, subscription, birthday) VALUES (?, ?, ?, ?, ?, ?) ";
 		UserDAO user = new UserDAO();
 		user.doSave(dao.getUser());
-		UserBean newUser = user.doRetriveByUsername(dao.getUser().getEmail());
-		if(newUser == null)
+		User newUser = user.doRetriveByUsername(dao.getUser().getEmail());
+		if (newUser == null)
 			throw new SQLException("User null");
 		try (var conn = ds.getConnection()) {
 			try (var stmt = conn.prepareStatement(sql)) {
@@ -91,13 +91,12 @@ public class CustomerDAO implements GenericDAO<CustomerBean> {
 				stmt.execute();
 			}
 		}
-		
+
 	}
 
 	@Override
-	public int doUpdate(CustomerBean dao) throws SQLException {
-		String sql = "UPDATE " + CustomerDAO.TABLE_NAME + " ( id, fristname, lastname, "
-				+ "email, gender, active, "
+	public int doUpdate(Customer dao) throws SQLException {
+		String sql = "UPDATE " + CustomerDAO.TABLE_NAME + " ( id, fristname, lastname, " + "email, gender, active, "
 				+ "newsletter, password, birthday) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ";
 		return 0;
 	}
@@ -107,10 +106,10 @@ public class CustomerDAO implements GenericDAO<CustomerBean> {
 		String sql = "DELETE FROM " + CustomerDAO.TABLE_NAME + " WHERE (id = ? ) ";
 		return false;
 	}
-	
-	protected CustomerBean getParam(ResultSet result) throws SQLException {
-		CustomerBean temp = new CustomerBean();
-		UserBean user = new UserBean();
+
+	protected Customer getParam(ResultSet result) throws SQLException {
+		Customer temp = new Customer();
+		User user = new User();
 		temp.setId(result.getInt("id"));
 		temp.setFirstName(result.getString("firstName"));
 		temp.setLastName(result.getString("lastName"));
@@ -118,7 +117,7 @@ public class CustomerDAO implements GenericDAO<CustomerBean> {
 		temp.setSubscription(result.getBoolean("newsletter"));
 		temp.setBirthday(result.getDate("birthday").toLocalDate());
 		temp.setUser(null);
-		if(result.getString("email") != null) {
+		if (result.getString("email") != null) {
 			user.setEmail(result.getString("email"));
 			user.setPassword(result.getString("password"));
 			user.setRole(result.getString("role"));

@@ -3,10 +3,6 @@ package it.befloral.model;
 import java.sql.SQLException;
 import java.util.Collection;
 
-import javax.sql.DataSource;
-
-import it.befloral.beans.ProductBean;
-
 public interface GenericDAO<T> {
 
 	Collection<T> doRetrieveAll(String order) throws SQLException;
