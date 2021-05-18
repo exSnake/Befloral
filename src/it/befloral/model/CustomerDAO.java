@@ -1,6 +1,5 @@
 package it.befloral.model;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
@@ -42,7 +41,21 @@ public class CustomerDAO implements GenericDAO<Customer> {
 				result = stmt.executeQuery();
 				Customer temp = null;
 				if (result.next()) {
-					temp = getParam(result);
+					temp = new Customer();
+					User user = new User();
+					temp.setId(result.getInt("id"));
+					temp.setFirstName(result.getString("firstName"));
+					temp.setLastName(result.getString("lastName"));
+					temp.setGender(result.getInt("gender"));
+					temp.setSubscription(result.getBoolean("newsletter"));
+					temp.setBirthday(result.getDate("birthday").toLocalDate());
+					temp.setUser(null);
+					if (result.getString("email") != null) {
+						user.setEmail(result.getString("email"));
+						user.setPassword(result.getString("password"));
+						user.setRole(result.getString("role"));
+						user.setActive(result.getBoolean("active"));
+					}
 				}
 				return temp;
 			}
@@ -64,7 +77,21 @@ public class CustomerDAO implements GenericDAO<Customer> {
 				ResultSet result = stmt.executeQuery();
 				Customer temp = null;
 				if (result.next()) {
-					temp = getParam(result);
+					temp = new Customer();
+					User user = new User();
+					temp.setId(result.getInt("id"));
+					temp.setFirstName(result.getString("firstName"));
+					temp.setLastName(result.getString("lastName"));
+					temp.setGender(result.getInt("gender"));
+					temp.setSubscription(result.getBoolean("newsletter"));
+					temp.setBirthday(result.getDate("birthday").toLocalDate());
+					temp.setUser(null);
+					if (result.getString("email") != null) {
+						user.setEmail(result.getString("email"));
+						user.setPassword(result.getString("password"));
+						user.setRole(result.getString("role"));
+						user.setActive(result.getBoolean("active"));
+					}
 				}
 				return temp;
 			}
@@ -105,26 +132,6 @@ public class CustomerDAO implements GenericDAO<Customer> {
 	public boolean doDelete(int code) throws SQLException {
 		String sql = "DELETE FROM " + CustomerDAO.TABLE_NAME + " WHERE (id = ? ) ";
 		return false;
-	}
-
-	protected Customer getParam(ResultSet result) throws SQLException {
-		Customer temp = new Customer();
-		User user = new User();
-		temp.setId(result.getInt("id"));
-		temp.setFirstName(result.getString("firstName"));
-		temp.setLastName(result.getString("lastName"));
-		temp.setGender(result.getInt("gender"));
-		temp.setSubscription(result.getBoolean("newsletter"));
-		temp.setBirthday(result.getDate("birthday").toLocalDate());
-		temp.setUser(null);
-		if (result.getString("email") != null) {
-			user.setEmail(result.getString("email"));
-			user.setPassword(result.getString("password"));
-			user.setRole(result.getString("role"));
-			user.setActive(result.getBoolean("active"));
-		}
-		return temp;
-
 	}
 
 }

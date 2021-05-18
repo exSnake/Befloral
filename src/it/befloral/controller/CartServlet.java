@@ -34,7 +34,6 @@ public class CartServlet extends HttpServlet {
 	 */
 	public CartServlet() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
