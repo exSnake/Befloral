@@ -1,6 +1,5 @@
 <%@taglib prefix="z" tagdir="/WEB-INF/tags"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<link href="resources/css/product.css" rel="stylesheet" type="text/css">
 <z:layout pageTitle="Login">
 	<form action="Login" method="post" enctype="application/x-www-form-urlencoded">
 		<div class="form-group">

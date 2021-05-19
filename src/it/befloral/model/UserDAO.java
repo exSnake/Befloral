@@ -80,12 +80,13 @@ public class UserDAO implements GenericDAO<User> {
 
 	public User doRetriveByUsername(String username) throws SQLException {
 		String sql = "SELECT * FROM " + UserDAO.TABLE_NAME + " WHERE email = ?";
-		User bean = new User();
+		User bean = null;
 		try (var conn = ds.getConnection()) {
 			try (var stmt = conn.prepareStatement(sql)) {
 				stmt.setString(1, username);
 				ResultSet rs = stmt.executeQuery();
-				while (rs.next()) {
+				if(rs.next()) {
+					bean = new User();
 					bean.setId(rs.getInt("id"));
 					bean.setEmail(rs.getString("email"));
 					bean.setPassword(rs.getString("password"));

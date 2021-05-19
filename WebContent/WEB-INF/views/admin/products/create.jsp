@@ -1,5 +1,8 @@
-<%@ taglib prefix="z" tagdir="/WEB-INF/tags"%>
-<z:layout pageTitle="Product View">
+<%@taglib prefix="z" tagdir="/WEB-INF/tags"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<link href="resources/css/product.css" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<z:layout pageTitle="Admin Product Create">
 	<h1>Create new Product</h1>
 	<form action="Products" method="post">
 		<input type="hidden" name="action" value="create">

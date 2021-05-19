@@ -1,7 +1,6 @@
 <%@taglib prefix="z" tagdir="/WEB-INF/tags"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <z:layout pageTitle="Register">
-
 	<h1>Create new account</h1>
 	<form action="Login" method="post" enctype="application/x-www-form-urlencoded">
 		<div class="form-group">
@@ -63,5 +62,4 @@
 		<button type="submit" class="btn btn-success mt-2">Register Now!</button>
 
 	</form>
-
 </z:layout>

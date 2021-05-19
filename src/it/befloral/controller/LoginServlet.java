@@ -47,8 +47,7 @@ public class LoginServlet extends HttpServlet {
 		// Try to Register
 		String action = request.getParameter("action");
 		if (user == null && action != null && action.equals("register")) {
-			RequestDispatcher dispatcher = getServletContext()
-					.getRequestDispatcher("/WEB-INF/views/login/register.jsp");
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/views/login/register.jsp");
 			dispatcher.forward(request, response);
 			return;
 		}
@@ -72,6 +71,7 @@ public class LoginServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String action = request.getParameter("action");
+		System.out.println(action);
 		if (action != null) {
 			// Try Registering
 			if (action.equals("register")) {
@@ -87,11 +87,14 @@ public class LoginServlet extends HttpServlet {
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
-
-				if (bean == null || bean.getPassword() == request.getParameter("password")) {
-					RequestDispatcher dispatcher = getServletContext()
-							.getRequestDispatcher("/WEB-INF/views/login/login.jsp");
+				System.out.println(bean == null);
+				System.out.println(bean != null ? bean.getEmail() : "null");
+				if (bean == null || bean.getPassword().equals(request.getParameter("password"))) {
+					request.getSession().setAttribute("user", null);
+					RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/views/login/login.jsp");
 					dispatcher.forward(request, response);
+					//TODO send a login error
+					return;
 				} else {
 					request.getSession().setAttribute("user", bean);
 				}
