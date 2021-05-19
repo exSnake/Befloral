@@ -1,5 +1,7 @@
+USE `befloral`;
+
 INSERT INTO `migrations` (`name`) VALUES
-	('2021_05_14_create_customers_table');
+	('2021_05_14_09_55_14_create_customers_table');
 
 CREATE TABLE `customers` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -10,7 +12,6 @@ CREATE TABLE `customers` (
   `subscription` tinyint DEFAULT NULL,
   `birthday` date NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `email_UNIQUE` (`email`),
   CONSTRAINT `users` FOREIGN KEY (`uid`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT 
 );
 

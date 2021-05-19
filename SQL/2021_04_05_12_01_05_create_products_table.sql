@@ -44,14 +44,19 @@ CREATE TABLE `products` (
 
 -- Dump dei dati della tabella befloral.migrations: 1 row
 INSERT INTO `migrations` (`name`) VALUES
-	('2021_04_05_create_products_table');
+	('2021_04_05_12_01_05_create_products_table');
 
 -- Dump dei dati della tabella befloral.products: 4 rows 
 INSERT INTO `products` (`name`, `description`, `shortDescription`, `metaDescription`, `metaKeyword`, `price`, `weight`, `available`, `discount`, `onSale`, `quantity`) VALUES
-	('Boquette Anturium', 'Boquette di Anturium e Azalee', 'Anturium', 'boquette_anturium', 'anturium', 20.33, 1.2, 1, 12, 1, 10),
-	('Boquette Rose', 'Boquette di Rose Rosse bulgare', 'Boquette Rose', 'boquette_rose', 'boquette', 19.3, 1.6, 1, 0, 1, 9),
+	('Bouquet di Anturium', 'Bouquet di Anturium e Azalee', 'Anturium', 'bouquet_anturium', 'anturium', 20.33, 1.2, 1, 12, 1, 10),
+	('Bouquet di Rose', 'Bouquet di Rose Rosse bulgare', 'Boquette Rose', 'bouquet_rose', 'boquette', 19.3, 1.6, 1, 0, 1, 9),
 	('Margherita', 'Margherita bianca con petali rossi floreali', 'Margerita', 'margerita', 'margherita', 8.5, 0.5, 1, 0, 1, 120),
 	('Tulipano Giallo', 'Tulipano giallo himalaiano', 'Tulipano', 'tulipano', 'tulipano', 9.25, 0.3, 1, 0, 1, 50),
+	('Orchidea Gialla', 'Orchidea gialla in vaso', 'Orchidea', 'orchidea', 'orchidea', 29.90, 2.3, 1, 0, 0, 50),
+	('Orchidea Rosa', 'Orchidea rosa in vaso', 'Orchidea', 'orchidea', 'orchidea', 29.90, 2.3, 1, 0, 0, 50),
+	('Orchidea Verde', 'Orchidea verde in vaso', 'Orchidea', 'orchidea', 'orchidea', 29.90, 2.3, 1, 0, 0, 50),
+	('Rosa rossa', 'Rosa rossa con gambo di 80cm', 'Rosa rossa', 'rosa', 'rosa', 3.90, 0.5, 1, 0, 0, 50),
+	('Bouquet di Gerbera', 'Bouquet di Gerbera di colori misti', 'Bouquet Gerbera', 'bouquet_gerbera', 'gerbera', 20.90, 0.5, 1, 0, 0, 50),
 	('Vaso Terra Cotta', 'Vaso di terra cotta rosso', 'Vaso', 'vaso', 'varo', 12.4, 0.5, 1, 0, 1, 12);
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

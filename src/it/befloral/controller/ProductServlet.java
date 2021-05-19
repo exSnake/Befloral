@@ -97,39 +97,39 @@ public class ProductServlet extends HttpServlet {
 	// request.getParameter("weight").replace(",", ".") : "0.0" )
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
-		if (request.getParameter("action").equals("create")) {
-			ProductDAO products = new ProductDAO();
-			Product product = new Product(request.getParameter("name"), request.getParameter("description"),
-					request.getParameter("shortDescription"), request.getParameter("metaDescription"),
-					request.getParameter("metaKeyword"), Double.parseDouble(request.getParameter("weight")),
-					Double.parseDouble(request.getParameter("price")),
-					Double.parseDouble(request.getParameter("discount")),
-					Integer.parseInt(request.getParameter("quantity")),
-					Integer.parseInt(request.getParameter("onSale")),
-					(request.getParameter("available") == null ? false : true));
-			try {
-				products.doSave(product);
-
-			} catch (SQLException e) {
-				System.out.println("Error insert Product");
-				e.printStackTrace();
-			}
-			RequestDispatcher dispatcher = request.getServletContext()
-					.getRequestDispatcher("/WEB-INF/views/products/create.jsp");
-			dispatcher.forward(request, response);
-		} else if (request.getParameter("action").equals("put")) {
-			doPut(request, response);
-		} else if (request.getParameter("action").equals("view")) {
-			RequestDispatcher dispatcher = request.getServletContext()
-					.getRequestDispatcher("/WEB-INF/views/products/view.jsp");
-			dispatcher.forward(request, response);
-			return;
-		} else if (request.getParameter("action").equals("delete")) {
-			doDelete(request, response);
-			return;
-		}
-
+/* admin 
+//		if (request.getParameter("action").equals("create")) {
+//			ProductDAO products = new ProductDAO();
+//			Product product = new Product(request.getParameter("name"), request.getParameter("description"),
+//					request.getParameter("shortDescription"), request.getParameter("metaDescription"),
+//					request.getParameter("metaKeyword"), Double.parseDouble(request.getParameter("weight")),
+//					Double.parseDouble(request.getParameter("price")),
+//					Double.parseDouble(request.getParameter("discount")),
+//					Integer.parseInt(request.getParameter("quantity")),
+//					Integer.parseInt(request.getParameter("onSale")),
+//					(request.getParameter("available") == null ? false : true));
+//			try {
+//				products.doSave(product);
+//
+//			} catch (SQLException e) {
+//				System.out.println("Error insert Product");
+//				e.printStackTrace();
+//			}
+//			RequestDispatcher dispatcher = request.getServletContext()
+//					.getRequestDispatcher("/WEB-INF/views/products/create.jsp");
+//			dispatcher.forward(request, response);
+//		} else if (request.getParameter("action").equals("put")) {
+//			doPut(request, response);
+//		} else if (request.getParameter("action").equals("view")) {
+//			RequestDispatcher dispatcher = request.getServletContext()
+//					.getRequestDispatcher("/WEB-INF/views/products/view.jsp");
+//			dispatcher.forward(request, response);
+//			return;
+//		} else if (request.getParameter("action").equals("delete")) {
+//			doDelete(request, response);
+//			return;
+//		}
+*/
 	}
 
 	/**
