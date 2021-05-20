@@ -34,6 +34,7 @@ public class UserServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		User user = (User) request.getSession().getAttribute("user");
+		request.setAttribute("active", "User");
 		if (user != null) {
 			OrderDAO orderDao = new OrderDAO();
 			try {

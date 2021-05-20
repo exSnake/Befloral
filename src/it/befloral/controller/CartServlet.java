@@ -43,6 +43,7 @@ public class CartServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		Cart cart = (Cart) request.getSession().getAttribute("cart");
+		request.setAttribute("active", "Cart");
 		if (cart != null) {
 			cart.getProducts();
 		}

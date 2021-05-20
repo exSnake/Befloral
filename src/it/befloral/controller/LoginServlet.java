@@ -39,8 +39,9 @@ public class LoginServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		
 		User user = null;
+		request.setAttribute("active", "Login");
 		// If session have user
 		if (request.getSession().getAttribute("user") != null)
 			user = (User) request.getSession().getAttribute("user");
@@ -57,6 +58,7 @@ public class LoginServlet extends HttpServlet {
 			dispatcher.forward(request, response);
 		} else {
 			// Profile page
+			request.getSession().setAttribute("active", "User");
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/views/users/index.jsp");
 			dispatcher.forward(request, response);
 		}
@@ -71,7 +73,7 @@ public class LoginServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String action = request.getParameter("action");
-		System.out.println(action);
+		request.setAttribute("active", "Login");
 		if (action != null) {
 			// Try Registering
 			if (action.equals("register")) {
@@ -98,9 +100,7 @@ public class LoginServlet extends HttpServlet {
 				} else {
 					request.getSession().setAttribute("user", bean);
 				}
-
-				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/views/index.jsp");
-				dispatcher.forward(request, response);
+				response.sendRedirect("Home");
 			}
 		}
 	}

@@ -57,15 +57,19 @@ public class AdminOrderServlet extends HttpServlet {
 		var dateFrom = request.getAttribute("dateFrom");
 		var dateTo = request.getAttribute("dateTo");
 		var uid = request.getAttribute("userId");
+		// http://localhost/befloral/admin/orders?page=1  <- primi 10 ordini
+		// http://localhost/befloral/admin/orders?page=2  <- dal 10 al 20 esimo ordine... etc
+		// http://localhost/befloral/admin/orders?page=1&dateFrom=2021-01-01&dateTo=2021-05-01 1
 	}
 	
 	private void doView(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		// TODO view single order detail page
+		// http://localhost/beflral/admin/orders?action=view&id=12 
+		
 	}
 	
 	private void doEdit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		// TODO view single order edit page
-		
 	}
 
 	@Override

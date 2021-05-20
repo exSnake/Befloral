@@ -3,5 +3,4 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <z:layout pageTitle="Admin Orders Manager">
 
-
 </z:layout>
