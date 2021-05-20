@@ -117,16 +117,70 @@ public class OrderDAO implements GenericDAO<Order> {
 
 	@Override
 	public int doUpdate(Order dao) throws SQLException {
-		// TODO Auto-generated method stub
+		
+		String updateOrder = "UPDATE  orders SET(`destination` = ?, `totalProducts` = ?, `totalPaid` =?, `trackNumber` =?, `gift`=?, `giftMessage`=?) "
+				+ "WHERE `uid`=? and 'id' = ? ";
+		String updateItem = "UPDATE  order_items SET(`name` = ?, `description` = ?, `shortDescription` = ?"
+				+ ", `price` = ?, `weight` = ?, `discount` = ?, `quantity`= ? ) "
+				+ "WHERE 'id' = ? and 'oid' = ?  ";
+		var conn = ds.getConnection();
+		
+		try {
+			var stmt = conn.prepareStatement(updateOrder);
+			stmt.setString(1, dao.getDestination());
+			stmt.setInt(2, dao.getTotalProducts());
+			stmt.setDouble(3, dao.getTotalPaid());
+			stmt.setString(4, dao.getTrackNumber());
+			stmt.setBoolean(5, dao.isGift());
+			stmt.setString(6, dao.getGiftMessage());
+			
+			stmt.setInt(7,  dao.getUser().getId() );
+			stmt.setInt(8, dao.getId());
+			
+			stmt.executeUpdate();
+		
+				for (OrderItem item : dao.getItems()) {
+					var stmt2 = conn.prepareStatement(updateItem);
+					
+					stmt2.setString(1, item.getName());
+					stmt2.setString(2, item.getDescription());
+					stmt2.setString(3, item.getShortDescription());
+					stmt2.setDouble(4, item.getPrice());
+					stmt2.setDouble(5, item.getWeight());
+					stmt2.setDouble(6, item.getDiscount());
+					stmt2.setInt(7, item.getQuantity());
+					
+					stmt2.setInt(8, item.getId());
+					stmt2.setInt(9,  dao.getId());
+					
+					stmt2.execute();
+				}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			conn.rollback();
+		}	
+		
 		return 0;
 	}
 
 	@Override
 	public boolean doDelete(int code) throws SQLException {
-		// TODO Auto-generated method stub
-		return false;
-	}
+		String deleteSQL = "DELETE * FROM " + TABLE_NAME + "WHERE id = ?";
+		int rs;
+		try (var conn = ds.getConnection()) {
+			try (var stmt = conn.prepareStatement(deleteSQL)) {
+				
+				stmt.setInt(1,code ); 
+				
+				rs = stmt.executeUpdate();
 
+		
+				return rs>0 ? true : false ;
+			}
+		}
+}
+			
 	public Collection<Order> doRetriveByUser(User userBean) throws SQLException {
 		Collection<Order> orders = new LinkedList<Order>();
 		String selectSQL = "SELECT * FROM " + TABLE_NAME;
