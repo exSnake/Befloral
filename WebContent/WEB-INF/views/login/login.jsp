@@ -1,6 +1,8 @@
 <%@taglib prefix="z" tagdir="/WEB-INF/tags"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <z:layout pageTitle="Login">
+	
+	
 	<form action="Login" method="post" enctype="application/x-www-form-urlencoded">
 		<div class="form-group">
 			<label for="email">Email</label>

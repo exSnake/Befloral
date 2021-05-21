@@ -53,6 +53,40 @@ public class OrderDAO implements GenericDAO<Order> {
 		return orders;
 	}
 
+	
+	public Collection<Order> doRetrieveSome(String order , int from , int howMany) throws SQLException {
+		Collection<Order> orders = new LinkedList<>();
+		String selectSQL = "SELECT * FROM  TABLE_NAME ORDER BY ? LIMIT ? OFFSET ? " ;
+		try (var conn = ds.getConnection()) {
+			try (var stmt = conn.prepareStatement(selectSQL)) {
+				
+				stmt.setString(1, order);
+				stmt.setInt(2, howMany);
+				stmt.setInt(3, from);
+				
+				
+				ResultSet rs = stmt.executeQuery();
+				while (rs.next()) {
+					Order bean = new Order();
+					bean.setId(rs.getInt("id"));
+					bean.setDestination(rs.getString("destination"));
+					bean.setTotalProducts(rs.getInt("totalProducts"));
+					bean.setTotalPaid(rs.getDouble("totalPaid"));
+					bean.setStatus(rs.getString("status"));
+					bean.setGift(rs.getBoolean("gift"));
+					bean.setGiftMessage(rs.getString("giftMessage"));
+					bean.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+					orders.add(bean);
+				}
+			}
+		}
+		return orders;
+	}
+	
+	
+	
+	
+	
 	@Override
 	public Order doRetriveByKey(int code) throws SQLException {
 		String selectSQL = "SELECT * FROM " + TABLE_NAME + " WHERE id = ? LEFT JOIN order_items s WHERE s.oid = id ";
@@ -91,7 +125,12 @@ public class OrderDAO implements GenericDAO<Order> {
 			stmt.setString(5, dao.getTrackNumber());
 			stmt.setBoolean(6, dao.isGift());
 			stmt.setString(7, dao.getGiftMessage());
+			
+					
 			stmt.executeUpdate();
+			
+			
+			
 			ResultSet rs = stmt.getGeneratedKeys();
 			if (rs.next()) {
 				int lastInsertedId = rs.getInt(1);
@@ -105,6 +144,8 @@ public class OrderDAO implements GenericDAO<Order> {
 					stmt2.setDouble(6, item.getWeight());
 					stmt2.setDouble(7, item.getDiscount());
 					stmt2.setInt(8, item.getQuantity());
+										
+					
 					stmt2.execute();
 				}
 			}
@@ -204,4 +245,7 @@ public class OrderDAO implements GenericDAO<Order> {
 		return orders;
 	}
 
+	
+	
+	
 }

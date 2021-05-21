@@ -122,6 +122,7 @@ public class CartServlet extends HttpServlet {
 		order.setTrackNumber("");
 		order.setUser(user);
 		order.setGift(false);
+	
 		for (CartProduct prod : cart.getProducts()) {
 			OrderItem bean = new OrderItem();
 			bean.setDescription(prod.getProduct().getDescription());
