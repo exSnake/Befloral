@@ -3,7 +3,10 @@ package it.befloral.model;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Date;
 import java.util.LinkedList;
 
 import javax.naming.Context;
@@ -53,10 +56,49 @@ public class OrderDAO implements GenericDAO<Order> {
 		return orders;
 	}
 
+	public Collection<Order> doRetrieveOrdersBetween(String order , int userId , int from , int howMany
+			, Timestamp fromDate , Timestamp ToDate) throws SQLException {
+		
+		String selectSQL = "SELECT * from  " +TABLE_NAME +" where uid = ?  AND createdAtTime BETWEEN ? AND  ? ORDER BY ? LIMIT  ?  OFFSET ?";
+		Collection<Order> orders = new LinkedList<>();
+		
+		try (var conn = ds.getConnection()) {
+			try (var stmt = conn.prepareStatement(selectSQL)) {
+				
+				stmt.setInt(1, userId);
+				stmt.setTimestamp(2, fromDate);
+				stmt.setTimestamp(3, ToDate);
+				
+				stmt.setString(4, order);
+				stmt.setInt(5, howMany);
+				stmt.setInt(6, from);
+				
+				
+				ResultSet rs = stmt.executeQuery();
+				while (rs.next()) {
+					Order bean = new Order();
+					bean.setId(rs.getInt("id"));
+					bean.setDestination(rs.getString("destination"));
+					bean.setTotalProducts(rs.getInt("totalProducts"));
+					bean.setTotalPaid(rs.getDouble("totalPaid"));
+					bean.setStatus(rs.getString("status"));
+					bean.setGift(rs.getBoolean("gift"));
+					bean.setGiftMessage(rs.getString("giftMessage"));
+					bean.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+					orders.add(bean);
+				}
+			}
+		}
+		return orders;
+	}
+	
+		
+
+	
 	
 	public Collection<Order> doRetrieveSome(String order , int from , int howMany) throws SQLException {
 		Collection<Order> orders = new LinkedList<>();
-		String selectSQL = "SELECT * FROM  TABLE_NAME ORDER BY ? LIMIT ? OFFSET ? " ;
+		String selectSQL = "SELECT * FROM  " +TABLE_NAME +" ORDER BY ? LIMIT ? OFFSET ? " ;
 		try (var conn = ds.getConnection()) {
 			try (var stmt = conn.prepareStatement(selectSQL)) {
 				
@@ -156,6 +198,35 @@ public class OrderDAO implements GenericDAO<Order> {
 
 	}
 
+	
+	public int doUpdateOrder(Order dao )throws SQLException {
+		String updateOrder = "UPDATE  orders SET(`destination` = ?, `totalProducts` = ?, `totalPaid` =?, `trackNumber` =?, `gift`=?, `giftMessage`=?) "
+				+ "WHERE `uid`=? and 'id' = ? ";
+		var conn = ds.getConnection();
+	
+		try {
+			var stmt = conn.prepareStatement(updateOrder);
+			stmt.setString(1, dao.getDestination());
+			stmt.setInt(2, dao.getTotalProducts());
+			stmt.setDouble(3, dao.getTotalPaid());
+			stmt.setString(4, dao.getTrackNumber());
+			stmt.setBoolean(5, dao.isGift());
+			stmt.setString(6, dao.getGiftMessage());
+			
+			stmt.setInt(7,  dao.getUser().getId() );
+			stmt.setInt(8, dao.getId());
+			
+			stmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			conn.rollback();
+		}	
+		
+		return 0;
+	}
+	
+	
 	@Override
 	public int doUpdate(Order dao) throws SQLException {
 		
