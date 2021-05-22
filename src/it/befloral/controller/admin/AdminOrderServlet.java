@@ -40,14 +40,18 @@ public class AdminOrderServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
 		var action = request.getParameter("action");
+		System.out.println(action);
 		if (action == null) {
 			index(request, response);
 		} else {
 			if (action.equals("view")) {
 				doView(request, response);
+				return;
 			} else if (action.equals("edit")) {
 				doEdit(request, response);
+				return;
 			}
 		}
 	}
@@ -82,9 +86,12 @@ public class AdminOrderServlet extends HttpServlet {
 				int id = Integer.parseInt(request.getParameter("id"));
 				var order = model.doRetriveByKey(id);
 				request.setAttribute("bean", order);
+				request.setAttribute("items", order.getItems());
+				System.out.println(order.getItems().size());
 				RequestDispatcher dispatcher = request.getServletContext()
 						.getRequestDispatcher("/WEB-INF/views/admin/orders/view.jsp");
 				dispatcher.forward(request, response);
+				return;
 			}
 		} catch (SQLException e) {
 			System.out.println("Error:" + e.getMessage());
@@ -93,21 +100,22 @@ public class AdminOrderServlet extends HttpServlet {
 	}
 
 	private void index(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
 		int page = Integer.parseInt(request.getParameter("page") == null ? "1" : request.getParameter("page"));
 		LocalDate dateFrom = LocalDate.parse(request.getParameter("dateFrom"));
 		LocalDate dateTo = LocalDate.parse(request.getParameter("dateTo"));
 		int uid = Integer.parseInt(request.getParameter("userId"));
 
-		int offset = Integer.parseInt(request.getParameter("page") == null ? "10": request.getParameter("offset")); // 10 FOR PAGE
-		String sort= request.getParameter("sort") == null ? "id" : request.getParameter("sort"); // NO ORDER , DEFAULT
+		int offset = Integer.parseInt(request.getParameter("page") == null ? "10" : request.getParameter("offset")); // 10
+																														// FOR
+																														// PAGE
+		String sort = request.getParameter("sort") == null ? "id" : request.getParameter("sort"); // NO ORDER , DEFAULT
 																									// ORDER BY ID
 		OrderDAO dao = new OrderDAO();
 		try {
 			/* TAKE orders of that id */
-			Collection<Order> orders = dao.doRetrieveOrdersBetween(sort, uid,
-					(( page - 1) * (offset) + 1),offset,Timestamp.valueOf(dateFrom.atStartOfDay()),
-					Timestamp.valueOf(dateTo.atStartOfDay()));
+			Collection<Order> orders = dao.doRetrieveOrdersBetween(sort, uid, ((page - 1) * (offset) + 1), offset,
+					Timestamp.valueOf(dateFrom.atStartOfDay()), Timestamp.valueOf(dateTo.atStartOfDay()));
 
 			request.removeAttribute("order");
 			request.setAttribute("order", orders);
@@ -121,9 +129,23 @@ public class AdminOrderServlet extends HttpServlet {
 	}
 
 	private void doEdit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO view single order edit page
+		System.out.println("edit");
+		try {
+			if (request.getParameter("id") != null) {
+				int id = Integer.parseInt(request.getParameter("id"));
+				var order = model.doRetriveByKey(id);
+				request.setAttribute("bean", order);
+				RequestDispatcher dispatcher = request.getServletContext()
+						.getRequestDispatcher("/WEB-INF/views/admin/orders/edit.jsp");
+				dispatcher.forward(request, response);
+				return;
+			}
 
-		var id = request.getParameter("id") == null ? 0 : request.getParameter("id");// TAKE id of order
+		} catch (SQLException e) {
+			System.out.println("Error:" + e.getMessage());
+		}
+		
+		// http://localhost/beflral/admin/orders?action=view&id=1
 
 	}
 
@@ -132,14 +154,14 @@ public class AdminOrderServlet extends HttpServlet {
 		// TODO delete order from db (only id needed)
 		int orderid = Integer.parseInt(request.getParameter("id"));// TAKE id of order
 		OrderDAO dao = new OrderDAO();
-		
+
 		try {
 			boolean risp = dao.doDelete(orderid);
 
 			// Rispondi TODO
 
 		} catch (SQLException e) {
-	
+
 			e.printStackTrace();
 		}
 	}

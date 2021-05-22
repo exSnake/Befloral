@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Collection;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import it.befloral.beans.Order;
 import it.befloral.model.OrderDAO;
+import it.befloral.model.ProductDAO;
 
 /**
  * Servlet implementation class AdminProductServlet
@@ -86,9 +88,22 @@ public class AdminProductServlet extends HttpServlet {
 	}
 	
 	@Override
-	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// TODO delete product from db (only id needed)
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		ProductDAO product = new ProductDAO();
+		try {
+			product.doDelete(Integer.parseInt(request.getParameter("id")));
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+			System.out.println("Error with delete product id" + request.getParameter("id"));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		RequestDispatcher dispatcher = request.getServletContext()
+				.getRequestDispatcher("/WEB-INF/views/products/index.jsp");
+		dispatcher.forward(request, response);
 	}
+
 
 	@Override
 	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

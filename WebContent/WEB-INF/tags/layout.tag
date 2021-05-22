@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="http://fonts.cdnfonts.com/css/playlist" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
-    
-	<link href="resources/css/layout.css" rel="stylesheet" type="text/css">
+   
+	<link href="<c:url value="/resources/css/layout.css"/>" rel="stylesheet" type="text/css">
 	<title>${pageTitle}</title>
 </head>
 

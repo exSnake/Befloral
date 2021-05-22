@@ -80,7 +80,7 @@ public class OrderDAO implements GenericDAO<Order> {
 					bean.setDestination(rs.getString("destination"));
 					bean.setTotalProducts(rs.getInt("totalProducts"));
 					bean.setTotalPaid(rs.getDouble("totalPaid"));
-					bean.setStatus(rs.getString("trackNumber"));
+					bean.setTrackNumber(rs.getString("trackNumber"));
 					bean.setGift(rs.getBoolean("gift"));
 					bean.setGiftMessage(rs.getString("giftMessage"));
 					bean.setCreatedAt(rs.getTimestamp("createdAtTime").toLocalDateTime());
