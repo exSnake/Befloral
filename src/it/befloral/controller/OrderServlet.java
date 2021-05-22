@@ -2,6 +2,7 @@ package it.befloral.controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Collection;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -63,10 +64,22 @@ public class OrderServlet extends HttpServlet {
 				response.sendRedirect("User");
 				return;
 			}
+
+			if (action != null) {
+				if (action.equals("view")) {
+					// view detail order
+
+				}
+
+			} else {
+				response.sendRedirect("User");
+				return;
+
+			}
 		} catch (SQLException a) {
 			System.out.println("Error:" + a.getMessage());
-
 		}
+
 	}
 
 	/**

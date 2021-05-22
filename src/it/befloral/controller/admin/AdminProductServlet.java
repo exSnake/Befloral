@@ -1,11 +1,17 @@
 package it.befloral.controller.admin;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.Collection;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import it.befloral.beans.Order;
+import it.befloral.model.OrderDAO;
 
 /**
  * Servlet implementation class AdminProductServlet
@@ -53,7 +59,26 @@ public class AdminProductServlet extends HttpServlet {
 	
 	private void index(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		// TODO dispatch page to view all product information 10 per page
+		var offset = request.getParameter("page") == null ? 10 : request.getParameter("offset");
 		var page = request.getParameter("page") == null ? 1 : request.getParameter("page");
+		var order = request.getParameter("order") == null ? "id" : request.getParameter("order");
+		OrderDAO dao = new OrderDAO();
+		try {
+			Collection<Order> orders  = dao.doRetrieveSome(order, ((((int)page-1)*((int)offset)+1))   , (int) offset);
+			
+			request.removeAttribute("order");
+			request.setAttribute("order", orders);
+			
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		//TODO RISPONDI 
+		
 	}
 	
 	private void doEdit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{

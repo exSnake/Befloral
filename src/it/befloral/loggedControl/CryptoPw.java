@@ -5,7 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class CryptoPw {
+public  class CryptoPw {
 
 	private static String ALGO = "SHA-256" ;
 	
