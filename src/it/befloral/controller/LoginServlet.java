@@ -91,7 +91,7 @@ public class LoginServlet extends HttpServlet {
 				}
 				System.out.println(bean == null);
 				System.out.println(bean != null ? bean.getEmail() : "null");
-				if (bean == null || bean.getPassword().equals(request.getParameter("password"))) {
+				if (bean == null || !bean.getPassword().equals(request.getParameter("password"))) {
 					request.getSession().setAttribute("user", null);
 					RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/views/login/login.jsp");
 					dispatcher.forward(request, response);

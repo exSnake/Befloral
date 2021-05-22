@@ -55,20 +55,34 @@ public class OrderDAO implements GenericDAO<Order> {
 
 	@Override
 	public Order doRetriveByKey(int code) throws SQLException {
-		String selectSQL = "SELECT * FROM " + TABLE_NAME + " WHERE id = ? LEFT JOIN order_items s WHERE s.oid = id ";
+		String selectSQL = "SELECT o.id AS orderId, o.uid, o.destination, o.totalProducts, o.totalPaid, o.trackNumber, o.gift, o.giftMessage, o.createdAtTime,s.* FROM "+ TABLE_NAME +" o LEFT JOIN order_items  s ON  s.oid = o.id WHERE o.id = ?";
 		Order order = new Order();
 		try (var conn = ds.getConnection()) {
 			try (var stmt = conn.prepareStatement(selectSQL)) {
 				stmt.setInt(1, code);
+				System.out.println(stmt);
 				ResultSet rs = stmt.executeQuery();
-				while (rs.next()) {
-					order.setId(rs.getInt("id"));
+				if(rs.next()) {
+					order.setId(rs.getInt("orderId"));
 					order.setDestination(rs.getString("destination"));
 					order.setTotalProducts(rs.getInt("totalProducts"));
 					order.setTotalPaid(rs.getDouble("totalPaid"));
 					order.setGift(rs.getBoolean("gift"));
 					order.setGiftMessage(rs.getString("giftMessage"));
 				}
+				do {
+					OrderItem item =new OrderItem();
+					item.setId(rs.getInt("id"));
+					item.setOid(rs.getInt("oid"));
+					item.setName(rs.getString("name"));
+					item.setDescription(rs.getString("description"));
+					item.setShortDescription(rs.getString("shortDescription"));
+					item.setPrice(rs.getDouble("price"));
+					item.setWeight(rs.getDouble("weight"));
+					item.setDiscount(rs.getDouble("discount"));
+					item.setQuantity(rs.getInt("quantity"));
+					order.addItem(item);
+				}while(rs.next());
 			}
 		}
 		return order;
