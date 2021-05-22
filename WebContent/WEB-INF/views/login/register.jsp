@@ -3,6 +3,7 @@
 <z:layout pageTitle="Register">
 	<h1>Create new account</h1>
 	<form action="Login" method="post" enctype="application/x-www-form-urlencoded">
+		<input type="hidden" name="action" value="register">
 		<div class="form-group">
 			<label for="firstName">First Name</label>
 			<input type="text" class="form-control" name="firstName" id="" firstName"" aria-describedby="nameHelp"
@@ -22,15 +23,15 @@
 		</div>
 
 		<div class="form-check">
-			<input class="form-check-input" type="radio" name="gender" id="gender_male" value="scolastic" value="male">
+			<input class="form-check-input" type="radio" name="gender" id="gender_male" value="scolastic" value="Male">
 			<label class="form-check-label" for="gender_male">Male</label>
 		</div>
 		<div class="form-check">
-			<input class="form-check-input" type="radio" name="gender" id="gender_female" value="female">
+			<input class="form-check-input" type="radio" name="gender" id="gender_female" value="Female">
 			<label class="form-check-label" for="gender_female">Female</label>
 		</div>
 		<div class="form-check">
-			<input class="form-check-input" type="radio" name="gender" id="gender_undefined" value="undefined">
+			<input class="form-check-input" type="radio" name="gender" id="gender_undefined" value="Undefined" checked>
 			<label class="form-check-label" for="gender_undefined">Undefined</label>
 		</div>
 
@@ -57,9 +58,6 @@
 				aria-describedby="nameHelp" placeholder="Enter again your password" min="8" required>
 		</div>
 
-		<input type="hidden" name="action" value="register">
-
 		<button type="submit" class="btn btn-success mt-2">Register Now!</button>
-
 	</form>
 </z:layout>

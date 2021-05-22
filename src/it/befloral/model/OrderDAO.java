@@ -82,8 +82,7 @@ public class OrderDAO implements GenericDAO<Order> {
 				+ "(`oid`, `name`, `description`, `shortDescription`, `price`, `weight`, `discount`, `quantity`) "
 				+ "VALUES (? , ?, ?, ?, ?, ?, ?, ?)";
 		var conn = ds.getConnection();
-		try {
-			var stmt = conn.prepareStatement(insertOrder, Statement.RETURN_GENERATED_KEYS);
+		try (var stmt = conn.prepareStatement(insertOrder, Statement.RETURN_GENERATED_KEYS)) {
 			stmt.setInt(1, dao.getUser().getId());
 			stmt.setString(2, dao.getDestination());
 			stmt.setInt(3, dao.getTotalProducts());
@@ -196,7 +195,7 @@ public class OrderDAO implements GenericDAO<Order> {
 					bean.setStatus(rs.getString("status"));
 					bean.setGift(rs.getBoolean("gift"));
 					bean.setGiftMessage(rs.getString("giftMessage"));
-					bean.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+					bean.setCreatedAt(rs.getTimestamp("createdAt").toLocalDateTime());
 					orders.add(bean);
 				}
 			}

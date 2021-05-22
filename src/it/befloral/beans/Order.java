@@ -26,7 +26,7 @@ public class Order {
 	}
 
 	public Collection<OrderItem> getItems() {
-		return items;
+		return new ArrayList<OrderItem>(items);
 	}
 
 	public void setItems(Collection<OrderItem> items) {

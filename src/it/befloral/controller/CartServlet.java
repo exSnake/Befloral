@@ -42,6 +42,7 @@ public class CartServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		System.out.println(this.getClass().getSimpleName() + " get:" + request.getParameter("action"));
 		Cart cart = (Cart) request.getSession().getAttribute("cart");
 		request.setAttribute("active", "Cart");
 		if (cart != null) {
@@ -60,6 +61,7 @@ public class CartServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		System.out.println(this.getClass().getSimpleName() + " post:" + request.getParameter("action"));
 		// Check action
 		Cart cart = (Cart) request.getSession().getAttribute("cart");
 		if (cart == null) {
@@ -93,51 +95,13 @@ public class CartServlet extends HttpServlet {
 					}
 					response.sendRedirect("Cart");
 					return;
-				} else if (action.equals("buy")) {
-					if (request.getSession().getAttribute("user") == null) {
-						response.sendRedirect("Login");
-						return;
-					} else if (!cart.getProducts().isEmpty()) {
-						doBuy(request, response);
-					}
+				} else {
+					response.sendError(404);
 				}
 			}
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
-		}
-	}
-
-	private void doBuy(HttpServletRequest request, HttpServletResponse response) {
-		/***
-		 * TODO Redirect to a page where the user can select if is a gift, the address
-		 * of the shipment, payment method and gift message
-		 */
-		Cart cart = (Cart) request.getSession().getAttribute("cart");
-		User user = (User) request.getSession().getAttribute("user");
-		Order order = new Order();
-		order.setDestination("TODO Set Customer Default Address");
-		order.setTotalPaid(cart.getTotalPrice());
-		order.setTotalProducts(cart.getTotalProductsQuantity());
-		order.setTrackNumber("");
-		order.setUser(user);
-		order.setGift(false);
-		for (CartProduct prod : cart.getProducts()) {
-			OrderItem bean = new OrderItem();
-			bean.setDescription(prod.getProduct().getDescription());
-			bean.setDiscount(prod.getProduct().getDiscount());
-			bean.setName(prod.getProduct().getName());
-			bean.setPrice(prod.getTotalPrice());
-			bean.setQuantity(prod.getQuantity());
-			bean.setShortDescription(prod.getProduct().getShortDescription());
-			bean.setWeight(prod.getProduct().getWeight());
-			order.addItem(bean);
-		}
-		OrderDAO dao = new OrderDAO();
-		try {
-			dao.doSave(order);
-		} catch (SQLException e) {
-			e.printStackTrace();
 		}
 	}
 

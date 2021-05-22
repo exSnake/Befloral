@@ -65,11 +65,16 @@ input.block {
     font-size: 1rem;
     line-height: 1.5;
     color: #495057;
-    background-color: #fff;
+    background-color: #FFF;
     background-clip: padding-box;
     border: 1px solid #ced4da;
     border-radius: .25rem;
     transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.form-control:disabled, .form-control[readonly] {
+    background-color: #e9ecef;
+    opacity: 1;
 }
 
 .form-group {
@@ -216,7 +221,7 @@ label {
     padding: 0.4em 0.7em;
     line-height: 1.5;
     color: #212529;
-    background-color: #fff;
+    background-color: #FFF;
     background-clip: padding-box;
     border: 1px solid #ced4da;
     border-radius: 0.35em;
@@ -280,35 +285,10 @@ label {
     box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);
 }
 
-.btn-success {
-    color: #fff;
-    background-color: #28a745;
-    border-color: #28a745;
-}
-
-.btn-primary {
-    color: #fff;
-    background-color: #007bff;
-    border-color: #007bff;
-}
-
-.btn-danger {
-    color: #fff;
-    background-color: #dc3545;
-    border-color: #dc3545;
-}
-
-.btn-info {
-    color: #fff;
-    background-color: #17a2b8;
-    border-color: #17a2b8;
-}
-/* default
----------------------------- */
 .btn-default {
     color: #333;
-    background-color: #fff;
-    border-color: #ccc;
+    background-color: #FFF;
+    border-color: #CCC;
 }
 .btn-default:focus {
     color: #333;
@@ -325,6 +305,65 @@ label {
     background-color: #e6e6e6;
     border-color: #adadad;
 }
+
+.btn-success {
+    color: #FFF;
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-primary {
+    color: #FFF;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-danger {
+    color: #FFF;
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn-info {
+    color: #FFF;
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+}
+
+hr {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+a {
+	text-decoration: none;
+}
+
+a:link{
+	color: #006C7B;
+}
+
+a:hover{
+	font-weight: 600;
+	cursor: pointer;	
+	color: #41d5ab;
+}
+
+a:active{
+	color: #529A89 ;
+}
+
+a:visited {
+	color: #529A89 ;
+}
+a:after {
+	color: #529A89 ;
+}
+
+/* default
+---------------------------- */
 
 .mt-2 {
     margin-top: 0.75rem;
@@ -346,7 +385,35 @@ label {
     margin-bottom: 1rem!important;
 }
 
+.row {
+	display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+}
 
+.col, .col-8 {
+	flex-basis: 0;
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    max-width: 100%;
+    position: relative;
+    width: 100%;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+.col-8 {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 66.666667%;
+    flex: 0 0 66.666667%;
+    max-width: 66.666667%;
+}
 
 /*#endregion Default Layout Css */
 
@@ -366,7 +433,7 @@ label {
     float: left;
     vertical-align: middle;
     padding: 0;
-    color: #fff;
+    color: #FFF;
     margin: 0;
     width: 180px;
     height: 68px;
@@ -399,7 +466,7 @@ label {
     background-color: #FF77D0;
 }
 .logo-header a{
-    color: #fff;
+    color: #FFF;
     font-size: 38px;
     font-weight: 600;
     line-height: 70px;
@@ -415,8 +482,23 @@ nav ul li {
     border-radius: 14px;
 }
 
+nav li a{
+    color: #FFF;
+}
+
+nav li a:visited {
+	color: #FFF ;
+}
+nav li a:after {
+	color: #FFF ;
+}
+
+nav li a:link{
+	color: #FFF;
+}
+
 nav li.active a{
-    color: #fff;
+    color: #FFF;
     background-color: #FF77D0;
     border-radius: 14px;
 }
@@ -427,15 +509,17 @@ nav ul li a {
     margin-bottom: 8px;
     font-size: 16px;
     font-weight: 500;
-    color: #fff;
+    color: #FFF;
     text-decoration: none;
     opacity: 1;
     transition: all 0.5s;
     border-radius: 14px;
 }
 
+
+
 nav li:hover a{
-    color: #fff;
+    color: #FFF;
     background-color: #FF77D0;
     border-radius: 14px;
 }
@@ -462,7 +546,7 @@ nav li:hover a{
 }
 
 .checkbtn span {
-    background-color: #fff;
+    background-color: #FFF;
     display: block;
     position: absolute;
     height: 2px;
@@ -537,11 +621,11 @@ nav li:hover a{
 .footer a{
 	padding: 15px 35px;
 	text-decoration: none;
-	color: #fff;
+	color: #FFF;
 }
 
 .footer a:hover{
-	color: #fff;
+	color: #FFF;
     background-color: #FF77D0;
     border-radius: 14px;
 }

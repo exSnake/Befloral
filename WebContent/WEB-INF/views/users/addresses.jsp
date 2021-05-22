@@ -40,33 +40,44 @@
 		</div>
 
 		<div class="right">
-			<h3 class="title-left">My Orders</h3>
+			<div class="header">
+				<h3 class="title-left">My Addresses</h3> <a href="User?action=createAddress"><i class="fa fa-plus-square fa-2x"></i></a>
+			</div>
 			<div class="user-previous-orders">
-				<c:forEach items="${orders}" var="order">
+				<c:forEach items="${user.getAddresses()}" var="address">
 					<div class="order-details">
 						<div class="flex-spaced">
 							<div class="flex">
-								<img class="order-details-image"
-									src="https://source.unsplash.com/120x120/?sig=${order.getId()}&bouquet">
+								<i class="fa fa-home fa-2x"></i>
 								<ul>
-									<li class="delivery-date">${order.getStatus()}</li>
+									<li class="delivery-date">${address.getAlias()}
+										<c:if test="${address.isPreferred()}">
+										<i class="fa fa-star fa-2x"></i>
+										</c:if>
+									</li>
 									<li class="bouquet-name"></li>
 									<li class="bouquet-price mobile-hidden">
-										${order.getTotalPaid() }&euro;
-										<span>, with discount</span>
+										${address.getFirstName()} ${address.getLastName()} 
 									</li>
-									<li class="order-number">Order no. ${order.getId()}</li>
+									<li class="order-number">${address.getAddress()}</li>
 									<li class="invoice-links">
-										<a href="#" target="_blank" class="download-link">Download Invoice</a>
-										<a href="#" class="generate-invoice">Generate Invoice</a>
+										${address.getPostalCode()} ${address.getCity()} (${address.getProvince()}) 
 									</li>
 								</ul>
 							</div>
 							<div class="flex">
 								<ul>
-									<li><a class="links" href="Orders?id=${order.getId()}">View Details</a></li>
+									<li><a class="links" href="User?action=editAddress&id=${address.getId()}">Edit Address</a></li>
+									<c:if test="${!address.isPreferred()}">
+										<li class="mt-4">
+											<form action="User" method="post">
+												<input type="hidden" name="action" value="setPreferredAddress">
+												<input type="hidden" name="id" value="${address.getId()}">
+												<button type="submit" class="links btn-info">Set as Preferred</button>
+											</form>
+										</li>
+									</c:if>
 								</ul>
-
 							</div>
 						</div>
 					</div>

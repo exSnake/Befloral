@@ -13,9 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import it.befloral.beans.Customer;
 import it.befloral.beans.User;
-import it.befloral.model.CustomerDAO;
 import it.befloral.model.UserDAO;
 
 /**
@@ -39,7 +37,7 @@ public class LoginServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
+		System.out.println(this.getClass().getSimpleName() + " get:" + request.getParameter("action"));
 		User user = null;
 		request.setAttribute("active", "Login");
 		// If session have user
@@ -70,37 +68,42 @@ public class LoginServlet extends HttpServlet {
 	 *      response)
 	 */
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println(this.getClass().getSimpleName() + " post:" + request.getParameter("action"));
 		String action = request.getParameter("action");
 		request.setAttribute("active", "Login");
 		if (action != null) {
 			// Try Registering
 			if (action.equals("register")) {
 				registerUser(request, response);
+				return;
 			}
 
 			// Try login by login.jsp
 			if (action.equals("login")) {
-				User bean = null;
-				UserDAO customer = new UserDAO();
+				User user = null;
+				UserDAO userDAO = new UserDAO();
 				try {
-					bean = customer.doRetriveByUsername(request.getParameter("email"));
+					user = userDAO.doRetriveByEmail(request.getParameter("email"));
 				} catch (SQLException e) {
 					e.printStackTrace();
+					response.sendError(500);
+					return;
 				}
-				System.out.println(bean == null);
-				System.out.println(bean != null ? bean.getEmail() : "null");
-				if (bean == null || bean.getPassword().equals(request.getParameter("password"))) {
+				if (user == null || !user.getPassword().equals(request.getParameter("password"))) {
 					request.getSession().setAttribute("user", null);
 					RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/views/login/login.jsp");
 					dispatcher.forward(request, response);
 					//TODO send a login error
 					return;
 				} else {
-					request.getSession().setAttribute("user", bean);
+					if(user.getRole().equals("customer")) {
+						request.getSession().setAttribute("user", user);
+					} else if(user.getRole().equals("administrator")) {
+						request.getSession().setAttribute("admin", user);
+					}
+					response.sendRedirect("Home");
 				}
-				response.sendRedirect("Home");
 			}
 		}
 	}
@@ -109,20 +112,19 @@ public class LoginServlet extends HttpServlet {
 			throws ServletException, IOException {
 		// control same password
 		if (validateForm(request)) {
-			Customer bean = new Customer();
-			CustomerDAO dao = new CustomerDAO();
-			bean.setBirthday(LocalDate.parse(request.getParameter("birthday")));
-			bean.setFirstName(request.getParameter("firstName"));
-			bean.setLastName(request.getParameter("lastName"));
-			bean.setSubscription(request.getParameter("subscribe") != null);
 			User user = new User();
+			UserDAO dao = new UserDAO();
+			user.setBirthday(LocalDate.parse(request.getParameter("birthday")));
+			user.setFirstName(request.getParameter("firstName"));
+			user.setLastName(request.getParameter("lastName"));
+			user.setSubscription(request.getParameter("subscribe") != null);
+			user.setGender(request.getParameter("gender"));
 			user.setEmail(request.getParameter("email"));
 			user.setPassword(request.getParameter("password"));
 			user.setRole("customer");
 			user.setActive(true);
-			bean.setUser(user);
 			try {
-				dao.doSave(bean);
+				dao.doSave(user);
 				request.getSession().setAttribute("user", user);
 				response.sendRedirect("Home");
 				return;
@@ -175,6 +177,8 @@ public class LoginServlet extends HttpServlet {
 				|| request.getParameter("password") != request.getParameter("confirmpassword")) {
 			errors.add("Password doesn't match");
 		}
+		if( request.getParameter("gender") == null) 
+			errors.add("Set a gender or choose undefined");
 		if (errors.size() > 0)
 			request.setAttribute("errors", errors);
 		return errors.size() > 0;

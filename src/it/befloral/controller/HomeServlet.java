@@ -32,6 +32,7 @@ public class HomeServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		System.out.println(this.getClass().getSimpleName() + " get:" + request.getParameter("action"));
 		request.setAttribute("active", "Home");
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/views/index.jsp");
 		dispatcher.forward(request, response);
@@ -43,6 +44,7 @@ public class HomeServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		System.out.println(this.getClass().getSimpleName() + " post:" + request.getParameter("action"));
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
