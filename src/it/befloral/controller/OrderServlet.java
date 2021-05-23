@@ -15,6 +15,7 @@ import it.befloral.beans.OrderItem;
 import it.befloral.beans.User;
 import it.befloral.beans.Address;
 import it.befloral.model.Cart;
+import it.befloral.model.GenericDAO;
 import it.befloral.model.OrderDAO;
 /**
  * Servlet implementation class OrderServlet

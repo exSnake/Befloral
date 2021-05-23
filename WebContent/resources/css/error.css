@@ -1,0 +1,112 @@
+@charset "ISO-8859-1";
+@import url('https://fonts.googleapis.com/css?family=Dosis:300,400,500');
+@-moz-keyframes rocket-movement { 100% {-moz-transform: translate(1200px,-600px);} }
+@-webkit-keyframes rocket-movement {100% {-webkit-transform: translate(1200px,-600px); } }
+@keyframes rocket-movement { 100% {transform: translate(1200px,-600px);} }
+@-moz-keyframes spin-earth { 100% { -moz-transform: rotate(-360deg); transition: transform 20s;  } }
+@-webkit-keyframes spin-earth { 100% { -webkit-transform: rotate(-360deg); transition: transform 20s;  } }
+@keyframes spin-earth{ 100% { -webkit-transform: rotate(-360deg); transform:rotate(-360deg); transition: transform 20s; } }
+
+
+
+@-moz-keyframes move-face {
+    100% { -moz-transform: translate(-160px, -160px);}
+}
+@-webkit-keyframes move-face {
+    100% { -webkit-transform: translate(-160px, -160px);}
+}
+@keyframes move-face{
+    100% { -webkit-transform: translate(-160px, -160px); transform:translate(-160px, -160px); }
+}
+@-moz-keyframes rotate-face {
+    100% { -moz-transform: rotate(-720deg);}
+}
+@-webkit-keyframes rotate-face {
+    100% { -webkit-transform: rotate(-720deg);}
+}
+@keyframes rotate-face{
+    100% { -webkit-transform: rotate(-720deg); transform:rotate(-720deg); }
+}
+
+
+
+.error{
+    width: 100%;
+    text-align: center;
+   	font-size: 18px;
+}
+
+.error-code {
+	
+    text-align: center;
+	
+	color: #333333;
+	line-height: 1.6;
+	letter-spacing: 2px;
+	word-spacing: 4px;
+	text-align: center;
+	text-decoration: none;
+	text-transform: uppercase;
+	text-shadow: 8px 5px 2px rgba(25, 136, 247, 0.64);
+	
+	width: 100%;
+	font-size: 252px;
+}
+
+
+
+
+
+.object_face_rocket{
+    z-index: 95;
+    position: absolute;
+    transform: translateX(-50px);
+    top: 35%;
+    pointer-events: none;
+    animation: rocket-movement 100s linear infinite both running;
+}
+
+
+
+.object_face{
+    animation: rotate-face 100s infinite linear both alternate;
+}
+
+.box_face{
+    z-index: 110 !important;
+    position: absolute;
+    top: 40%;
+    right: 20%;
+    will-change: transform;
+    animation: move-face 50s infinite linear both alternate;
+}
+
+.object_face ,box_face  :hover:focus:active:after{
+	transform: rotate(360deg);
+	transition: width .5s ease;
+	
+}
+
+
+@media only screen and (max-width: 600px){
+ 
+    .box_face{
+        top: 70%;
+    }
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
