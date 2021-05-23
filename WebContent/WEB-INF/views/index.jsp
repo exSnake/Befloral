@@ -6,5 +6,12 @@
 		<img class="cropped" alt="BIG PHOTO OF STORE" src="resources/images/screenlogo.jpg">
 	</div>
 
+
 	<p>Site under construction!</p>
+	
+	<form method="get" action="ToError">
+		<button type="submit">VAI</button>
+	</form>
+	
+	
 </z:layout>
