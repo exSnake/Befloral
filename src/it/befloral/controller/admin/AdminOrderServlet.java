@@ -1,10 +1,12 @@
 package it.befloral.controller.admin;
 
+import java.awt.List;
 import java.io.IOException;
 import java.sql.SQLException;
 import javax.servlet.RequestDispatcher;
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
@@ -18,6 +20,7 @@ import it.befloral.beans.Order;
 import it.befloral.model.GenericDAO;
 import it.befloral.beans.User;
 import it.befloral.model.OrderDAO;
+import it.befloral.model.UserDAO;
 
 /**
  * Servlet implementation class OrderServlet
@@ -40,7 +43,7 @@ public class AdminOrderServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
+		System.out.println(this.getClass().getSimpleName() + " get:" + request.getParameter("action"));
 		var action = request.getParameter("action");
 		System.out.println(action);
 		if (action == null) {
@@ -62,14 +65,17 @@ public class AdminOrderServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		System.out.println(this.getClass().getSimpleName() + " post:" + request.getParameter("action"));
 		var action = request.getParameter("action");
 		if (action == null) {
 			response.sendError(500);
 		} else if (action.equals("put")) {
 			doPut(request, response);
+			return;
 		} else if (action.equals("delete")) {
 			if (request.getParameter("id") != null) {
 				doDelete(request, response);
+				return;
 			} else {
 				response.sendError(500);
 			}
@@ -100,26 +106,32 @@ public class AdminOrderServlet extends HttpServlet {
 	}
 
 	private void index(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
 		int page = Integer.parseInt(request.getParameter("page") == null ? "1" : request.getParameter("page"));
-		LocalDate dateFrom = LocalDate.parse(request.getParameter("dateFrom"));
-		LocalDate dateTo = LocalDate.parse(request.getParameter("dateTo"));
-		int uid = Integer.parseInt(request.getParameter("userId"));
-
-		int offset = Integer.parseInt(request.getParameter("page") == null ? "10" : request.getParameter("offset")); // 10
-																														// FOR
-																														// PAGE
+		LocalDate dateFrom = (request.getParameter("dateFrom") == null || request.getParameter("dateFrom").isEmpty()) ? LocalDate.parse("1970-01-01") : LocalDate.parse(request.getParameter("dateFrom"));
+		LocalDate dateTo = (request.getParameter("dateTo") == null || request.getParameter("dateTo").isEmpty()) ? LocalDate.parse("2038-01-18") : LocalDate.parse(request.getParameter("dateTo"));
+		int uid = request.getParameter("userId") == null ? 0 : Integer.parseInt(request.getParameter("userId"));
+		int offset = request.getParameter("offset") == null ? 10 :  Integer.parseInt(request.getParameter("offset")); // 10																						// FOR																					// PAGE
 		String sort = request.getParameter("sort") == null ? "id" : request.getParameter("sort"); // NO ORDER , DEFAULT
-																									// ORDER BY ID
+																								// ORDER BY ID
 		OrderDAO dao = new OrderDAO();
+		UserDAO udao = new UserDAO();
 		try {
 			/* TAKE orders of that id */
-			Collection<Order> orders = dao.doRetrieveOrdersBetween(sort, uid, ((page - 1) * (offset) + 1), offset,
+			Collection<Order> orders = dao.doRetrieveOrdersBetween(sort, uid, ((page - 1) * (offset)), offset,
 					Timestamp.valueOf(dateFrom.atStartOfDay()), Timestamp.valueOf(dateTo.atStartOfDay()));
-
-			request.removeAttribute("order");
-			request.setAttribute("order", orders);
-
+			int pageCount = (int) Math.ceil(dao.doRetrieveCount()/(double)offset);
+			ArrayList<String> pages = new ArrayList<>();
+			for (int i = 1; i <= pageCount; i++) {
+				pages.add(String.format("page=%d&dateFrom=%s&dateTo=%s&userId=%d&offset=%d&sort=%s",i,dateFrom.toString(),dateTo.toString(),uid,offset,sort));
+			}
+			request.removeAttribute("orders");
+			request.setAttribute("orders", orders);
+			request.setAttribute("pages", pages);
+			request.setAttribute("currPage", page);
+			request.setAttribute("users", udao.doRetrieveAll("email"));
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/admin/orders/index.jsp");
+			dispatcher.forward(request, response);
+			return;
 			// Rispondi TODO
 
 		} catch (Exception e) {
@@ -129,7 +141,6 @@ public class AdminOrderServlet extends HttpServlet {
 	}
 
 	private void doEdit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("edit");
 		try {
 			if (request.getParameter("id") != null) {
 				int id = Integer.parseInt(request.getParameter("id"));
@@ -167,35 +178,25 @@ public class AdminOrderServlet extends HttpServlet {
 	}
 
 	@Override
-	protected void doPut(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {
+	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO update order (attribute will be the same as db columns)
 
 		int id = Integer.parseInt(request.getParameter("id"));
-		int uid = Integer.parseInt(request.getParameter("uid"));
 		String destination = request.getParameter("destination");
-		int totalProducts = Integer.parseInt(request.getParameter("totalProducts"));
-		double totalPaid = Double.parseDouble(request.getParameter("totalPaid"));
 		String trackNumber = request.getParameter("trackNumber");
-		boolean gift = Boolean.parseBoolean(request.getParameter("gift"));
 		String giftMessage = request.getParameter("giftMessage");
 
 		Order order = new Order();
 
-		order.setId((int) id);
-		User temp = new User();
-		temp.setId((int) uid);
-		order.setUser(temp);
+		order.setId(id);
 		order.setDestination(destination);
-		order.setTotalProducts(totalProducts);
-		order.setTotalPaid(totalPaid);
 		order.setTrackNumber(trackNumber);
-		order.setGift(gift);
 		order.setGiftMessage(giftMessage);
 
 		try {
 			OrderDAO dao = new OrderDAO();
 			dao.doUpdateOrder(order);
-
+			response.sendRedirect(request.getServletContext().getContextPath()+"/Admin/Orders");
 			// RISPOSTA TODO
 
 		} catch (SQLException e) {

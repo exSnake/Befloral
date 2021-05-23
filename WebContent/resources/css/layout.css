@@ -26,6 +26,14 @@ main {
   margin-bottom: 15px;
 }
 
+.errors{
+	color: red;
+}
+
+.round {
+  border-radius: 50%;
+}
+
 @media (min-width: 768px) {
   .container {
     width: 750px;
@@ -106,6 +114,7 @@ input.block {
 .form-check-input:disabled~.form-check-label {
     color: #6c757d;
 }
+
 
 input[type=checkbox],
 input[type=radio] {
@@ -342,24 +351,24 @@ a {
 }
 
 a:link{
-	color: #006C7B;
+/* 	color: #006C7B; */
 }
 
 a:hover{
 	font-weight: 600;
 	cursor: pointer;	
-	color: #41d5ab;
+/* 	color: #41d5ab; */
 }
 
 a:active{
-	color: #529A89 ;
+/* 	color: #529A89 ; */
 }
 
 a:visited {
-	color: #529A89 ;
+/* 	color: #529A89 ; */
 }
 a:after {
-	color: #529A89 ;
+/* 	color: #529A89 ; */
 }
 
 /* default

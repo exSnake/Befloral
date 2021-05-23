@@ -1,0 +1,40 @@
+
+.admin-order {
+	background-color: #fff;
+    padding: 15px 25px;
+    margin-bottom: 20px;
+    border-radius: 14px;
+    display: flex;
+}
+
+.admin-order .body {
+	flex-basis: 85%
+}
+
+.admin-order .actions {
+	display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.admin-pages {
+	display:flex;
+	justify-content: center;
+}
+
+.admin-pages .disabled {
+    background: #ccc;
+    margin-right: 10px;
+}
+
+
+.admin-pages .page-btn{
+    padding: 8px 16px;
+    background: #fff;
+    margin-right: 10px;
+    border-color: #006C7B;
+    border-style: solid;
+    border-radius: 7px;
+    border-width: 1px;
+}

@@ -33,11 +33,13 @@ public class UserDAO implements GenericDAO<User> {
 		String sql = "SELECT u.*, "
 				+ "   a.id AS aid, a.firstName AS aFirstName, a.lastName AS aLastName, a.address, a.postalCode, a.city, a.province, a.phone, a.info, a.alias, a.preferred "
 				+ "   FROM " + TABLE_NAME + " u "
-				+ "	  LEFT JOIN addresses a ON a.uid = u.id WHERE id = ?";
+				+ "	  LEFT JOIN addresses a ON a.uid = u.id ORDER BY ?";
+		order = order.isEmpty() ? "id" : order;
 		var users = new ArrayList<User>();
 		User bean = null;
 		try (var conn = ds.getConnection()) {
 			try (var stmt = conn.prepareStatement(sql)) {
+				stmt.setString(1, order);
 				ResultSet rs = stmt.executeQuery();
 				if(rs.next()) {
 					do {
@@ -69,7 +71,7 @@ public class UserDAO implements GenericDAO<User> {
 								addr.setUser(bean);
 								bean.addAddress(addr);
 								//if exit is at the end of the stream or it's a new user.
-							} while(rs.next() && bean.getId() == rs.getInt("uid"));
+							} while(rs.next() && bean.getId() == rs.getInt("id"));
 						} else {
 							rs.next();
 						}
@@ -184,26 +186,27 @@ public class UserDAO implements GenericDAO<User> {
 					bean.setPassword(rs.getString("password"));
 					bean.setRole(rs.getString("role"));
 					bean.setActive(rs.getBoolean("active"));
+					//in this case there are at least one address
+					if(rs.getInt("aid") != 0) {
+						do {
+							Address addr = new Address();
+							addr.setId(rs.getInt("aid"));
+							addr.setFirstName(rs.getString("aFirstName"));
+							addr.setLastName(rs.getString("aLastName"));
+							addr.setAddress(rs.getString("address"));
+							addr.setPostalCode(rs.getString("postalCode"));
+							addr.setCity(rs.getString("city"));
+							addr.setProvince(rs.getString("province"));
+							addr.setPhone(rs.getString("phone"));
+							addr.setInfo(rs.getString("info"));
+							addr.setAlias(rs.getString("alias"));
+							addr.setPreferred(rs.getBoolean("preferred"));
+							addr.setUser(bean);
+							
+						} while (rs.next());
+					}
 				}
-				//in this case there are at least one address
-				if(rs.getInt("aid") != 0) {
-					do {
-						Address addr = new Address();
-						addr.setId(rs.getInt("aid"));
-						addr.setFirstName(rs.getString("aFirstName"));
-						addr.setLastName(rs.getString("aLastName"));
-						addr.setAddress(rs.getString("address"));
-						addr.setPostalCode(rs.getString("postalCode"));
-						addr.setCity(rs.getString("city"));
-						addr.setProvince(rs.getString("province"));
-						addr.setPhone(rs.getString("phone"));
-						addr.setInfo(rs.getString("info"));
-						addr.setAlias(rs.getString("alias"));
-						addr.setPreferred(rs.getBoolean("preferred"));
-						addr.setUser(bean);
-						bean.addAddress(addr);
-					} while (rs.next());
-				}
+				
 			}
 		}
 		return bean;

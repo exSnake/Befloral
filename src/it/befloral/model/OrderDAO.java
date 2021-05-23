@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.sql.Types;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Date;
@@ -58,21 +59,26 @@ public class OrderDAO implements GenericDAO<Order> {
 
 	public Collection<Order> doRetrieveOrdersBetween(String sort, int userId, int from, int howMany, Timestamp fromDate,
 			Timestamp ToDate) throws SQLException {
-		String selectSQL = "SELECT * FROM  " + TABLE_NAME
-				+ " where uid = ?  AND createdAtTime BETWEEN ? AND  ? ORDER BY ? LIMIT  ?  OFFSET ?";
+		String selectSQL = userId == 0 ? 
+				"SELECT * FROM  " + TABLE_NAME
+				+ " WHERE uid LIKE ? AND createdAt BETWEEN ? AND ? ORDER BY ? LIMIT ? OFFSET ?"
+				:
+				"SELECT * FROM  " + TABLE_NAME
+				+ " WHERE uid = ?  AND createdAt BETWEEN ? AND ? ORDER BY ? LIMIT ? OFFSET ?";
 		Collection<Order> orders = new LinkedList<>();
 
 		try (var conn = ds.getConnection()) {
 			try (var stmt = conn.prepareStatement(selectSQL)) {
-
-				stmt.setInt(1, userId);
+				if(userId == 0)
+					stmt.setString(1, "%");
+				else
+					stmt.setInt(1, userId);
 				stmt.setTimestamp(2, fromDate);
 				stmt.setTimestamp(3, ToDate);
-
 				stmt.setString(4, sort);
 				stmt.setInt(5, howMany);
 				stmt.setInt(6, from);
-
+				System.out.println(stmt);
 				ResultSet rs = stmt.executeQuery();
 				while (rs.next()) {
 					Order bean = new Order();
@@ -83,7 +89,7 @@ public class OrderDAO implements GenericDAO<Order> {
 					bean.setTrackNumber(rs.getString("trackNumber"));
 					bean.setGift(rs.getBoolean("gift"));
 					bean.setGiftMessage(rs.getString("giftMessage"));
-					bean.setCreatedAt(rs.getTimestamp("createdAtTime").toLocalDateTime());
+					bean.setCreatedAt(rs.getTimestamp("createdAt").toLocalDateTime());
 					orders.add(bean);
 				}
 			}
@@ -121,7 +127,7 @@ public class OrderDAO implements GenericDAO<Order> {
 
 	@Override
 	public Order doRetriveByKey(int code) throws SQLException {
-		String selectSQL = "SELECT o.id AS orderId, o.uid, o.destination, o.totalProducts, o.totalPaid, o.trackNumber, o.gift, o.giftMessage, o.createdAtTime,s.* FROM "
+		String selectSQL = "SELECT o.id AS orderId, o.uid, o.destination, o.totalProducts, o.totalPaid, o.trackNumber, o.gift, o.giftMessage, o.createdAt,s.* FROM "
 				+ TABLE_NAME + " o LEFT JOIN order_items  s ON  s.oid = o.id WHERE o.id = ?";
 		Order order = new Order();
 		try (var conn = ds.getConnection()) {
@@ -134,6 +140,7 @@ public class OrderDAO implements GenericDAO<Order> {
 					order.setDestination(rs.getString("destination"));
 					order.setTotalProducts(rs.getInt("totalProducts"));
 					order.setTotalPaid(rs.getDouble("totalPaid"));
+					order.setTrackNumber(rs.getString("trackNumber"));
 					order.setGift(rs.getBoolean("gift"));
 					order.setGiftMessage(rs.getString("giftMessage"));
 				}
@@ -199,30 +206,24 @@ public class OrderDAO implements GenericDAO<Order> {
 	}
 
 	public int doUpdateOrder(Order dao) throws SQLException {
-		String updateOrder = "UPDATE  orders SET(`destination` = ?, `totalProducts` = ?, `totalPaid` =?, `trackNumber` =?, `gift`=?, `giftMessage`=?) "
-				+ "WHERE `uid`=? and 'id' = ? ";
-		var conn = ds.getConnection();
+		String updateOrder = "UPDATE orders"
+				+ "			SET `destination` = ?,"
+				+ "				`trackNumber` = ?,"
+				+ "				`giftMessage`= ?"
+				+ "			WHERE `id` = ? ";
 
-		try {
-			var stmt = conn.prepareStatement(updateOrder);
-			stmt.setString(1, dao.getDestination());
-			stmt.setInt(2, dao.getTotalProducts());
-			stmt.setDouble(3, dao.getTotalPaid());
-			stmt.setString(4, dao.getTrackNumber());
-			stmt.setBoolean(5, dao.isGift());
-			stmt.setString(6, dao.getGiftMessage());
-
-			stmt.setInt(7, dao.getUser().getId());
-			stmt.setInt(8, dao.getId());
-
-			stmt.executeUpdate();
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			conn.rollback();
+		try(var conn = ds.getConnection()) {
+			try (var stmt = conn.prepareStatement(updateOrder);) {
+				stmt.setString(1, dao.getDestination());
+				stmt.setString(2, dao.getTrackNumber());
+				if(dao.getGiftMessage() == null)
+					stmt.setNull(3, Types.NULL);
+				else stmt.setString(1, dao.getGiftMessage());
+				stmt.setInt(4, dao.getId());
+				System.out.println(stmt);
+				return stmt.executeUpdate();
+			} 
 		}
-
-		return 0;
 	}
 
 	@Override
@@ -310,6 +311,16 @@ public class OrderDAO implements GenericDAO<Order> {
 			}
 		}
 		return orders;
+	}
+
+	public int doRetrieveCount() throws SQLException {
+		String sql = "SELECT COUNT(*) AS c FROM " +TABLE_NAME;
+		try(var conn = ds.getConnection()){
+			try(var stmt = conn.prepareStatement(sql)){
+				ResultSet rs = stmt.executeQuery();
+				return rs.next() ? rs.getInt("c") : 0;
+			}
+		}
 	}
 
 }

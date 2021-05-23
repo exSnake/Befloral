@@ -4,7 +4,7 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <z:layout pageTitle="Admin Product Create">
 	<h1>Create new Product</h1>
-	<form action="Products" method="post">
+	<form action="<c:url value="/Admin/Products" />" method="post">
 		<input type="hidden" name="action" value="create">
 		<div class="form-group">
 			<label for="name">Name</label>

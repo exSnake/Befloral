@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import it.befloral.beans.Order;
+import it.befloral.beans.Product;
 import it.befloral.model.OrderDAO;
 import it.befloral.model.ProductDAO;
 
@@ -27,52 +28,92 @@ public class AdminProductServlet extends HttpServlet {
      */
     public AdminProductServlet() {
         super();
-
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println(this.getClass().getSimpleName() + " get:" + request.getParameter("action"));
 		var action = request.getParameter("action");
 		if(action == null) {
 			index(request,response);
+			return;
 		} else {
 			if(action.equals("view")) {
 				
+			} else if (action.equals("create")) {
+				create(request, response);
+				return;
 			} else if (action.equals("edit")) {
 				doEdit(request, response);
+				return;
 			}
 		}
 	}
+	private void create(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		RequestDispatcher dispatcher = request.getServletContext()
+				.getRequestDispatcher("/WEB-INF/views/admin/products/create.jsp");
+		dispatcher.forward(request, response);
+		return;
+	}
+
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println(this.getClass().getSimpleName() + " post:" + request.getParameter("action"));
 		var action = request.getAttribute("action");
 		if(action == null) {
-			
+		} else if(action.equals("create")) {
+			save(request,response);
+			return;
 		} else if (action.equals("put")) {
 			doPut(request, response);
+			return;
 		} else if (action.equals("delete")) {
 			doDelete(request, response);
+			return;
 		}
 	}
 	
+	private void save(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		ProductDAO products = new ProductDAO();
+		Product product = new Product(request.getParameter("name"), request.getParameter("description"),
+				request.getParameter("shortDescription"), request.getParameter("metaDescription"),
+				request.getParameter("metaKeyword"), Double.parseDouble(request.getParameter("weight")),
+				Double.parseDouble(request.getParameter("price")),
+				Double.parseDouble(request.getParameter("discount")),
+				Integer.parseInt(request.getParameter("quantity")),
+				Integer.parseInt(request.getParameter("onSale")),
+				(request.getParameter("available") == null ? false : true));
+		try {
+			products.doSave(product);
+			response.sendRedirect(request.getServletContext().getContextPath()+"/Admin/Products");
+			return;
+		} catch (SQLException e) {
+			System.out.println("Error insert Product");
+			e.printStackTrace();
+		}
+		RequestDispatcher dispatcher = request.getServletContext()
+				.getRequestDispatcher("/WEB-INF/views/admin/products/create.jsp");
+		dispatcher.forward(request, response);
+	}
+
 	private void index(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		// TODO dispatch page to view all product information 10 per page
 		var offset = request.getParameter("page") == null ? 10 : request.getParameter("offset");
 		var page = request.getParameter("page") == null ? 1 : request.getParameter("page");
 		var order = request.getParameter("order") == null ? "id" : request.getParameter("order");
-		OrderDAO dao = new OrderDAO();
+		ProductDAO dao = new ProductDAO();
 		try {
-			Collection<Order> orders  = dao.doRetrieveSome(order, ((((int)page-1)*((int)offset)+1))   , (int) offset);
-			
-			request.removeAttribute("order");
-			request.setAttribute("order", orders);
-			
-			
-			
+			//TODO Collection<Order> products  = dao.doRetrieveSome(order, ((((int)page-1)*((int)offset)+1))   , (int) offset);
+			Collection<Product> products = dao.doRetrieveAll("name");
+			request.removeAttribute("products");
+			request.setAttribute("products", products);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/admin/products/index.jsp");
+			dispatcher.forward(request, response);
+			return;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -84,7 +125,19 @@ public class AdminProductServlet extends HttpServlet {
 	}
 	
 	private void doEdit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		// TODO show page to edit product information
+		ProductDAO model = new ProductDAO();
+		Product prod = null;
+		try {
+			prod = model.doRetriveByKey(Integer.parseInt(request.getParameter("id")));
+		} catch(SQLException e) {
+			e.printStackTrace();
+			response.sendError(500);
+			return;
+		}
+		request.setAttribute("bean", prod);
+		RequestDispatcher dispatcher = request.getServletContext()
+				.getRequestDispatcher("/WEB-INF/views/admin/products/edit.jsp");
+		dispatcher.forward(request, response);
 	}
 	
 	@Override
@@ -106,8 +159,32 @@ public class AdminProductServlet extends HttpServlet {
 
 
 	@Override
-	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// TODO update product (attribute will be the same as db columns)
+	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String error = null;
+		ProductDAO products = new ProductDAO();
+		Product product = new Product(Integer.parseInt(request.getParameter("id")), request.getParameter("name"),
+				request.getParameter("description"), request.getParameter("shortDescription"),
+				request.getParameter("metaDescription"), request.getParameter("metaKeyword"),
+				Double.parseDouble(request.getParameter("weight").replace(",", ".")),
+				Double.parseDouble(request.getParameter("price")), Double.parseDouble(request.getParameter("discount")),
+				Integer.parseInt(request.getParameter("quantity")), Integer.parseInt(request.getParameter("onSale")),
+				(request.getParameter("available") == null ? false : true));
+		try {
+			if (products.doUpdate(product) > 0) {
+				response.sendRedirect(request.getServletContext().getContextPath()+"/Admin/Products");
+				return;
+			} else {
+				error = "Update Failed";
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		request.setAttribute("error", error);
+		RequestDispatcher dispatcher = request.getServletContext()
+				.getRequestDispatcher("/WEB-INF/views/admin/products/edit.jsp");
+		dispatcher.forward(request, response);
+
 	}
 }
 

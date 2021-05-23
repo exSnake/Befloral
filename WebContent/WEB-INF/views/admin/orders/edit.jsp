@@ -3,7 +3,9 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <z:layout pageTitle="Admin Order Edit">
 <h1 class="mb-3">Update Order N. ${bean.getId()}</h1>
-	<form action="Admin/Orders" method="post">
+	<form action="<c:url value="/Admin/Orders" />" method="post">
+		<input type="hidden" name="action" id="action" value="put">
+		<input type="hidden" name="id" id="id" value="${bean.getId()}">
 		<div class="form-group">
 			<label for="destination">Destination</label>
 			<input type="text" value="${bean.getDestination()}" class="form-control" name="destination" id="destination"
@@ -24,6 +26,6 @@
 			<small id="giftMessage" class="form-text text-muted">Enter the gift Message</small>
 		</div>
 		</c:if>
-		</form>
 		<button type="submit"  class="btn btn-success mt-2">Update Order</button>
+	</form>
 </z:layout>

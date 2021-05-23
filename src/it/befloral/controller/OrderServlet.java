@@ -2,8 +2,6 @@ package it.befloral.controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Collection;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,14 +16,12 @@ import it.befloral.beans.User;
 import it.befloral.beans.Address;
 import it.befloral.model.Cart;
 import it.befloral.model.OrderDAO;
-import it.befloral.model.AddressDAO;
 /**
  * Servlet implementation class OrderServlet
  */
 @WebServlet("/Orders")
 public class OrderServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	static GenericDAO<Order> model = new OrderDAO();
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -45,10 +41,6 @@ public class OrderServlet extends HttpServlet {
 		var action = request.getParameter("action");
 		User user = (User) request.getSession().getAttribute("user");
 		Cart cart = (Cart) request.getSession().getAttribute("cart");
-		if (user == null) {
-			response.sendRedirect("Login");
-			return;
-		}
 
 		if (action != null) {
 			if (action.equals("view")) {
@@ -101,7 +93,7 @@ public class OrderServlet extends HttpServlet {
 		Cart cart = (Cart) request.getSession().getAttribute("cart");
 		User user = (User) request.getSession().getAttribute("user");
 		Address address = (Address) request.getSession().getAttribute("address");
-		if(user == null || cart == null || address == null) {
+		if(cart == null || address == null) {
 			response.sendError(500);
 			return;
 		}

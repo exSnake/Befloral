@@ -25,4 +25,11 @@
 			<button type="submit" class="btn btn-success mt-2">Register Now!</button>
 		</div>
 	</form>
+	<div class="errors">
+		<ul>
+		<c:forEach items="${errors}" var="err">
+			<li>${err}</li>
+		</c:forEach>
+		</ul>
+	</div>
 </z:layout>

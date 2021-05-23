@@ -30,19 +30,22 @@
             </div>
 
             <ul>
-                <li ${active.equals("Home") ? "class='active'": ""}><a href="Home">Home</a></li>
-				<li ${active.equals("Products") ? "class='active'": ""}><a href="Products">Flowers</a></li>
+                <li ${active.equals("Home") ? "class='active'": ""}><a href="<c:url value="/Home"/>">Home</a></li>
+				<li ${active.equals("Products") ? "class='active'": ""}><a href="<c:url value="/Products"/>">Flowers</a></li>
                 <li ${active.equals("Plants") ? "class='active'": ""}><a href="#">Plants</a></li>
                 <li ${active.equals("Bouquet") ? "class='active'": ""}><a href="#">Bouquet</a></li>
-                <li ${active.equals("Cart") ? "class='active'": ""}><a href="Cart">
+                <li ${active.equals("Cart") ? "class='active'": ""}><a href="<c:url value="/Cart"/>">
                 	<i class="fa fa-shopping-bag fa-2x"></i>
                 	<span>(${cart == null ? 0:cart.getTotalProductsQuantity() })</span>
                 </a>
-                <c:if test="${user == null}">
-                	<li ${active.equals("Login") ? "class='active'": ""}><a href="Login">Login</a></li>
+                <c:if test="${user == null && admin == null}">
+                	<li ${active.equals("Login") ? "class='active'": ""}><a href="<c:url value="/Login"/>">Login</a></li>
                 </c:if>
                 <c:if test="${user != null}">
-                	<li ${active.equals("User") ? "class='active'": ""}><a href="User">Profile</a></li>
+                	<li ${active.equals("User") ? "class='active'": ""}><a href="<c:url value="/User"/>">Profile</a></li>
+                </c:if>
+                <c:if test="${admin != null}">
+                	<li ${active.equals("Admin") ? "class='active'": ""}><a href="<c:url value="/Admin"/>">Admin Panel</a></li>
                 </c:if>
             </ul>
         </nav>

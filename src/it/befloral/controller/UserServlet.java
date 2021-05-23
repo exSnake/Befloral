@@ -40,28 +40,24 @@ public class UserServlet extends HttpServlet {
 		User user = (User) request.getSession().getAttribute("user");
 		request.setAttribute("active", "User");
 		var action = request.getParameter("action");
-		if (user != null) {
-			OrderDAO orderDao = new OrderDAO();
-			try {
-				request.getSession().setAttribute("orders", orderDao.doRetriveByUser(user));
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			if(action == null) {
-				RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/users/view.jsp");
-				dispatcher.forward(request, response);
-			} else if (action.equals("viewAddresses")) {
-				System.out.println("addresses");
-				RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/users/addresses.jsp");
-				dispatcher.forward(request, response);
-			} else if (action.equals("createAddress")) {
-				RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/users/createAddress.jsp");
-				dispatcher.forward(request, response);
-			}
-			return;
-		} else {
-			response.sendRedirect("Login");
+		OrderDAO orderDao = new OrderDAO();
+		try {
+			request.getSession().setAttribute("orders", orderDao.doRetriveByUser(user));
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
+		if(action == null) {
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/users/view.jsp");
+			dispatcher.forward(request, response);
+		} else if (action.equals("viewAddresses")) {
+			System.out.println("addresses");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/users/addresses.jsp");
+			dispatcher.forward(request, response);
+		} else if (action.equals("createAddress")) {
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/users/createAddress.jsp");
+			dispatcher.forward(request, response);
+		}
+		return;
 	}
 
 	/**
@@ -71,52 +67,51 @@ public class UserServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		System.out.println(this.getClass().getSimpleName() + " post:" + request.getParameter("action"));
-		User user = (User) request.getSession().getAttribute("user");
 		request.setAttribute("active", "User");
+		User user = (User) request.getSession().getAttribute("user");
 		var action = request.getParameter("action");
-		if (user != null) {
-			if(action == null) {
+		if(action == null) {
+			response.sendError(500);
+			return;
+		}
+		
+		if(action.equals("createAddress")) {
+			Address address = new Address();
+			address.setFirstName(request.getParameter("firstName"));
+			address.setLastName(request.getParameter("lastName"));
+			address.setAddress(request.getParameter("address"));
+			address.setPostalCode(request.getParameter("postalCode"));
+			address.setCity(request.getParameter("city"));
+			address.setProvince(request.getParameter("province"));
+			address.setPhone(request.getParameter("phone"));
+			address.setInfo(request.getParameter("info"));
+			address.setAlias(request.getParameter("alias"));
+			UserDAO userDAO = new UserDAO();
+			try {
+				userDAO.doSaveAddress(user, address);
+				user.addAddress(address);
+				request.getSession().setAttribute("user", user);
+			} catch (SQLException e) {
+				e.printStackTrace();
 				response.sendError(500);
-				return;
 			}
-			
-			if(action.equals("createAddress")) {
-				Address address = new Address();
-				address.setFirstName(request.getParameter("firstName"));
-				address.setLastName(request.getParameter("lastName"));
-				address.setAddress(request.getParameter("address"));
-				address.setPostalCode(request.getParameter("postalCode"));
-				address.setCity(request.getParameter("city"));
-				address.setProvince(request.getParameter("province"));
-				address.setPhone(request.getParameter("phone"));
-				address.setInfo(request.getParameter("info"));
-				address.setAlias(request.getParameter("alias"));
-				UserDAO userDAO = new UserDAO();
+			response.sendRedirect("User");
+		} else if (action.equals("setPreferredAddress")) {
+			UserDAO userDAO = new UserDAO();
+			int id = Integer.parseInt(request.getParameter("id"));
+			if(user.setPreferredAddress(id)) {
 				try {
-					userDAO.doSaveAddress(user, address);
-					user.addAddress(address);
-					request.getSession().setAttribute("user", user);
+					userDAO.doSetPreferredAddress(user, id);
 				} catch (SQLException e) {
 					e.printStackTrace();
 					response.sendError(500);
+					return;
 				}
-				response.sendRedirect("User");
-			} else if (action.equals("setPreferredAddress")) {
-				UserDAO userDAO = new UserDAO();
-				int id = Integer.parseInt(request.getParameter("id"));
-				if(user.setPreferredAddress(id)) {
-					try {
-						userDAO.doSetPreferredAddress(user, id);
-					} catch (SQLException e) {
-						e.printStackTrace();
-						response.sendError(500);
-						return;
-					}
-				}
-				response.sendRedirect("User");
-				return;
 			}
+			response.sendRedirect("User");
+			return;
 		}
+
 	}
 
 }

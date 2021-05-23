@@ -38,29 +38,31 @@ public class LoginServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		System.out.println(this.getClass().getSimpleName() + " get:" + request.getParameter("action"));
-		User user = null;
 		request.setAttribute("active", "Login");
-		// If session have user
-		if (request.getSession().getAttribute("user") != null)
-			user = (User) request.getSession().getAttribute("user");
-		// Try to Register
+		User user = (User) request.getSession().getAttribute("user");
 		String action = request.getParameter("action");
-		if (user == null && action != null && action.equals("register")) {
-			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/views/login/register.jsp");
-			dispatcher.forward(request, response);
-			return;
-		}
-		if (user == null) {
-			// Login page if not logged in
-			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/views/login/login.jsp");
-			dispatcher.forward(request, response);
+		// Try to Register
+		if(user == null) {
+			if(action != null && action.equals("register")) {
+				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/views/login/register.jsp");
+				dispatcher.forward(request, response);
+				return;
+			} else {
+				// Login page if not logged in
+				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/views/login/login.jsp");
+				dispatcher.forward(request, response);
+				return;
+			}
 		} else {
-			// Profile page
-			request.getSession().setAttribute("active", "User");
-			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/views/users/index.jsp");
-			dispatcher.forward(request, response);
+			if(action.equals("logout")) {
+				request.getSession().invalidate();
+				response.sendRedirect("Home");
+				return;
+			} else {
+				response.sendRedirect("User");
+				return;
+			}
 		}
-
 	}
 
 	/**
@@ -77,10 +79,8 @@ public class LoginServlet extends HttpServlet {
 			if (action.equals("register")) {
 				registerUser(request, response);
 				return;
-			}
-
-			// Try login by login.jsp
-			if (action.equals("login")) {
+			} else if (action.equals("login")) {
+				// Try login by login.jsp
 				User user = null;
 				UserDAO userDAO = new UserDAO();
 				try {
@@ -92,11 +92,12 @@ public class LoginServlet extends HttpServlet {
 				}
 				if (user == null || !user.getPassword().equals(request.getParameter("password"))) {
 					request.getSession().setAttribute("user", null);
+					request.setAttribute("errors", new ArrayList<String>() {{add("User not found or password error");}});
 					RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/views/login/login.jsp");
 					dispatcher.forward(request, response);
-					//TODO send a login error
 					return;
 				} else {
+					request.removeAttribute("errors");
 					if(user.getRole().equals("customer")) {
 						request.getSession().setAttribute("user", user);
 					} else if(user.getRole().equals("administrator")) {

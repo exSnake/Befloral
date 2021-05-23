@@ -4,7 +4,7 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <z:layout pageTitle="Admin Product Edit">
 	<h1>Edit Product</h1>
-	<form action="Products" method="post">
+	<form action="<c:url value="/Admin/Products" />" method="post">
 		<input type="hidden" name="id" id="id" value="${bean.getId()}" required>
 		<input type="hidden" name="action" value="put">
 		<div class="form-group">
