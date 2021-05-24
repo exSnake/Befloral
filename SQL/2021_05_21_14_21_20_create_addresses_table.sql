@@ -24,4 +24,3 @@ CREATE TABLE `addresses` (
 	CONSTRAINT `FK__customers` FOREIGN KEY (`cid`) REFERENCES `customers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE 
 );
 
-

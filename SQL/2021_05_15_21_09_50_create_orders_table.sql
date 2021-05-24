@@ -1,8 +1,5 @@
 USE `befloral`;
 
-INSERT INTO `migrations` (`name`) VALUES
-	('2021_05_15_21_09_50_create_orders_table');
-
 CREATE TABLE `orders` (
 	`id` bigint AUTO_INCREMENT,
 	`uid` bigint NOT NULL,
@@ -29,3 +26,7 @@ CREATE TABLE `order_items` (
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_order` FOREIGN KEY (`oid`) REFERENCES `orders` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT 
 );
+
+INSERT INTO `migrations` (`name`) VALUES
+	('2021_05_15_21_09_50_create_orders_table');
+

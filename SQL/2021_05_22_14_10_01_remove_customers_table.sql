@@ -9,8 +9,8 @@ ALTER TABLE users
 ADD COLUMN `firstName` varchar(45) NOT NULL AFTER `id`,
 ADD COLUMN `lastName` varchar(45) NOT NULL AFTER `firstName`,
 ADD COLUMN `gender` varchar(20) NOT NULL DEFAULT "Undefined" AFTER `lastName`,
-ADD COLUMN `subscription` tinyint NOT NULL DEFAULT 0 `gender`,
-ADD COLUMN `birthday` date NOT NULL after `subscription`;
+ADD COLUMN `subscription` tinyint NOT NULL DEFAULT 0 AFTER `gender`,
+ADD COLUMN `birthday` date NOT NULL DEFAULT '1900-01-01' after `subscription`;
 
 ALTER TABLE `addresses`
 	CHANGE COLUMN `cid` `uid` BIGINT(19) NOT NULL AFTER `id`,
@@ -23,3 +23,4 @@ ALTER TABLE `addresses`
 
 INSERT INTO `migrations` (`name`) VALUES
 	('2021_05_22_14_10_01_remove_customers_table');
+

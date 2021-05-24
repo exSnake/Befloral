@@ -233,6 +233,7 @@ public class UserDAO implements GenericDAO<User> {
 					stmt.setBoolean(11, true);
 				else
 					stmt.setNull(11, Types.NULL);
+				System.out.println(stmt);
 				stmt.execute();
 			}
 		}

@@ -6,3 +6,4 @@ INSERT INTO `migrations` (`name`) VALUES
 ALTER TABLE orders
 ADD COLUMN `status` VARCHAR(255) NULL
 	AFTER `trackNumber`;
+	
