@@ -74,6 +74,9 @@ public class OrderServlet extends HttpServlet {
 		System.out.println(this.getClass().getSimpleName() + " post:" + request.getParameter("action"));
 		var action = request.getParameter("action");
 		System.out.println("OrderServlet post: " + action);
+		
+		
+		
 		if(action != null) {
 			if(action.equals("create")) {
 				RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/orders/summary.jsp");
@@ -83,7 +86,11 @@ public class OrderServlet extends HttpServlet {
 				doBuy(request, response);
 				return;
 			}
+			
+			
 		}
+
+		
 	}
 	
 	private void doBuy(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

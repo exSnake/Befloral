@@ -1,11 +1,13 @@
 @charset "ISO-8859-1";
+
+
 @import url('https://fonts.googleapis.com/css?family=Dosis:300,400,500');
 @-moz-keyframes rocket-movement { 100% {-moz-transform: translate(1200px,-600px);} }
 @-webkit-keyframes rocket-movement {100% {-webkit-transform: translate(1200px,-600px); } }
 @keyframes rocket-movement { 100% {transform: translate(1200px,-600px);} }
-@-moz-keyframes spin-earth { 100% { -moz-transform: rotate(-360deg); transition: transform 20s;  } }
-@-webkit-keyframes spin-earth { 100% { -webkit-transform: rotate(-360deg); transition: transform 20s;  } }
-@keyframes spin-earth{ 100% { -webkit-transform: rotate(-360deg); transform:rotate(-360deg); transition: transform 20s; } }
+@-moz-keyframes spin-earth { 100% { -moz-transform: rotate(-360deg); transition: transform 10s;  } }
+@-webkit-keyframes spin-earth { 100% { -webkit-transform: rotate(-360deg); transition: transform 10s;  } }
+@keyframes spin-earth{ 100% { -webkit-transform: rotate(-360deg); transform:rotate(-360deg); transition: transform 10s; } }
 
 
 
@@ -26,6 +28,17 @@
 }
 @keyframes rotate-face{
     100% { -webkit-transform: rotate(-720deg); transform:rotate(-720deg); }
+}
+
+.object_face{
+    animation: rotate-face 100s infinite linear both alternate;
+}
+
+
+.object_face ,box_face  :hover:focus:active:after{
+	transform: rotate(360deg);
+	transition: width .5s ease;
+	
 }
 
 
@@ -68,10 +81,6 @@
 
 
 
-.object_face{
-    animation: rotate-face 100s infinite linear both alternate;
-}
-
 .box_face{
     z-index: 110 !important;
     position: absolute;
@@ -81,11 +90,9 @@
     animation: move-face 50s infinite linear both alternate;
 }
 
-.object_face ,box_face  :hover:focus:active:after{
-	transform: rotate(360deg);
-	transition: width .5s ease;
-	
-}
+
+
+
 
 
 @media only screen and (max-width: 600px){

@@ -35,5 +35,15 @@
 		<input type="hidden" id="action" name="action" value="removeAll">
 		<button class="btn btn-danger">Remove All</button>
 	</form>
-	<a href="Orders?action=checkout"><button class="btn btn-danger">Buy Now</button></a>
+	<c:if test="${!cart.isEmpty() && cart!=null}">
+	
+		<form action="Login" method="get" >
+			<input type="hidden" id="action" name="action" value="checkout">
+			<button class="btn btn-danger" type="submit">Buy Now</button>
+		</form>
+			
+	</c:if>
+	
+	
 </z:layout>
+

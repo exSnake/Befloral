@@ -41,6 +41,28 @@ public class LoginServlet extends HttpServlet {
 		request.setAttribute("active", "Login");
 		User user = (User) request.getSession().getAttribute("user");
 		String action = request.getParameter("action");
+		
+		//chekout
+		if(action!= null && action.equals("checkout")){
+			//utente non loggato
+			if(user==null) {
+				request.getSession().setAttribute("tryLoggin", "try");
+				request.removeAttribute(action);		
+				
+				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/views/login/login.jsp");
+				dispatcher.forward(request, response);
+				return;
+				
+			}
+			//utente loggato
+			else {
+				request.setAttribute("action", "checkout");
+				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/Orders");
+				dispatcher.forward(request, response);
+				return;
+			}
+		}
+		
 		// Try to Register
 		if(user == null) {
 			if(action != null && action.equals("register")) {
@@ -65,6 +87,8 @@ public class LoginServlet extends HttpServlet {
 		}
 	}
 
+	
+	
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
@@ -103,12 +127,24 @@ public class LoginServlet extends HttpServlet {
 					} else if(user.getRole().equals("administrator")) {
 						request.getSession().setAttribute("admin", user);
 					}
-					response.sendRedirect("Home");
+					
+					String tryLoggin = (String) request.getSession().getAttribute("tryLoggin");
+					if(tryLoggin!=null && tryLoggin.equals("try")) {
+						
+						request.getSession().removeAttribute("tryLoggin");				
+						response.sendRedirect("Orders?action=checkout");
+						return;
+						
+					}
+					else response.sendRedirect("Home");
 				}
 			}
 		}
 	}
 
+	
+	
+	
 	private void registerUser(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// control same password
@@ -127,8 +163,21 @@ public class LoginServlet extends HttpServlet {
 			try {
 				dao.doSave(user);
 				request.getSession().setAttribute("user", user);
-				response.sendRedirect("Home");
-				return;
+				
+				//registered by the buynow button cart
+				String tryLoggin = (String) request.getSession().getAttribute("tryLoggin");
+				
+				if(tryLoggin!=null && tryLoggin.equals("try")) {			
+					request.getSession().removeAttribute("tryLoggin");				
+					response.sendRedirect("Orders?action=checkout");
+					return;
+				}
+				
+				else {
+					response.sendRedirect("Home");//call servlet get
+					return;
+				}
+				
 			} catch (IOException | SQLException e) {
 				e.printStackTrace();
 				System.out.println(e.getMessage());
@@ -185,4 +234,9 @@ public class LoginServlet extends HttpServlet {
 		return errors.size() > 0;
 	}
 
+	
+	
+	
+	
+	
 }
