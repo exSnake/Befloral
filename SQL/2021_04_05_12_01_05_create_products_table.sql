@@ -14,6 +14,7 @@
 
 -- Dump della struttura del database befloral
 CREATE DATABASE IF NOT EXISTS `befloral` /*!40100 DEFAULT CHARACTER SET utf8 */ /*!80016 DEFAULT ENCRYPTION='N' */;
+
 USE `befloral`;
 
 -- Dump della struttura di tabella befloral.migrations
@@ -41,11 +42,6 @@ CREATE TABLE `products` (
   PRIMARY KEY (`id`)
 );
 
-
--- Dump dei dati della tabella befloral.migrations: 1 row
-INSERT INTO `migrations` (`name`) VALUES
-	('2021_04_05_12_01_05_create_products_table');
-
 -- Dump dei dati della tabella befloral.products: 4 rows 
 INSERT INTO `products` (`name`, `description`, `shortDescription`, `metaDescription`, `metaKeyword`, `price`, `weight`, `available`, `discount`, `onSale`, `quantity`) VALUES
 	('Bouquet di Anturium', 'Bouquet di Anturium e Azalee', 'Anturium', 'bouquet_anturium', 'anturium', 20.33, 1.2, 1, 12, 1, 10),
@@ -59,6 +55,7 @@ INSERT INTO `products` (`name`, `description`, `shortDescription`, `metaDescript
 	('Bouquet di Gerbera', 'Bouquet di Gerbera di colori misti', 'Bouquet Gerbera', 'bouquet_gerbera', 'gerbera', 20.90, 0.5, 1, 0, 0, 50),
 	('Vaso Terra Cotta', 'Vaso di terra cotta rosso', 'Vaso', 'vaso', 'varo', 12.4, 0.5, 1, 0, 1, 12);
 
-/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
-/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+-- Dump dei dati della tabella befloral.migrations: 1 row
+INSERT INTO `migrations` (`name`) VALUES
+	('2021_04_05_12_01_05_create_products_table');
+

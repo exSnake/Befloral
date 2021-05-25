@@ -429,6 +429,7 @@ a:after {
 /*#region Navbar */
 
 .main-bar{
+	z-index: 1;
     background-color: #56BFBA !important;
     display: flow-root;
     padding: 0 10%;
@@ -482,6 +483,7 @@ a:after {
     text-decoration: none;
 }
 nav ul {
+	z-index: 1;
     float: right;
 }
 
@@ -585,6 +587,7 @@ nav li:hover a{
     .checkbtn{
         display: block;
         margin-right: 40px;
+        z-index: 2;
     }
 
     nav ul {
@@ -592,7 +595,8 @@ nav li:hover a{
         width: 320px;
         height:100vh;
         background: #56BFBA;
-        top: 60px;
+        top: 0px;
+        padding-top: 60px;
         left: -100%;
         text-align: center;
         transition: all 0.5s;

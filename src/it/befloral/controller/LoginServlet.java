@@ -115,7 +115,7 @@ public class LoginServlet extends HttpServlet {
 					return;
 				}
 				if (user == null || !user.getPassword().equals(request.getParameter("password"))) {
-					request.getSession().setAttribute("user", null);
+					request.getSession().removeAttribute("user");
 					request.setAttribute("errors", new ArrayList<String>() {{add("User not found or password error");}});
 					RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/views/login/login.jsp");
 					dispatcher.forward(request, response);
@@ -162,6 +162,7 @@ public class LoginServlet extends HttpServlet {
 			user.setActive(true);
 			try {
 				dao.doSave(user);
+				user = dao.doRetriveByEmail(user.getEmail());
 				request.getSession().setAttribute("user", user);
 				
 				//registered by the buynow button cart

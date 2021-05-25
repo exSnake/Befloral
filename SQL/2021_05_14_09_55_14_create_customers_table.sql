@@ -16,7 +16,6 @@ CREATE TABLE `customers` (
 );
 
 ALTER TABLE `users`
-	CHANGE COLUMN `username` `email` VARCHAR(45) NOT NULL COLLATE 'utf8_general_ci' AFTER `id`,
+	CHANGE COLUMN `username` `email` VARCHAR(45) NOT NULL AFTER `id`,
 	ADD UNIQUE INDEX `email` (`email`);
-	
 	

@@ -1,8 +1,5 @@
 USE `befloral`;
 
-INSERT INTO `migrations` (`name`) VALUES
-	('2021_05_12_13_12_05_create_users_table');
-
 CREATE TABLE `users` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `username` varchar(45) NOT NULL,
@@ -17,3 +14,5 @@ INSERT INTO `users` (`username`, `password`, `role`, `active`) VALUES
 	('employee', 'employee', 'employee', 0),
 	('customer', 'customer', 'customer', 0);
 
+INSERT INTO `migrations` (`name`) VALUES
+	('2021_05_12_13_12_05_create_users_table');

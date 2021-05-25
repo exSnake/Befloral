@@ -16,7 +16,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<!-- Navbar -->
 	
-	<div class="main-bar">
+	<div id="navbar" class="main-bar">
         <nav>
             <input type="checkbox" id="check">
             <label class="checkbtn" for="check">
@@ -26,7 +26,7 @@
             </label>
             
             <div class="logo-header">
-                <a href="#">BeFloral</a>
+                <a href="<c:url value="/Home"/>">BeFloral</a>
             </div>
 
             <ul>
@@ -57,6 +57,26 @@
 			<jsp:doBody />
 		</div>
 	</main>
+	
+	<script>
+	// When the user scrolls the page, execute myFunction
+	window.onscroll = function() {myFunction()};
+
+	// Get the navbar
+	var navbar = document.getElementById("navbar");
+
+	// Get the offset position of the navbar
+	var sticky = navbar.offsetTop;
+
+	// Add the sticky class to the navbar when you reach its scroll position. Remove "sticky" when you leave the scroll position
+	function myFunction() {
+	  if (window.pageYOffset >= sticky) {
+	    navbar.classList.add("sticky")
+	  } else {
+	    navbar.classList.remove("sticky");
+	  }
+	}
+	</script>
 	<!-- Footer colors #2e2e2e   and #252525  -->
 	<div class="footer">
 		<div class=footer-left>
