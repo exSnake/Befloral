@@ -24,11 +24,10 @@
         <scripting-invalid>false</scripting-invalid>
     </jsp-property-group>
 </jsp-config>
-
-
-
-
-
+<context-param>
+    <param-name>logFilePath</param-name>
+    <param-value>/application/befloral.log</param-value>
+</context-param>
 
 <error-page>
     <!-- Missing login -->

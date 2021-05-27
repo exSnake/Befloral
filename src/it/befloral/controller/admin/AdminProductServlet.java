@@ -34,7 +34,6 @@ public class AdminProductServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println(this.getClass().getSimpleName() + " get:" + request.getParameter("action"));
 		var action = request.getParameter("action");
 		if(action == null) {
 			index(request,response);
@@ -62,7 +61,6 @@ public class AdminProductServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println(this.getClass().getSimpleName() + " post:" + request.getParameter("action"));
 		var action = request.getAttribute("action");
 		if(action == null) {
 		} else if(action.equals("create")) {

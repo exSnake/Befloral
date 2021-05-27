@@ -37,7 +37,6 @@ public class LoginServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println(this.getClass().getSimpleName() + " get:" + request.getParameter("action"));
 		request.setAttribute("active", "Login");
 		User user = (User) request.getSession().getAttribute("user");
 		String action = request.getParameter("action");
@@ -71,7 +70,6 @@ public class LoginServlet extends HttpServlet {
 	 */
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println(this.getClass().getSimpleName() + " post:" + request.getParameter("action"));
 		String action = request.getParameter("action");
 		request.setAttribute("active", "Login");
 		if (action != null) {

@@ -42,7 +42,6 @@ public class CartServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println(this.getClass().getSimpleName() + " get:" + request.getParameter("action"));
 		Cart cart = (Cart) request.getSession().getAttribute("cart");
 		request.setAttribute("active", "Cart");
 		if (cart != null) {
@@ -61,7 +60,6 @@ public class CartServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println(this.getClass().getSimpleName() + " post:" + request.getParameter("action"));
 		// Check action
 		Cart cart = (Cart) request.getSession().getAttribute("cart");
 		if (cart == null) {

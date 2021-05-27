@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import it.befloral.beans.Address;
 import it.befloral.beans.User;
 import it.befloral.model.AddressDAO;
@@ -22,7 +25,6 @@ import it.befloral.model.UserDAO;
 @WebServlet("/User")
 public class UserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -36,7 +38,6 @@ public class UserServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println(this.getClass().getSimpleName() + " get:" + request.getParameter("action"));
 		User user = (User) request.getSession().getAttribute("user");
 		request.setAttribute("active", "User");
 		var action = request.getParameter("action");
@@ -66,7 +67,6 @@ public class UserServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println(this.getClass().getSimpleName() + " post:" + request.getParameter("action"));
 		request.setAttribute("active", "User");
 		User user = (User) request.getSession().getAttribute("user");
 		var action = request.getParameter("action");

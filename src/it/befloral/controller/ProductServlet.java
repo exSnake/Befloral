@@ -37,7 +37,6 @@ public class ProductServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// Acquire all products from db
-		System.out.println(this.getClass().getSimpleName() + " get:" + request.getParameter("action"));
 		String sort = request.getParameter("sort");
 		request.setAttribute("active", "Products");
 		try {
@@ -77,7 +76,6 @@ public class ProductServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println(this.getClass().getSimpleName() + " post:" + request.getParameter("action"));
 	}
 
 }

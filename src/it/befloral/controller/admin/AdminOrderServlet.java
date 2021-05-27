@@ -43,7 +43,6 @@ public class AdminOrderServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println(this.getClass().getSimpleName() + " get:" + request.getParameter("action"));
 		var action = request.getParameter("action");
 		System.out.println(action);
 		if (action == null) {
@@ -65,7 +64,6 @@ public class AdminOrderServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println(this.getClass().getSimpleName() + " post:" + request.getParameter("action"));
 		var action = request.getParameter("action");
 		if (action == null) {
 			response.sendError(500);
@@ -93,7 +91,6 @@ public class AdminOrderServlet extends HttpServlet {
 				var order = model.doRetriveByKey(id);
 				request.setAttribute("bean", order);
 				request.setAttribute("items", order.getItems());
-				System.out.println(order.getItems().size());
 				RequestDispatcher dispatcher = request.getServletContext()
 						.getRequestDispatcher("/WEB-INF/views/admin/orders/view.jsp");
 				dispatcher.forward(request, response);

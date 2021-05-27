@@ -1,6 +1,13 @@
 package it.befloral.controller;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.OpenOption;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -30,8 +37,21 @@ public class AdminServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/admin/index.jsp");
-		dispatcher.forward(request, response);
+		var action = request.getParameter("action");
+		if(action == null) {
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/admin/index.jsp");
+			dispatcher.forward(request, response);
+		} else if (action.equals("viewLogs")) {
+			List<String> logs = new LinkedList<String>();
+			logs = Files.readAllLines(Paths.get(getServletContext().getInitParameter("logFilePath")));
+			request.setAttribute("logs", logs);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/admin/logs.jsp");
+			dispatcher.forward(request, response);
+		} else if (action.equals("clearLogs")) {
+			Files.writeString(Paths.get(getServletContext().getInitParameter("logFilePath")), "", StandardOpenOption.TRUNCATE_EXISTING);
+			response.sendRedirect(getServletContext().getContextPath() + "/Admin");
+		}
+		
 	}
 
 	/**

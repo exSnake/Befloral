@@ -38,7 +38,6 @@ public class OrderServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println(this.getClass().getSimpleName() + " get:" + request.getParameter("action"));
 		var action = request.getParameter("action");
 		User user = (User) request.getSession().getAttribute("user");
 		Cart cart = (Cart) request.getSession().getAttribute("cart");
@@ -71,9 +70,7 @@ public class OrderServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println(this.getClass().getSimpleName() + " post:" + request.getParameter("action"));
 		var action = request.getParameter("action");
-		System.out.println("OrderServlet post: " + action);
 		if(action != null) {
 			if(action.equals("create")) {
 				RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/orders/summary.jsp");
