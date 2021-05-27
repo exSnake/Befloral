@@ -20,6 +20,7 @@ import it.befloral.beans.OrderItem;
 import it.befloral.beans.User;
 
 public class OrderDAO implements GenericDAO<Order> {
+	
 	private static DataSource ds;
 	private static final String TABLE_NAME = "orders";
 

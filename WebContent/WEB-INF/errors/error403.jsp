@@ -14,7 +14,7 @@
 			
 			<h1 class="error-code">403</h1>
 			<p class="error">Access denied....</p>
-			<p class="error">You don'thabe peermission to access this page.</p>
+			<p class="error">You don't have peermission to access this page.</p>
 			
 		</div>
 	

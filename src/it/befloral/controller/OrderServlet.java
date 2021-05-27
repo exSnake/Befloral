@@ -80,7 +80,11 @@ public class OrderServlet extends HttpServlet {
 				doBuy(request, response);
 				return;
 			}
+			
+			
 		}
+
+		
 	}
 	
 	private void doBuy(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

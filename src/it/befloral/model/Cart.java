@@ -32,6 +32,10 @@ public class Cart {
 		}
 	}
 
+	public boolean isEmpty() {
+		return products.size() > 0 ? false : true; 
+	}
+	
 	public List<CartProduct> getProducts() {
 		return products;
 	}
