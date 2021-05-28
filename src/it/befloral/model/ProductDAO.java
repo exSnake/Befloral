@@ -12,6 +12,8 @@ import javax.sql.DataSource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.mysql.cj.xdevapi.Result;
+
 import it.befloral.beans.*;
 
 public class ProductDAO implements GenericDAO<Product> {
@@ -171,7 +173,7 @@ public class ProductDAO implements GenericDAO<Product> {
 			
 			conn.setAutoCommit(false);
 			
-			stmt = conn.prepareStatement(inserSQL);
+			stmt = conn.prepareStatement(inserSQL,Statement.RETURN_GENERATED_KEYS);
 
 			stmt.setString(1, dao.getName());
 			stmt.setString(2, dao.getDescription());
@@ -186,26 +188,29 @@ public class ProductDAO implements GenericDAO<Product> {
 			stmt.setInt(11, dao.getQuantity());
 			
 			LOGGER.debug(stmt);
-			
 			stmt.execute();
-
-			stmt3 = conn.prepareStatement(deleteSQL_Category);
-				stmt3.setInt(1, dao.getId());
-				stmt3.execute();
-				
-			for (Category c : dao.getCategories()) {
-				stmt2 = conn.prepareStatement(updateSQL);
-				stmt2.setInt(1, dao.getId());
-				stmt2.setInt(2, c.getId());
-				
-				LOGGER.debug(stmt2);
-				stmt2.execute();
-			}			
+			ResultSet res  = stmt.getGeneratedKeys();
+			int key;
 			
+			if (res.next()) {
+				
+				key = res.getInt(1);
+
+				for (Category c : dao.getCategories()) {
+					stmt2 = conn.prepareStatement(updateSQL);
+					stmt2.setInt(1, key);
+					stmt2.setInt(2, c.getId());
+
+					LOGGER.debug(stmt2);
+					stmt2.execute();
+				}
+			
+			}
 			conn.commit();
 			
 			
 		} catch (SQLException e) {
+			e.printStackTrace();
 			conn.rollback();
 		}		
 			finally {
@@ -225,13 +230,18 @@ public class ProductDAO implements GenericDAO<Product> {
 		String updateSQL = "UPDATE products p  " + "SET p.name = ?," + "p.description = ?," + "p.shortDescription = ?,"
 				+ "p.metaDescription = ?," + "p.metaDescription = ?," + "p.price = ?," + "p.weight = ?,"
 				+ "p.available = ?," + "p.discount = ?," + "p.onSale = ?," + "p.quantity = ? " + "WHERE p.id = ? ";
+		String inserSQL = "INSERT INTO categories_products (pid,cid) VALUES (?,?) ON DUPLICATE KEY UPDATE pid=pid";
+		String deleteSQL_Category="Delete * from categories_products WHERE pid=?";
+		
 		Connection conn = null;
 		PreparedStatement stmt = null;
+		PreparedStatement stmt2 = null;
+		PreparedStatement stmt3 = null;
 		var result = 0;
 		try {
 			conn = ds.getConnection();
+			conn.setAutoCommit(false);	
 			stmt = conn.prepareStatement(updateSQL);
-			
 			stmt.setString(1, dao.getName());
 			stmt.setString(2, dao.getDescription());
 			stmt.setString(3, dao.getShortDescription());
@@ -243,13 +253,24 @@ public class ProductDAO implements GenericDAO<Product> {
 			stmt.setDouble(9, dao.getDiscount());
 			stmt.setInt(10, dao.getOnSale());
 			stmt.setInt(11, dao.getQuantity());
-			stmt.setInt(12, dao.getId());
+			stmt.setInt(12, dao.getId());		
 			
-			LOGGER.debug(stmt);
+			stmt.executeUpdate();
 			
-			result = stmt.executeUpdate();
-
-		} finally {
+			stmt2 = conn.prepareStatement(deleteSQL_Category);
+			stmt2.execute();					
+				for (Category c : dao.getCategories()) {
+					stmt3 = conn.prepareStatement(inserSQL);
+					stmt3.setInt(1, dao.getId());
+					stmt3.setInt(2, c.getId());
+					stmt3.execute();
+				}	
+				conn.commit();
+			}catch (SQLException e) {
+			e.printStackTrace();
+			conn.rollback();
+		} 
+		finally {
 			try {
 				if (stmt != null)
 					stmt.close();
@@ -258,7 +279,6 @@ public class ProductDAO implements GenericDAO<Product> {
 					conn.close();
 			}
 		}
-
 		return result;
 	}
 
@@ -266,11 +286,8 @@ public class ProductDAO implements GenericDAO<Product> {
 	public synchronized boolean doDelete(int code) throws SQLException {
 		Connection conn = null;
 		PreparedStatement stmt = null;
-
 		int result = 0;
-
 		String deleteSQL = "DELETE FROM " + ProductDAO.TABLE_NAME + " WHERE id = ?";
-
 		try {
 			conn = ds.getConnection();
 			stmt = conn.prepareStatement(deleteSQL);
@@ -286,7 +303,6 @@ public class ProductDAO implements GenericDAO<Product> {
 					conn.close();
 			}
 		}
-
 		return (result != 0);
 	}
 

@@ -40,7 +40,7 @@ public class AdminProductServlet extends HttpServlet {
 			return;
 		} else {
 			if(action.equals("view")) {
-				
+				//TODO
 			} else if (action.equals("create")) {
 				create(request, response);
 				return;
@@ -65,6 +65,7 @@ public class AdminProductServlet extends HttpServlet {
 		
 		if(action == null) {
 		} else if(action.equals("create")) {
+
 			save(request,response);
 			return;
 		} else if (action.equals("put")) {
@@ -86,7 +87,7 @@ public class AdminProductServlet extends HttpServlet {
 				Integer.parseInt(request.getParameter("quantity")),
 				Integer.parseInt(request.getParameter("onSale")),
 				(request.getParameter("available") == null ? false : true));
-		try {
+		try {			
 			products.doSave(product);
 			response.sendRedirect(request.getServletContext().getContextPath()+"/Admin/Products");
 			return;
@@ -151,9 +152,7 @@ public class AdminProductServlet extends HttpServlet {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		RequestDispatcher dispatcher = request.getServletContext()
-				.getRequestDispatcher("/WEB-INF/views/products/index.jsp");
-		dispatcher.forward(request, response);
+		response.sendRedirect(getServletContext().getContextPath()+"/Admin/Products");
 	}
 
 

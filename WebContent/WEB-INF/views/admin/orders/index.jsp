@@ -62,8 +62,8 @@
 	</div>
 	</c:forEach>
 	<div class="admin-pages">
-	<c:forEach items="${pages}" var="pageLink" varStatus="loop">
-    	<a class="page-btn" href="<c:url value="/Admin/Orders?${pageLink}"/>"><span>${loop.index+1}</span></a>
+	<c:forEach items="${pages}" var="page" varStatus="loop">
+    	<a class="page-btn" href="<c:url value="/Admin/Orders?${page.getValue()}"/>"><span>${page.getKey()}</span></a>
 	</c:forEach>
 	</div>
 </z:layout>

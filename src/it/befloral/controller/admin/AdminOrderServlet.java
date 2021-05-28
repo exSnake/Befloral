@@ -6,9 +6,11 @@ import java.sql.SQLException;
 import javax.servlet.RequestDispatcher;
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Map.Entry;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -103,7 +105,8 @@ public class AdminOrderServlet extends HttpServlet {
 	}
 
 	private void index(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int page = Integer.parseInt(request.getParameter("page") == null ? "1" : request.getParameter("page"));
+		int page = Integer.parseInt(request.getParameter("page") == null ? "1" : request.getParameter("page")) ;
+		page = page <= 0 ? 1 : page ;
 		LocalDate dateFrom = (request.getParameter("dateFrom") == null || request.getParameter("dateFrom").isEmpty()) ? LocalDate.parse("1970-01-01") : LocalDate.parse(request.getParameter("dateFrom"));
 		LocalDate dateTo = (request.getParameter("dateTo") == null || request.getParameter("dateTo").isEmpty()) ? LocalDate.parse("2038-01-18") : LocalDate.parse(request.getParameter("dateTo"));
 		int uid = request.getParameter("userId") == null ? 0 : Integer.parseInt(request.getParameter("userId"));
@@ -117,9 +120,14 @@ public class AdminOrderServlet extends HttpServlet {
 			Collection<Order> orders = dao.doRetrieveOrdersBetween(sort, uid, ((page - 1) * (offset)), offset,
 					Timestamp.valueOf(dateFrom.atStartOfDay()), Timestamp.valueOf(dateTo.atStartOfDay()));
 			int pageCount = (int) Math.ceil(dao.doRetrieveCount()/(double)offset);
-			ArrayList<String> pages = new ArrayList<>();
-			for (int i = 1; i <= pageCount; i++) {
-				pages.add(String.format("page=%d&dateFrom=%s&dateTo=%s&userId=%d&offset=%d&sort=%s",i,dateFrom.toString(),dateTo.toString(),uid,offset,sort));
+				
+			ArrayList<Entry<Integer,String>> pages = new ArrayList<Entry<Integer,String>>();
+			int toShow = 7;
+			int start = (int) Math.max(1, Math.min(Math.floor(page - (toShow/2) ), pageCount-toShow));
+			for (int i = start; i <= start+toShow; i++) {
+				
+				pages.add(new AbstractMap.SimpleEntry<>(i,String.format("page=%d&dateFrom=%s&dateTo=%s&userId=%d&offset=%d&sort=%s",i,dateFrom.toString(),dateTo.toString(),uid,offset,sort)));
+				//pages.add(String.format("page=%d&dateFrom=%s&dateTo=%s&userId=%d&offset=%d&sort=%s",i,dateFrom.toString(),dateTo.toString(),uid,offset,sort));
 			}
 			request.removeAttribute("orders");
 			request.setAttribute("orders", orders);
