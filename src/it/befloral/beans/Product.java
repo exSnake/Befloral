@@ -2,6 +2,8 @@ package it.befloral.beans;
 
 import java.io.Serializable;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class Product implements Serializable {
 
@@ -31,6 +33,10 @@ public class Product implements Serializable {
 	private int quantity;
 	private int onSale;
 
+	private Collection<Category> categories ;
+	
+	
+	
 	private boolean available;
 	//////////////////////////////////////////////////////////////////////////
 
@@ -66,6 +72,19 @@ public class Product implements Serializable {
 
 	////////// GETTER&SETTERS//////////////////////////////////////////////////
 
+	
+	public void addCategory(Category category) {
+		if(categories == null ) categories = new ArrayList<Category>();
+		if(!categories.contains(category))
+			categories.add(category);
+	}
+	
+	public Collection<Category> getCategories() {
+		 return categories;
+	}
+	
+	
+	
 	public int getId() {
 		return id;
 	}

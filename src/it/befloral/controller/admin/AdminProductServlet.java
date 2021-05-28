@@ -61,7 +61,8 @@ public class AdminProductServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		var action = request.getAttribute("action");
+		var action = request.getParameter("action");
+		
 		if(action == null) {
 		} else if(action.equals("create")) {
 			save(request,response);
@@ -167,6 +168,8 @@ public class AdminProductServlet extends HttpServlet {
 				Double.parseDouble(request.getParameter("price")), Double.parseDouble(request.getParameter("discount")),
 				Integer.parseInt(request.getParameter("quantity")), Integer.parseInt(request.getParameter("onSale")),
 				(request.getParameter("available") == null ? false : true));
+		System.out.println("ciaooo");
+		
 		try {
 			if (products.doUpdate(product) > 0) {
 				response.sendRedirect(request.getServletContext().getContextPath()+"/Admin/Products");

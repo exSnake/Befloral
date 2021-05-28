@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Category {
 
 	private int id;
-	private String name,description,metaKeywords,metaTitle,metaDescription;
+	private String name,description,metaKeywords;
 	
 	private ArrayList<Integer> productsId;
 	
@@ -58,18 +58,7 @@ public class Category {
 	public void setMetaKeywords(String metaKeywords) {
 		this.metaKeywords = metaKeywords;
 	}
-	public String getMetaTitle() {
-		return metaTitle;
-	}
-	public void setMetaTitle(String metaTitle) {
-		this.metaTitle = metaTitle;
-	}
-	public String getMetaDescription() {
-		return metaDescription;
-	}
-	public void setMetaDescription(String metaDescription) {
-		this.metaDescription = metaDescription;
-	}
+
 	
 	
 	
@@ -82,8 +71,7 @@ public class Category {
 		this.name = name;
 		this.description = description;
 		this.metaKeywords = metaKeywords;
-		this.metaTitle = metaTitle;
-		this.metaDescription = metaDescription;
+
 		productsId= new ArrayList<Integer>();
 	}
 	
@@ -98,9 +86,9 @@ public class Category {
 		int result = 1;
 		result = prime * result + ((description == null) ? 0 : description.hashCode());
 		result = prime * result + id;
-		result = prime * result + ((metaDescription == null) ? 0 : metaDescription.hashCode());
+
 		result = prime * result + ((metaKeywords == null) ? 0 : metaKeywords.hashCode());
-		result = prime * result + ((metaTitle == null) ? 0 : metaTitle.hashCode());
+
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
@@ -120,20 +108,10 @@ public class Category {
 			return false;
 		if (id != other.id)
 			return false;
-		if (metaDescription == null) {
-			if (other.metaDescription != null)
-				return false;
-		} else if (!metaDescription.equals(other.metaDescription))
-			return false;
 		if (metaKeywords == null) {
 			if (other.metaKeywords != null)
 				return false;
 		} else if (!metaKeywords.equals(other.metaKeywords))
-			return false;
-		if (metaTitle == null) {
-			if (other.metaTitle != null)
-				return false;
-		} else if (!metaTitle.equals(other.metaTitle))
 			return false;
 		if (name == null) {
 			if (other.name != null)
@@ -148,7 +126,7 @@ public class Category {
 	@Override
 	public String toString() {
 		return "Category [id=" + id + ", name=" + name + ", description=" + description + ", metaKeywords="
-				+ metaKeywords + ", metaTitle=" + metaTitle + ", metaDescription=" + metaDescription + "]";
+				+ metaKeywords + "]";
 	}
 
 	
