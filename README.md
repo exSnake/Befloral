@@ -18,3 +18,11 @@ Quick Start on Eclipse:
 
 It should open a new page on your browser pointing to http://localhost/ProjectName/Home 
 Well done!
+
+Navigational Diagram
+
+![image](https://user-images.githubusercontent.com/11262725/119989737-ce91f080-bfc7-11eb-8745-95b9b1ce8569.png)
+
+Er Diagram
+
+![image](https://user-images.githubusercontent.com/11262725/119989768-d81b5880-bfc7-11eb-85d2-1d09d46ca104.png)
