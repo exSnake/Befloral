@@ -40,7 +40,8 @@ public class AdminProductServlet extends HttpServlet {
 			return;
 		} else {
 			if(action.equals("view")) {
-				//TODO
+				doView(request, response);
+				return;
 			} else if (action.equals("create")) {
 				create(request, response);
 				return;
@@ -50,9 +51,22 @@ public class AdminProductServlet extends HttpServlet {
 			}
 		}
 	}
+	private void doView(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		ProductDAO dao = new ProductDAO();
+		int id = request.getParameter("id") == null ? 0 : Integer.parseInt(request.getParameter("id"));
+		try {
+			Product prod = dao.doRetriveByKey(id);
+			request.setAttribute("prod", prod);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/admin/products/view.jsp");
+		dispatcher.forward(request, response);
+		return;
+	}
+
 	private void create(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher dispatcher = request.getServletContext()
-				.getRequestDispatcher("/WEB-INF/views/admin/products/create.jsp");
+		RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/admin/products/create.jsp");
 		dispatcher.forward(request, response);
 		return;
 	}

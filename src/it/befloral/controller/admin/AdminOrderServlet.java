@@ -124,7 +124,10 @@ public class AdminOrderServlet extends HttpServlet {
 			ArrayList<Entry<Integer,String>> pages = new ArrayList<Entry<Integer,String>>();
 			int toShow = 7;
 			int start = (int) Math.max(1, Math.min(Math.floor(page - (toShow/2) ), pageCount-toShow));
-			for (int i = start; i <= start+toShow; i++) {
+			System.out.println(start+toShow);
+			System.out.println(pageCount);
+			int end = (start+toShow) < pageCount ? start+toShow : pageCount;
+			for (int i = start; i <= end; i++) {
 				
 				pages.add(new AbstractMap.SimpleEntry<>(i,String.format("page=%d&dateFrom=%s&dateTo=%s&userId=%d&offset=%d&sort=%s",i,dateFrom.toString(),dateTo.toString(),uid,offset,sort)));
 				//pages.add(String.format("page=%d&dateFrom=%s&dateTo=%s&userId=%d&offset=%d&sort=%s",i,dateFrom.toString(),dateTo.toString(),uid,offset,sort));

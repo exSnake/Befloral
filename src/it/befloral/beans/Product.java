@@ -34,6 +34,7 @@ public class Product implements Serializable {
 	private int onSale;
 
 	private Collection<Category> categories ;
+	private Collection<Review> reviewes;
 	
 	
 	
@@ -74,6 +75,10 @@ public class Product implements Serializable {
 	////////// GETTER&SETTERS//////////////////////////////////////////////////
 
 	
+	public Product(int id) {
+		this.id = id;
+	}
+
 	public void addCategory(Category category) {
 		if(categories == null ) categories = new ArrayList<Category>();
 		if(!categories.contains(category))
@@ -277,6 +282,14 @@ public class Product implements Serializable {
 		if (Double.doubleToLongBits(weight) != Double.doubleToLongBits(other.weight))
 			return false;
 		return true;
+	}
+
+	public Collection<Review> getReviewes() {
+		return reviewes;
+	}
+
+	public void setReviewes(Collection<Review> reviewes) {
+		this.reviewes = reviewes;
 	}
 
 }

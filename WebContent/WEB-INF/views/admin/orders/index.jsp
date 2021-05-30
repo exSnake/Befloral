@@ -34,7 +34,13 @@
 			<button class="btn btn-success">Search</button>
 		</form>
 	</div>
-	<h1 class="mb-3">Orders</h1>
+	
+	<c:if test="${orders.size() == 0}">
+		<h1 class="mb-3">No order found</h1>
+	</c:if>
+	<c:if test="${orders.size() > 0}">
+		<h1 class="mb-3">Orders</h1>
+	</c:if>
 	
 	<c:forEach items="${orders}" var="order">
 	<div class="admin-order">

@@ -88,7 +88,7 @@ public class UserDAO implements GenericDAO<User> {
 		String sql = "SELECT u.*,  "
 				+ "	  a.id AS aid, a.firstName AS aFirstName, a.lastName AS aLastName, a.address, a.postalCode, a.city, a.province, a.phone, a.info, a.alias, a.preferred"
 				+ "   FROM " + TABLE_NAME + " u"
-				+ "	  LEFT JOIN addresses a ON a.uid = u.id WHERE id = ?";
+				+ "	  LEFT JOIN addresses a ON a.uid = u.id WHERE u.id = ?";
 		User bean = new User();
 		try (var conn = ds.getConnection()) {
 			try (var stmt = conn.prepareStatement(sql)) {
