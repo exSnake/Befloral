@@ -2,7 +2,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <z:layout pageTitle="Add Address">
 	<h1>Inserisci il nuovo indirizzo</h1>
-	<form class="mt-4" action="User" method="post">
+	<form class="mt-4" action="User" method="post" onsubmit="event.preventDefault(); myfunction(this)">
 		<input type="hidden" name="action" value="createAddress">
 		<div class="row">
 			<div class="col">
@@ -94,5 +94,36 @@
 		<button class="btn btn-success" type="submit">Save</button>
 		
 	</form>
+	<script>
+
+	function myfunction() {
+		phonenumber();
+		validatecap();
+	}
+	
+	function validatecap() {
+		var valicap=/^\d{5}$/;
+		var postalCode=document.getElementById("postalCode");
+		if(postalCode.value.match(valicap)) {
+			return true;
+		} else {
+			alert("Cap is not valid");
+			return false;
+		}
+	}
+	
+	function phonenumber() {
+		var input=document.getElementById("phone");
+		var phoneno = /^\d{10}$/;
+		if(input.value.match(phoneno)) {
+			return true;
+		} else {
+			alert("The numeric input is not valid");
+			return false;
+		}
+	}
+	
+	
+	</script>
 	
 </z:layout>

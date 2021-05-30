@@ -109,6 +109,7 @@
 	</form>
 	
 	<script>
+	
 		$("#save").change(function() {
 		    if(this.checked) {
 		    	$('#alias').removeAttr("disabled");
