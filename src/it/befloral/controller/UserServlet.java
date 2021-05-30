@@ -14,8 +14,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import it.befloral.beans.Address;
+import it.befloral.beans.Order;
 import it.befloral.beans.User;
 import it.befloral.model.AddressDAO;
+import it.befloral.model.GenericDAO;
 import it.befloral.model.OrderDAO;
 import it.befloral.model.UserDAO;
 
@@ -25,6 +27,7 @@ import it.befloral.model.UserDAO;
 @WebServlet("/User")
 public class UserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	static GenericDAO<Address> model = new AddressDAO();
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -57,6 +60,20 @@ public class UserServlet extends HttpServlet {
 		} else if (action.equals("createAddress")) {
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/users/createAddress.jsp");
 			dispatcher.forward(request, response);
+		}else if(action.equals("editAddress")) {
+			int id = Integer.parseInt(request.getParameter("id"));
+			Address address;
+			try {
+				address = model.doRetriveByKey(id);
+				System.out.println(address);
+				request.setAttribute("bean",address);
+				RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/users/editAddress.jsp");
+				dispatcher.forward(request, response);
+			} catch (SQLException e) {
+				e.printStackTrace();
+				response.sendError(500);
+			}
+			
 		}
 		return;
 	}
@@ -89,7 +106,7 @@ public class UserServlet extends HttpServlet {
 			UserDAO userDAO = new UserDAO();
 			try {
 				userDAO.doSaveAddress(user, address);
-				user.addAddress(address);
+				user=userDAO.doRetriveByEmail(user.getEmail());
 				request.getSession().setAttribute("user", user);
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -110,8 +127,14 @@ public class UserServlet extends HttpServlet {
 			}
 			response.sendRedirect("User");
 			return;
-		}
-
+		} /*else if(action.equals("editAddress")) {
+				int id = Integer.parseInt(request.getParameter("id"));
+				if(user.setPreferredAddress(id)) {
+			
+				}
+				
+			
+		}*/
 	}
 
 }

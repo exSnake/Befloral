@@ -1,23 +1,23 @@
 <%@taglib prefix="z" tagdir="/WEB-INF/tags"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<z:layout pageTitle="Add Address">
-	<h1>Inserisci il nuovo indirizzo</h1>
-	<form class="mt-4" action="User" method="post" onsubmit="event.preventDefault(); myfunction(this)">
-		<input type="hidden" name="action" value="createAddress">
-		<div class="row">
+<z:layout pageTitle="Edit Address">
+<h1>Edit Address N. ${bean.getId()}</h1>
+
+<form class="mt-4" action="User" method="get" onsubmit="event.preventDefault(); myfunction(this)">
+		<input type="hidden" name="action" value="editAddress">
+			<div class="row">
 			<div class="col">
 				<div class="form-group">
 					<label for="firstName">First Name</label>
-					<input type="text" class="form-control" name="firstName" id="firstName" aria-describedby="firstNameHelp"
-						placeholder="Mario..." required>
+					<input type="text" class="form-control" name="firstName" id="firstName" 
+					aria-describedby="firstNameHelp" value="${bean.getFirstName()}" required>
 					<small id="firstNameHelp" class="form-text text-muted">Destination first name</small>
 				</div>
 			</div>
 			<div class="col">
 				<div class="form-group">
 					<label for="lastName">Last Name</label>
-					<input type="text" class="form-control" name="lastName" id="lastName" aria-describedby="lastNameHelp"
-						placeholder="Rossi..." required>
+					<input type="text" class="form-control" name="lastName" id="lastName" aria-describedby="lastNameHelp" value="${bean.getLastName()}" required>
 					<small id="lastNameHelp" class="form-text text-muted">Destination last name</small>
 				</div>
 			</div>
@@ -26,16 +26,14 @@
 			<div class="col-8">
 				<div class="form-group">
 					<label for="address">Address</label>
-					<input type="text" class="form-control" name="address" id="address" aria-describedby="addressHelp"
-						placeholder="Via Roma, 12/A..." required>
+					<input type="text" class="form-control" name="address" id="address" aria-describedby="addressHelp" value="${bean.getAddress()}" required>
 					<small id="lastNameHelp" class="form-text text-muted">Destination address and civic number</small>
 				</div>
 			</div>
 			<div class="col">
 				<div class="form-group">
 					<label for=postalCode>CAP</label>
-					<input type="text" class="form-control" name="postalCode" id="postalCode" aria-describedby="postalCodeHelp"
-						placeholder="84100" required>
+					<input type="text" class="form-control" name="postalCode" id="postalCode" aria-describedby="postalCodeHelp" value="${bean.getPostalCode()}" required>
 					<small id="postalCodeHelp" class="form-text text-muted">Postal code of destination</small>
 				</div>
 			</div>
@@ -44,16 +42,14 @@
 			<div class="col-8">
 				<div class="form-group">
 					<label for="city">City</label>
-					<input type="text" class="form-control" name="city" id="city" aria-describedby="cityHelp"
-						placeholder="Milano..." required>
+					<input type="text" class="form-control" name="city" id="city" aria-describedby="cityHelp" value="${bean.getCity()}"required>
 					<small id="lastNameHelp" class="form-text text-muted">Destination city</small>
 				</div>
 			</div>
 			<div class="col">
 				<div class="form-group">
 					<label for="province">Province</label>
-					<input type="text" class="form-control" name="province" id="province" aria-describedby="provinceHelp"
-						placeholder="MI..." required>
+					<input type="text" class="form-control" name="province" id="province" aria-describedby="provinceHelp" value="${bean.getProvince()}"required>
 					<small id="provinceHelp" class="form-text text-muted">Destination province abbreviation</small>
 				</div>
 			</div>
@@ -61,15 +57,13 @@
 		
 		<div class="form-group">
 			<label for="phone"></label>
-			<input type="text" class="form-control" name="phone" id="phone" aria-describedby="phoneHelp"
-				placeholder="3929009...">
+			<input type="text" class="form-control" name="phone" id="phone" aria-describedby="phoneHelp"value="${bean.getPhone()}">
 			<small id="phoneHelp" class="form-text text-muted">Phone number to refer</small>
 		</div>
 		
 		<div class="form-group">
 			<label for="info"></label>
-			<input type="text" class="form-control" name="info" id="info" aria-describedby="infoHelp"
-				placeholder="Cancello verde di fronte alla banca...">
+			<input type="text" class="form-control" name="info" id="info" aria-describedby="infoHelp" value="${bean.getInfo()}">
 			<small id="infoHelp" class="form-text text-muted">Other info for the delivery</small>
 		</div>
 		
@@ -85,7 +79,7 @@
 		<div class="form-group">
 			<label for="alias"></label>
 			<input type="text" class="form-control" name="alias" id="alias" aria-describedby="aliasHelp"
-				placeholder="Home, Office..." required>
+				placeholder="Home, Office..." value="${bean.getAlias()}"required>
 			<small id="Help" class="form-text text-muted">Enter an alias for this address</small>
 		</div>
 		
@@ -129,7 +123,6 @@
 			return false;
 		}
 	}
-	
-	</script>
-	
+</script>
+
 </z:layout>

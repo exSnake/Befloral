@@ -3,6 +3,7 @@
  */
 package it.befloral.model;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
 
@@ -12,6 +13,7 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import it.befloral.beans.Address;
+import it.befloral.beans.User;
 
 /**
  * @author exSna
@@ -39,8 +41,31 @@ public class AddressDAO implements GenericDAO<Address> {
 
 	@Override
 	public Address doRetriveByKey(int code) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT "
+				+ "	  a.id AS aid, a.firstName AS aFirstName, a.lastName AS aLastName, a.address, a.postalCode, a.city, a.province, a.phone, a.info, a.alias, a.preferred"
+				+ "   FROM " + TABLE_NAME + " a"
+				+ "   WHERE a.id=?";
+		Address addr = new Address();
+		try (var conn = ds.getConnection()) {
+			try (var stmt = conn.prepareStatement(sql)) {
+				stmt.setInt(1, code);
+				ResultSet rs = stmt.executeQuery();
+				if(rs.next()) {
+					addr.setId(rs.getInt("aid"));
+					addr.setFirstName(rs.getString("aFirstName"));
+					addr.setLastName(rs.getString("aLastName"));
+					addr.setAddress(rs.getString("address"));
+					addr.setPostalCode(rs.getString("postalCode"));
+					addr.setCity(rs.getString("city"));
+					addr.setProvince(rs.getString("province"));
+					addr.setPhone(rs.getString("phone"));
+					addr.setInfo(rs.getString("info"));
+					addr.setAlias(rs.getString("alias"));
+					addr.setPreferred(rs.getBoolean("preferred"));
+				}
+			}
+		}
+		return addr;
 	}
 
 	@Override

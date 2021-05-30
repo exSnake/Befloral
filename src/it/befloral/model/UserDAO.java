@@ -202,7 +202,7 @@ public class UserDAO implements GenericDAO<User> {
 							addr.setAlias(rs.getString("alias"));
 							addr.setPreferred(rs.getBoolean("preferred"));
 							addr.setUser(bean);
-							
+							bean.addAddress(addr);
 						} while (rs.next());
 					}
 				}
