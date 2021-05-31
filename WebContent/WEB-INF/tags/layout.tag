@@ -4,67 +4,93 @@
 <html>
 
 <head>
-	<link href="resources/css/layout.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="http://fonts.cdnfonts.com/css/playlist" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+   
+	<link href="<c:url value="/resources/css/layout.css"/>" rel="stylesheet" type="text/css">
 	<title>${pageTitle}</title>
 </head>
 
 <body>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<!-- Navbar -->
+	
+	<div id="navbar" class="main-bar">
+        <nav>
+            <input type="checkbox" id="check">
+            <label class="checkbtn" for="check">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            
+            <div class="logo-header">
+                <a href="<c:url value="/Home"/>">BeFloral</a>
+            </div>
 
-	<link rel="shortcut icon" type="image/x-icon" href="resources/images/logoHorizzontal-removebg.png">
+            <ul>
+                <li ${active.equals("Home") ? "class='active'": ""}><a href="<c:url value="/Home"/>">Home</a></li>
+				<li ${active.equals("Products") ? "class='active'": ""}><a href="<c:url value="/Products"/>">Flowers</a></li>
+                <li ${active.equals("Plants") ? "class='active'": ""}><a href="#">Plants</a></li>
+                <li ${active.equals("Bouquet") ? "class='active'": ""}><a href="#">Bouquet</a></li>
+                <li ${active.equals("Cart") ? "class='active'": ""}><a href="<c:url value="/Cart"/>">
+                	<i class="fa fa-shopping-bag fa-2x"></i>
+                	<span>(${cart == null ? 0:cart.getTotalProductsQuantity() })</span>
+                </a>
+                <c:if test="${user == null && admin == null}">
+                	<li ${active.equals("Login") ? "class='active'": ""}><a href="<c:url value="/Login"/>">Login</a></li>
+                </c:if>
+                <c:if test="${user != null}">
+                	<li ${active.equals("User") ? "class='active'": ""}><a href="<c:url value="/User"/>">Profile</a></li>
+                </c:if>
+                <c:if test="${admin != null}">
+                	<li ${active.equals("Admin") ? "class='active'": ""}><a href="<c:url value="/Admin"/>">Admin Panel</a></li>
+                </c:if>
+            </ul>
+        </nav>
+    </div>
 
-	<script src="https://kit.fontawesome.com/442bbb4090.js" crossorigin="anonymous"></script>
-
-	<div class="navbar">
-		<div class="nav-left">
-			<div id="nav-logo">
-				<a href="Home"><img style="height: 80px; max-width: 100%" alt="LOGO"
-						src="resources/images/logoHorizzontal-removebg.png"></a>
-			</div>
-		</div>
-		<div class="nav-fill">
-			<div id="nav-search">
-				<form action="servo" method="get">
-					<input type="text" placeholder="Search.." name="search" size="120">
-					<button style="padding: 10px;" type="submit">
-						<i class="fas fa-search"></i>
-					</button>
-				</form>
-			</div>
-		</div>
-		<div class="nav-right">
-			<div id="nav-tools">
-				<a class="ml-2" href="Products"><i class="fas fa-store fa-2x"></i></a>
-				<a class="ml-2" href="Cart"><i class="fas fa-shopping-cart fa-2x"></i>(${cart == null ? 0 :
-					cart.getTotalProductsQuantity() })</a>
-				<c:if test="${user == null}">
-					<a class="ml-2" href="Login"><i class="fas fa-sign-in-alt fa-2x"></i>"Accedi"</a>
-				</c:if>
-				<c:if test="${user != null}">
-					<a class="ml-2" href="User"><img src="https://picsum.photos/id/0/50/50"></a>
-				</c:if>
-			</div>
-		</div>
-	</div>
 	<!-- Navbar -->
 	<main>
 		<div class="container">
 			<jsp:doBody />
 		</div>
 	</main>
+	
+	<script>
+	// When the user scrolls the page, execute myFunction
+	window.onscroll = function() {myFunction()};
+
+	// Get the navbar
+	var navbar = document.getElementById("navbar");
+
+	// Get the offset position of the navbar
+	var sticky = navbar.offsetTop;
+
+	// Add the sticky class to the navbar when you reach its scroll position. Remove "sticky" when you leave the scroll position
+	function myFunction() {
+	  if (window.pageYOffset >= sticky) {
+	    navbar.classList.add("sticky")
+	  } else {
+	    navbar.classList.remove("sticky");
+	  }
+	}
+	</script>
 	<!-- Footer colors #2e2e2e   and #252525  -->
 	<div class="footer">
 		<div class=footer-left>
-			<a href="#facebook"><i class="fab fa-facebook fa-2x"></i></a>
-			<a class="ml-2" href="#twitter"><i class="fab fa-twitter fa-2x"></i></a>
-			<a class="ml-2" href="#instagram"><i class="fab fa-instagram fa-2x"></i></a>
+			<a href="#facebook"><i class="fa fa-facebook fa-2x"></i></a>
+			<a class="ml-2" href="#twitter"><i class="fa fa-twitter fa-2x"></i></a>
+			<a class="ml-2" href="#instagram"><i class="fa fa-instagram fa-2x"></i></a>
 		</div>
 		<div class=footer-fill>
 
 		</div>
 		<!-- Copyright -->
-		<div class="footer-right">� 2021 Copyright:
-			<a class="anchorBefloral" href="/befloral">Befloral.com</a>
+		<div class="footer-right">
+			<a class="anchorBefloral" href="/befloral">@2021 Copyright: Leanelda Group</a>
 		</div>
 	</div>
 	<!-- Footer -->

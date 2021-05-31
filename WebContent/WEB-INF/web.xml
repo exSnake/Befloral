@@ -24,36 +24,35 @@
         <scripting-invalid>false</scripting-invalid>
     </jsp-property-group>
 </jsp-config>
-
-
-
-
-
+<context-param>
+    <param-name>logFilePath</param-name>
+    <param-value>/application/befloral.log</param-value>
+</context-param>
 
 <error-page>
     <!-- Missing login -->
     <error-code>401</error-code>
-    <location>/WEB-INF/errors/errorLogin.jsp</location>
+    <location>/WEB-INF/errors/error401.jsp</location>
 </error-page>
 <error-page>
     <!-- Forbidden directory listing -->
     <error-code>403</error-code>
-    <location>/WEB-INF/errors/errorLogin.jsp</location>
+    <location>/WEB-INF/errors/error403.jsp</location>
 </error-page>
 <error-page>
     <!-- Missing resource -->
     <error-code>404</error-code>
-    <location>/WEB-INF/errors/errorLogin.jsp</location>
+    <location>/WEB-INF/errors/error404.jsp</location>
 </error-page>
 <error-page>
     <!-- Uncaught exception -->
     <error-code>500</error-code>
-    <location>/WEB-INF/errors/errorLogin.jsp</location>
+    <location>/WEB-INF/errors/error500.jsp</location>
 </error-page>
 <error-page>
     <!-- Unsupported servlet method -->
     <error-code>503</error-code>
-    <location>/WEB-INF/errors/errorLogin.jsp</location>
+    <location>/WEB-INF/errors/error503.jsp</location>
 </error-page>
 
 </web-app>

@@ -2,6 +2,8 @@ package it.befloral.beans;
 
 import java.io.Serializable;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class Product implements Serializable {
 
@@ -31,6 +33,11 @@ public class Product implements Serializable {
 	private int quantity;
 	private int onSale;
 
+	private Collection<Category> categories ;
+	private Collection<Review> reviewes;
+	
+	
+	
 	private boolean available;
 	//////////////////////////////////////////////////////////////////////////
 
@@ -51,13 +58,14 @@ public class Product implements Serializable {
 		this.quantity = quantity;
 		this.onSale = onSale;
 		this.available = available;
+		
 	}
 	
 	public Product(String name, String description, String shortDescription, String metaDescription, String metaKeyword,
 			double weight, double price, double discount, int quantity, int onSale, boolean available) {
 		this(0, name, description, shortDescription, metaDescription, metaKeyword, weight, price, discount, quantity,
 				onSale, available);
-
+		
 	}
 
 	public Product() {
@@ -66,6 +74,24 @@ public class Product implements Serializable {
 
 	////////// GETTER&SETTERS//////////////////////////////////////////////////
 
+	
+	public Product(int id) {
+		this.id = id;
+	}
+
+	public void addCategory(Category category) {
+		if(categories == null ) categories = new ArrayList<Category>();
+		if(!categories.contains(category))
+			categories.add(category);
+	}
+	
+	public Collection<Category> getCategories() {
+		if(categories == null ) categories = new ArrayList<Category>(); 
+		return categories;
+	}
+	
+	
+	
 	public int getId() {
 		return id;
 	}
@@ -256,6 +282,14 @@ public class Product implements Serializable {
 		if (Double.doubleToLongBits(weight) != Double.doubleToLongBits(other.weight))
 			return false;
 		return true;
+	}
+
+	public Collection<Review> getReviewes() {
+		return reviewes;
+	}
+
+	public void setReviewes(Collection<Review> reviewes) {
+		this.reviewes = reviewes;
 	}
 
 }

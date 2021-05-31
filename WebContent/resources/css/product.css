@@ -73,6 +73,10 @@ body {
   font-weight: 700;
 }
 
+.wrapper .wrapper-container .wrapper-bottom .wrapper-left button {
+	display: contents;
+}
+
 .wrapper .wrapper-container .wrapper-bottom .wrapper-left .buy {
   display: flex;
   float: right;

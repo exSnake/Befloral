@@ -1,7 +1,8 @@
 <%@taglib prefix="z" tagdir="/WEB-INF/tags"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<link href="resources/css/product.css" rel="stylesheet" type="text/css">
 <z:layout pageTitle="Login">
+	
+	
 	<form action="Login" method="post" enctype="application/x-www-form-urlencoded">
 		<div class="form-group">
 			<label for="email">Email</label>
@@ -24,4 +25,11 @@
 			<button type="submit" class="btn btn-success mt-2">Register Now!</button>
 		</div>
 	</form>
+	<div class="errors">
+		<ul>
+		<c:forEach items="${errors}" var="err">
+			<li>${err}</li>
+		</c:forEach>
+		</ul>
+	</div>
 </z:layout>

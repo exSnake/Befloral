@@ -13,9 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import it.befloral.beans.Customer;
 import it.befloral.beans.User;
-import it.befloral.model.CustomerDAO;
 import it.befloral.model.UserDAO;
 
 /**
@@ -30,7 +28,6 @@ public class LoginServlet extends HttpServlet {
 	 */
 	public LoginServlet() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -40,90 +37,146 @@ public class LoginServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
-		User user = null;
-		// If session have user
-		if (request.getSession().getAttribute("user") != null)
-			user = (User) request.getSession().getAttribute("user");
-		// Try to Register
+		request.setAttribute("active", "Login");
+		User user = (User) request.getSession().getAttribute("user");
 		String action = request.getParameter("action");
-		if (user == null && action != null && action.equals("register")) {
-			RequestDispatcher dispatcher = getServletContext()
-					.getRequestDispatcher("/WEB-INF/views/login/register.jsp");
-			dispatcher.forward(request, response);
-			return;
+		
+		//chekout
+		if(action!= null && action.equals("checkout")){
+			//utente non loggato
+			if(user==null) {
+				request.getSession().setAttribute("tryLoggin", "try");
+				request.removeAttribute(action);		
+				
+				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/views/login/login.jsp");
+				dispatcher.forward(request, response);
+				return;
+				
+			}
+			//utente loggato
+			else {
+				request.setAttribute("action", "checkout");
+				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/Orders");
+				dispatcher.forward(request, response);
+				return;
+			}
 		}
-		if (user == null) {
-			// Login page if not logged in
-			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/views/login/login.jsp");
-			dispatcher.forward(request, response);
+		
+		// Try to Register
+		if(user == null) {
+			if(action != null && action.equals("register")) {
+				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/views/login/register.jsp");
+				dispatcher.forward(request, response);
+				return;
+			} else {
+				// Login page if not logged in
+				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/views/login/login.jsp");
+				dispatcher.forward(request, response);
+				return;
+			}
 		} else {
-			// Profile page
-			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/views/users/index.jsp");
-			dispatcher.forward(request, response);
+			if(action.equals("logout")) {
+				request.getSession().invalidate();
+				response.sendRedirect("Home");
+				return;
+			} else {
+				response.sendRedirect("User");
+				return;
+			}
 		}
-
 	}
 
+	
+	
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String action = request.getParameter("action");
+		request.setAttribute("active", "Login");
 		if (action != null) {
 			// Try Registering
 			if (action.equals("register")) {
 				registerUser(request, response);
-			}
-
-			// Try login by login.jsp
-			if (action.equals("login")) {
-				User bean = null;
-				UserDAO customer = new UserDAO();
+				return;
+			} else if (action.equals("login")) {
+				// Try login by login.jsp
+				User user = null;
+				UserDAO userDAO = new UserDAO();
 				try {
-					bean = customer.doRetriveByUsername(request.getParameter("email"));
+					user = userDAO.doRetriveByEmail(request.getParameter("email"));
 				} catch (SQLException e) {
 					e.printStackTrace();
+					response.sendError(500);
+					return;
 				}
-
-				if (bean == null || bean.getPassword() == request.getParameter("password")) {
-					RequestDispatcher dispatcher = getServletContext()
-							.getRequestDispatcher("/WEB-INF/views/login/login.jsp");
+				if (user == null || !user.getPassword().equals(request.getParameter("password"))) {
+					request.getSession().removeAttribute("user");
+					request.setAttribute("errors", new ArrayList<String>() {{add("User not found or password error");}});
+					RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/views/login/login.jsp");
 					dispatcher.forward(request, response);
+					return;
 				} else {
-					request.getSession().setAttribute("user", bean);
+					request.removeAttribute("errors");
+					if(user.getRole().equals("customer")) {
+						request.getSession().setAttribute("user", user);
+					} else if(user.getRole().equals("administrator")) {
+						request.getSession().setAttribute("admin", user);
+					}
+					
+					String tryLoggin = (String) request.getSession().getAttribute("tryLoggin");
+					if(tryLoggin!=null && tryLoggin.equals("try")) {
+						
+						request.getSession().removeAttribute("tryLoggin");				
+						response.sendRedirect("Orders?action=checkout");
+						return;
+						
+					}
+					else response.sendRedirect("Home");
 				}
-
-				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/views/index.jsp");
-				dispatcher.forward(request, response);
 			}
 		}
 	}
 
+	
+	
+	
 	private void registerUser(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// control same password
 		if (validateForm(request)) {
-			Customer bean = new Customer();
-			CustomerDAO dao = new CustomerDAO();
-			bean.setBirthday(LocalDate.parse(request.getParameter("birthday")));
-			bean.setFirstName(request.getParameter("firstName"));
-			bean.setLastName(request.getParameter("lastName"));
-			bean.setSubscription(request.getParameter("subscribe") != null);
 			User user = new User();
+			UserDAO dao = new UserDAO();
+			user.setBirthday(LocalDate.parse(request.getParameter("birthday")));
+			user.setFirstName(request.getParameter("firstName"));
+			user.setLastName(request.getParameter("lastName"));
+			user.setSubscription(request.getParameter("subscribe") != null);
+			user.setGender(request.getParameter("gender"));
 			user.setEmail(request.getParameter("email"));
 			user.setPassword(request.getParameter("password"));
 			user.setRole("customer");
 			user.setActive(true);
-			bean.setUser(user);
 			try {
-				dao.doSave(bean);
+				dao.doSave(user);
+				user = dao.doRetriveByEmail(user.getEmail());
 				request.getSession().setAttribute("user", user);
-				response.sendRedirect("Home");
-				return;
+				
+				//registered by the buynow button cart
+				String tryLoggin = (String) request.getSession().getAttribute("tryLoggin");
+				
+				if(tryLoggin!=null && tryLoggin.equals("try")) {			
+					request.getSession().removeAttribute("tryLoggin");				
+					response.sendRedirect("Orders?action=checkout");
+					return;
+				}
+				
+				else {
+					response.sendRedirect("Home");//call servlet get
+					return;
+				}
+				
 			} catch (IOException | SQLException e) {
 				e.printStackTrace();
 				System.out.println(e.getMessage());
@@ -173,9 +226,16 @@ public class LoginServlet extends HttpServlet {
 				|| request.getParameter("password") != request.getParameter("confirmpassword")) {
 			errors.add("Password doesn't match");
 		}
+		if( request.getParameter("gender") == null) 
+			errors.add("Set a gender or choose undefined");
 		if (errors.size() > 0)
 			request.setAttribute("errors", errors);
 		return errors.size() > 0;
 	}
 
+	
+	
+	
+	
+	
 }

@@ -1,0 +1,53 @@
+
+.summary, .summary .address, .summary .payment {
+	display: flex;
+}
+
+.summary .left {
+	display: flex;
+    flex-flow: column;
+    flex-basis: 75%;
+    padding: 20px 15px;
+    background-color: #fff;
+    margin-right: 20px;
+    margin-top: 10px;
+    border-radius: 14px;
+}
+
+.summary .right {
+	display: flex;
+	flex-flow: column;
+	flex-basis: 25%;
+	padding: 20px 15px;
+	background-color: #fff;
+	border-radius: 14px;
+	margin-top: 10px;
+}
+
+.summary .right div{
+	display: flex;
+	justify-content: space-between;
+}
+
+.summary .right .links {
+	flex-grow: 1;
+	text-align: center;
+}
+
+.summary .left .num {
+	flex-basis: 5%
+}
+
+.summary .left .head {
+	flex-basis: 15%
+}
+
+.summary .left .body {
+	flex-basis: 70%
+}
+
+.summary .actions ul li {
+	list-style-type: none;
+    padding-inline-start: 0;
+    margin-top: 0;
+}

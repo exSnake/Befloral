@@ -15,12 +15,32 @@
 	padding-right: 25px;
 	flex-basis: 25%;
 }
+.user-profile h2, .user-profile h3 {
+	margin-block-start: 0.83em;
+    margin-block-end: 0.83em;
+}
+
+.user-profile p {
+	margin-block-start: 1em;
+    margin-block-end: 1em;
+}
+
+.user-profile .right .header {
+	display: flex;
+	align-items: center;
+}
+
+.user-profile .right .header .title-left {
+	margin-right: 20px;
+}
 
 .user-profile-menu ul {
 	flex-direction: column;
 	padding: 24px 0 24px 24px;
 	text-align: left;
 	background: #fff;
+	margin-block-start: 1em;
+    margin-block-end: 1em;
 }
 
 .user-logout {

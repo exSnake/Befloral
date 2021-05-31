@@ -3,7 +3,7 @@
 <link href="resources/css/user-profile.css" rel="stylesheet" type="text/css">
 <z:layout pageTitle="Profile">
 
-	<h1>Hi! ${user.getEmail()} </h1>
+	<h1 class="is-size-1 has-text-weight-semibold">Hi! ${user.getFirstName()} </h1>
 	<div class="user-profile">
 		<div class="user-profile-menu">
 			<ul>
@@ -13,6 +13,11 @@
 				<li>
 					<a href="User?action=viewOrders" class="active">
 						<p>My Orders</p>
+					</a>
+				</li>
+				<li>
+					<a href="User?action=viewAddresses" class="active">
+						<p>My Addresses</p>
 					</a>
 				</li>
 				<li>
@@ -31,12 +36,15 @@
 					</a>
 				</li>
 			</ul>
-			<a class="user-logout" href="Login?action=logout">Close the session</a>
+			<a class="user-logout" href="Login?action=logout">Logout</a>
 		</div>
 
 		<div class="right">
-			<h3 class="title-left">My Orders</h3>
+			<h3 class="title-left is-size-4 has-text-weight-semibold">My Orders</h3>
 			<div class="user-previous-orders">
+				<c:if test="${orders.size() == 0 }">
+					<p>No order yet...!</p>
+				</c:if>
 				<c:forEach items="${orders}" var="order">
 					<div class="order-details">
 						<div class="flex-spaced">

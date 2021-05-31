@@ -3,10 +3,6 @@
 <link href="resources/css/product.css" rel="stylesheet" type="text/css">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <z:layout pageTitle="Products List">
-	<form action="Products" method="get">
-		<input type="hidden" name="action" value="create">
-		<button type="submit" class="btn btn-primary mt-2">Add New Product</button>
-	</form>
 	<div class="product-list">
 		<c:forEach items="${products}" var="bean">
 			<div class="wrapper">

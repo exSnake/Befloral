@@ -21,8 +21,6 @@ public class HomeServlet extends HttpServlet {
 	 */
 	public HomeServlet() {
 		super();
-		System.out.println("init");
-
 		// TODO Auto-generated constructor stub
 	}
 
@@ -32,9 +30,8 @@ public class HomeServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println("test");
+		request.setAttribute("active", "Home");
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/views/index.jsp");
-
 		dispatcher.forward(request, response);
 	}
 
