@@ -103,6 +103,7 @@ public class UserServlet extends HttpServlet {
 			address.setPhone(request.getParameter("phone"));
 			address.setInfo(request.getParameter("info"));
 			address.setAlias(request.getParameter("alias"));
+			address.setPreferred(request.getParameter("preferred") != null);
 			UserDAO userDAO = new UserDAO();
 			try {
 				userDAO.doSaveAddress(user, address);
