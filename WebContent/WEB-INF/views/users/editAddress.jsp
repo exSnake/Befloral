@@ -3,8 +3,9 @@
 <z:layout pageTitle="Edit Address">
 <h1>Edit Address N. ${bean.getId()}</h1>
 
-<form class="mt-4" action="User" method="get" onsubmit="event.preventDefault(); myfunction(this)">
+<form class="mt-4" action="User" method="post" onsubmit="event.preventDefault(); myfunction(this)">
 		<input type="hidden" name="action" value="editAddress">
+		<input type="hidden" name="id" value="${bean.getId()}">
 			<div class="row">
 			<div class="col">
 				<div class="form-group">

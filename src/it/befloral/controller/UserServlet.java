@@ -127,14 +127,29 @@ public class UserServlet extends HttpServlet {
 			}
 			response.sendRedirect("User");
 			return;
-		} /*else if(action.equals("editAddress")) {
+		} else if(action.equals("editAddress")) {
 				int id = Integer.parseInt(request.getParameter("id"));
-				if(user.setPreferredAddress(id)) {
-			
+				Address address = new Address();
+				address.setId(id);
+				address.setFirstName(request.getParameter("firstName"));
+				address.setLastName(request.getParameter("lastName"));
+				address.setAddress(request.getParameter("address"));
+				address.setPostalCode(request.getParameter("postalCode"));
+				address.setCity(request.getParameter("city"));
+				address.setProvince(request.getParameter("province"));
+				address.setPhone(request.getParameter("phone"));
+				address.setInfo(request.getParameter("info"));
+				address.setAlias(request.getParameter("alias"));
+				try {
+					model.doUpdate(address);
+					
+					response.sendRedirect(getServletContext().getContextPath()+"/User");
+				} catch (SQLException e) {
+					e.printStackTrace();
+					response.sendError(500);
 				}
-				
-			
-		}*/
+		}		
+		
 	}
 
 }

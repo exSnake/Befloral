@@ -92,14 +92,41 @@ public class AddressDAO implements GenericDAO<Address> {
 
 	@Override
 	public int doUpdate(Address dao) throws SQLException {
-		// TODO Auto-generated method stub
-		return 0;
+		String updateSQL = "UPDATE " + TABLE_NAME+" SET "
+		+ "`firstName`=?, `lastName`=?, `address`=?, `postalCode`=?, `city`=?,"
+		+ " `province`=?,`phone`=?, `info`=?, `alias`=?, preferred=?"
+		+ " WHERE  `id`=?";
+	
+		try (var conn = ds.getConnection()) {
+			try (var stmt = conn.prepareStatement(updateSQL)) {
+				stmt.setString(1, dao.getFirstName());
+				stmt.setString(2, dao.getLastName());
+				stmt.setString(3, dao.getAddress());
+				stmt.setString(4, dao.getPostalCode());
+				stmt.setString(5, dao.getCity());
+				stmt.setString(6, dao.getProvince());
+				stmt.setString(7, dao.getPhone());
+				stmt.setString(8, dao.getInfo());
+				stmt.setString(9, dao.getAlias());
+				stmt.setBoolean(10,dao.isPreferred());
+				stmt.setInt(11,dao.getId());
+				System.out.println(stmt);
+				return stmt.executeUpdate();
+			}
+		}
 	}
+	
 
 	@Override
 	public boolean doDelete(int code) throws SQLException {
-		// TODO Auto-generated method stub
-		return false;
+		String deleteSQL = "DELETE FROM "+ TABLE_NAME +" WHERE  `id`= ? ";
+			
+			try (var conn = ds.getConnection()) {
+				try (var stmt = conn.prepareStatement(deleteSQL)) {
+					stmt.setInt(1, code);
+					return stmt.executeUpdate()>0;
+				}
+		}
 	}
 	
 }
