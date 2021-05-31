@@ -1,17 +1,69 @@
-.container {
-	display: flex
-	
+.products {
+	display: flex;
+	flex-flow: column;
+}
+
+.product {
+	display: flex;
 }
 
 .images-small {
-	display: grid;
-	margin-right: 10px;
+	display: flex;
+	flex-flow: column;
+	justify-content: space-between;
+}
+
+.images-big {
+	margin: auto;
 }
 
 .right {
-	margin-left: 10px
+	margin-left: 10px;
+	flex-basis: 25%;
 }
 
 .left {
 	display: flex;
+	flex-basis: 85%
+}
+
+@media (max-width: 1050px) {
+	.right {
+		margin-left: 0px;
+		flex-basis: 100%;
+	}
+	
+	.left {
+		display: flex;
+		flex-basis: 100%;
+	}
+	
+	.product {
+		flex-flow: column;
+	}
+}
+
+.product-action {
+	display: flex;
+	flex-flow: column;
+}
+
+.rev-title {
+	display: flex;
+	align-items: center;
+}
+
+.rev-score {
+	margin-right: 10px;
+}
+
+.rev-reply {
+	padding-left: 15px;
+}
+
+.single-review {
+	background-color: #fff;
+	padding: 14px 16px;
+	border-radius: 14px;
+	margin-top: 15px;
 }

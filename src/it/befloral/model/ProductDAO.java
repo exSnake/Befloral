@@ -33,11 +33,7 @@ public class ProductDAO implements GenericDAO<Product> {
 
 	@Override
 	public synchronized Collection<Product> doRetrieveAll(String order) throws SQLException {
-		Connection connection = null;
-		PreparedStatement preparedStatement = null;
-
 		Collection<Product> products = new LinkedList<>();
-
 		String selectSQL = "SELECT s.*, c.name AS cname,c.id AS cid, c.description AS cdescription ,c.metaKeywords AS cmetaKeywords"
 				+ "	 FROM ( " + TABLE_NAME +  " AS s  LEFT JOIN categories_products cp ON cp.pid=s.id )"
 				+ "		 LEFT JOIN categories c ON cp.cid=c.id";
@@ -46,17 +42,13 @@ public class ProductDAO implements GenericDAO<Product> {
 			selectSQL += " ORDER BY " + order;
 		}
 
-		try {
-			connection = ds.getConnection();
-			preparedStatement = connection.prepareStatement(selectSQL);
-
-			ResultSet rs = preparedStatement.executeQuery();
-			
-			if (rs.next()) {
-
+		try(var connection = ds.getConnection()) {
+			try (var preparedStatement = connection.prepareStatement(selectSQL)) {
+				ResultSet rs = preparedStatement.executeQuery();
+				if (!rs.next())
+					return products;	
 				do {
 					Product bean = new Product();
-
 					bean.setId(rs.getInt("id"));
 					bean.setName(rs.getString("name"));
 					bean.setDescription(rs.getString("description"));
@@ -69,36 +61,21 @@ public class ProductDAO implements GenericDAO<Product> {
 					bean.setDiscount(rs.getDouble("discount"));
 					bean.setOnSale(rs.getInt("onSale"));
 					bean.setQuantity(rs.getInt("quantity"));
-					
 					if (rs.getString("cname") != null) {
-						
 						do {
-								Category c = new Category();
-								c.setId(rs.getInt("cid"));
-								c.setName("cname");
-								c.setDescription(rs.getString("cdescription"));
-								c.setMetaKeywords(rs.getString("cmetaKeywords"));
-								bean.addCategory(c);
-							
+							Category c = new Category();
+							c.setId(rs.getInt("cid"));
+							c.setName("cname");
+							c.setDescription(rs.getString("cdescription"));
+							c.setMetaKeywords(rs.getString("cmetaKeywords"));
+							bean.addCategory(c);
 						} while (rs.next() && rs.getInt("id") == bean.getId());
-						
 					}
 					else {
 						rs.next();
 					}
-					
 					products.add(bean);				
-				}while (!rs.isAfterLast());
-
-			}
-
-		} finally {
-			try {
-				if (preparedStatement != null)
-					preparedStatement.close();
-			} finally {
-				if (connection != null)
-					connection.close();
+				} while (!rs.isAfterLast());
 			}
 		}
 		return products;
@@ -107,8 +84,7 @@ public class ProductDAO implements GenericDAO<Product> {
 	@Override
 	public synchronized Product doRetriveByKey(int code) throws SQLException {
 		Product bean = new Product();
-		
-		
+		ReviewDAO rdao = new ReviewDAO();
 		String selectSQL = "SELECT s.*, c.name AS cname,c.id AS cid, c.description AS cdescription ,c.metaKeywords AS cmetaKeywords"
 				+ "	 FROM ( " + TABLE_NAME +  " AS s  LEFT JOIN categories_products cp ON cp.pid=s.id )"
 				+ "		 LEFT JOIN categories c ON cp.cid=c.id WHERE s.id=?";
@@ -116,9 +92,7 @@ public class ProductDAO implements GenericDAO<Product> {
 		try (var conn = ds.getConnection()) {
 			try (var stmt = conn.prepareStatement(selectSQL)) {
 				stmt.setInt(1, code);
-				
 				LOGGER.debug(stmt);
-				
 				ResultSet rs = stmt.executeQuery();
 				if (rs.next()) {
 					bean.setId(rs.getInt("id"));
@@ -133,24 +107,20 @@ public class ProductDAO implements GenericDAO<Product> {
 					bean.setDiscount(rs.getDouble("discount"));
 					bean.setOnSale(rs.getInt("onsale"));
 					bean.setQuantity(rs.getInt("quantity"));
-					
 					if (rs.getString("cname") != null) {
-						
 						do {
-								Category c = new Category();
-								c.setId(rs.getInt("cid"));
-								c.setName("cname");
-								c.setDescription(rs.getString("cdescription"));
-								c.setMetaKeywords(rs.getString("cmetaKeywords"));
-								bean.addCategory(c);
-							
+							Category c = new Category();
+							c.setId(rs.getInt("cid"));
+							c.setName("cname");
+							c.setDescription(rs.getString("cdescription"));
+							c.setMetaKeywords(rs.getString("cmetaKeywords"));
+							bean.addCategory(c);
 						} while (rs.next());
-						
 					}
-			
 				}
 			}
 		}
+		bean.setReviewes(rdao.doRetrieveByProduct("id", bean));
 		return bean;
 	}
 
@@ -167,14 +137,10 @@ public class ProductDAO implements GenericDAO<Product> {
 				+ "discount,onSale,quantity) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		String updateSQL = "INSERT INTO categories_products (pid,cid) VALUES (?,?) ON DUPLICATE KEY UPDATE pid=pid";
 		String deleteSQL_Category="Delete * from categories_products WHERE pid=?";
-			
 		try {
 			conn = ds.getConnection();
-			
 			conn.setAutoCommit(false);
-			
 			stmt = conn.prepareStatement(inserSQL,Statement.RETURN_GENERATED_KEYS);
-
 			stmt.setString(1, dao.getName());
 			stmt.setString(2, dao.getDescription());
 			stmt.setString(3, dao.getShortDescription());
@@ -186,16 +152,12 @@ public class ProductDAO implements GenericDAO<Product> {
 			stmt.setDouble(9, dao.getDiscount());
 			stmt.setInt(10, dao.getOnSale());
 			stmt.setInt(11, dao.getQuantity());
-			
 			LOGGER.debug(stmt);
 			stmt.execute();
 			ResultSet res  = stmt.getGeneratedKeys();
 			int key;
-			
 			if (res.next()) {
-				
 				key = res.getInt(1);
-
 				for (Category c : dao.getCategories()) {
 					stmt2 = conn.prepareStatement(updateSQL);
 					stmt2.setInt(1, key);
@@ -204,15 +166,12 @@ public class ProductDAO implements GenericDAO<Product> {
 					LOGGER.debug(stmt2);
 					stmt2.execute();
 				}
-			
 			}
 			conn.commit();
-			
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
-			conn.rollback();
-		}		
+			if(conn != null) conn.rollback();
+		}
 			finally {
 			try {
 				if (stmt != null)
