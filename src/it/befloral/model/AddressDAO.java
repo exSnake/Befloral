@@ -72,6 +72,23 @@ public class AddressDAO implements GenericDAO<Address> {
 	public void doSave(Address dao) throws SQLException {
 		String sql = "INSERT INTO addresses (firstName, lastName, address, postalCode, city, province, phone, info, alias, preferred"
 				+ " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		
+		if(dao.isPreferred()==true) {
+			String updateSQL2= "UPDATE addresses SET preferred=null WHERE uid=?";
+			
+			try (var conn = ds.getConnection()) {
+				try (var stmt2 = conn.prepareStatement(updateSQL2)) {
+				stmt2.setInt(1, dao.getUser().getId());
+				System.out.println(stmt2);
+				stmt2.execute();
+				}
+			}
+		}
+		
+		
+		
+		
+		
 		try(var conn = ds.getConnection()) {
 			try(var stmt = conn.prepareStatement(sql)) {
 				stmt.setString(1, dao.getFirstName());
@@ -97,6 +114,19 @@ public class AddressDAO implements GenericDAO<Address> {
 		+ " `province`=?,`phone`=?, `info`=?, `alias`=?, preferred=?"
 		+ " WHERE  `id`=?";
 	
+		if(dao.isPreferred()==true) {
+			String updateSQL2= "UPDATE addresses SET preferred=null WHERE uid=?";
+			
+			try (var conn = ds.getConnection()) {
+				try (var stmt2 = conn.prepareStatement(updateSQL2)) {
+				stmt2.setInt(1, dao.getUser().getId());
+				System.out.println(stmt2);
+				stmt2.execute();
+				}
+			}
+		}
+		
+		
 		try (var conn = ds.getConnection()) {
 			try (var stmt = conn.prepareStatement(updateSQL)) {
 				stmt.setString(1, dao.getFirstName());

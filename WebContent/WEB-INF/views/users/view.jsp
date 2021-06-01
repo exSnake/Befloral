@@ -60,8 +60,8 @@
 									</li>
 									<li class="order-number">Order no. ${order.getId()}</li>
 									<li class="invoice-links">
-										<a href="#" target="_blank" class="download-link">Download Invoice</a>
-										<a href="#" class="generate-invoice">Generate Invoice</a>
+										<a href="User?action=invoiceDownload&orderId=${order.getId()}" target="_blank" class="download-link">Download Invoice</a>
+										<a href="User?action=invoiceView&orderId=${order.getId()}" target="_blank" class="generate-invoice">Generate Invoice</a>
 									</li>
 								</ul>
 							</div>

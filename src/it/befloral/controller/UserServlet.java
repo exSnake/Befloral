@@ -2,6 +2,8 @@ package it.befloral.controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -53,7 +55,45 @@ public class UserServlet extends HttpServlet {
 		if(action == null) {
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/users/view.jsp");
 			dispatcher.forward(request, response);
-		} else if (action.equals("viewAddresses")) {
+		}else if (action.equals("viewOrders")) {
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/users/view.jsp");
+			dispatcher.forward(request, response);
+		}else if (action.equals("viewData")) {
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/users/myData.jsp");
+			dispatcher.forward(request, response);
+		}else if (action.equals("invoiceDownload")) {
+			//TODO
+
+			
+		}else if (action.equals("invoiceView")) {
+			
+			try {
+				var orderId = (int) Integer.parseInt(request.getParameter("orderId"));
+				Order toShow=null;
+				Collection<Order> list = (Collection<Order>) request.getSession().getAttribute("orders");
+				for (Order order : list) {if(order.getId()==orderId) {toShow=order;break; }}
+				if(toShow==null) {				
+					RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/users/view.jsp");
+					dispatcher.forward(request, response);
+				}
+				OrderDAO o = new OrderDAO();
+				toShow = o.doRetriveByKey(toShow.getId());
+				
+				request.setAttribute("orderToShow", toShow);
+				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/views/users/invoice.jsp");
+				dispatcher.forward(request, response);
+				
+
+				
+			
+			}catch (NumberFormatException e ) {
+				RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/users/view.jsp");
+				dispatcher.forward(request, response);
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+		}else if (action.equals("viewAddresses")) {
 			System.out.println("addresses");
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/users/addresses.jsp");
 			dispatcher.forward(request, response);
@@ -74,7 +114,8 @@ public class UserServlet extends HttpServlet {
 				response.sendError(500);
 			}
 			
-		}
+		}	
+		
 		return;
 	}
 
@@ -141,8 +182,14 @@ public class UserServlet extends HttpServlet {
 				address.setPhone(request.getParameter("phone"));
 				address.setInfo(request.getParameter("info"));
 				address.setAlias(request.getParameter("alias"));
+				address.setPreferred(request.getParameter("preferred") != null);
+				address.setUser((User)request.getSession().getAttribute("user"));
 				try {
 					model.doUpdate(address);
+					UserDAO u = new UserDAO();
+					User userLoad = (User) u.doRetriveByKey(((User)request.getSession().getAttribute("user")).getId());
+					request.getSession().removeAttribute("user");
+					request.getSession().setAttribute("user", userLoad);
 					
 					response.sendRedirect(getServletContext().getContextPath()+"/User");
 				} catch (SQLException e) {

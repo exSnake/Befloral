@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -35,6 +36,7 @@ public class CartServlet extends HttpServlet {
 	public CartServlet() {
 		super();
 	}
+	
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
@@ -46,6 +48,10 @@ public class CartServlet extends HttpServlet {
 		request.setAttribute("active", "Cart");
 		if (cart != null) {
 			cart.getProducts();
+		}
+		if(cart==null) {		
+			cart = new Cart();
+			request.getSession().setAttribute("cart", cart);
 		}
 		// push product in cart
 		// show cart page
