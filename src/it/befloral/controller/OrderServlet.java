@@ -56,8 +56,29 @@ public class OrderServlet extends HttpServlet {
 				RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/orders/summary.jsp");
 				dispatcher.forward(request, response);
 				return;
-			} 
-		} else {
+			}
+			else if(action.equals("details")) {
+				
+				
+				try {
+					OrderDAO o = new OrderDAO();
+					int idOrder =Integer.parseInt(request.getParameter("id"));
+					Order order = o.doRetriveByKey(idOrder);
+					if(o==null) response.sendRedirect("User");
+					
+					request.getSession().setAttribute("orderToShow", order);
+					RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/users/viewDetail.jsp");
+				    dispatcher.forward(request, response);				
+				}catch (Exception e) {
+					response.sendRedirect("User");
+					return;
+				}
+				
+				
+
+		  }
+		
+		}else {
 			response.sendRedirect("User");
 			return;
 		}

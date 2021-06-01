@@ -62,8 +62,31 @@ public class UserServlet extends HttpServlet {
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/users/myData.jsp");
 			dispatcher.forward(request, response);
 		}else if (action.equals("invoiceDownload")) {
-			//TODO
-
+			try {
+				var orderId = (int) Integer.parseInt(request.getParameter("orderId"));
+				Order toShow=null;
+				Collection<Order> list = (Collection<Order>) request.getSession().getAttribute("orders");
+				for (Order order : list) {if(order.getId()==orderId) {toShow=order;break; }}
+				if(toShow==null) {				
+					RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/users/view.jsp");
+					dispatcher.forward(request, response);
+				}
+				OrderDAO o = new OrderDAO();
+				toShow = o.doRetriveByKey(toShow.getId());
+				
+				request.setAttribute("orderToShow", toShow);
+				request.setAttribute("pdf", true);
+				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/views/users/invoice.jsp");
+				dispatcher.forward(request, response);
+								
+			
+			}catch (NumberFormatException e ) {
+				RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/users/view.jsp");
+				dispatcher.forward(request, response);
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
+			
 			
 		}else if (action.equals("invoiceView")) {
 			
@@ -80,11 +103,10 @@ public class UserServlet extends HttpServlet {
 				toShow = o.doRetriveByKey(toShow.getId());
 				
 				request.setAttribute("orderToShow", toShow);
+				request.setAttribute("pdf", false);
 				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/views/users/invoice.jsp");
 				dispatcher.forward(request, response);
-				
-
-				
+								
 			
 			}catch (NumberFormatException e ) {
 				RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/users/view.jsp");

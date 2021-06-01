@@ -10,33 +10,20 @@
 <script src="resources/script/invoiceDow.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
 
-<z:layout pageTitle="Invoice"> 
+<z:layout pageTitle="Order Details"> 
 
-	<div class="container">
-           
-            <div class="d_button">
-                <button class="links" id="download"> Download PDF</button>
-        	</div>
-        	
-  	<div id="invoice">
-       		<h1 class="invoice">Invoice</h1>
+<div class="containerDetails" >  	
+  	<div id="Details" style="background-image: radial-gradient(ellipse, rgba(57, 215, 156, 1) 0%, rgba(247, 25, 136, 0) 100%);">
+       		<h1 class="invoice">Order Details</h1>
         	<div class="information_befloral">
         		<p class="befloral_firm">Befloral</p>
         		<span>
-        			Daniele Giaquinto CEO Befloral <br>
-	        		Mercato San Severino SA 84085 <br>
-	        		+39 3663997645 // 02-896340007
+        			thank you very much for purchasing from us		
  				</span>
-	        	 	<div class="billing_time">
-							<c:set var = "now" value = '<%= new java.util.Date()%>' />
-							<p class="par_right" >
-								Billing Data : <fmt:formatDate type = "both" dateStyle = "short" timeStyle = "short" value = "${now}" />
-			        		</p>	
-	        		</div>
       		</div> 
        			
-        	<div class="information_invoice">
-        		
+       			
+        	<div class="information_invoice">     		
         	  <div class="time">	
         		<c:set var = "orderDate" value = "${orderToShow.getCreateDate()}" />
         		<p>Order executed on : <fmt:formatDate type = "both" dateStyle = "short" timeStyle = "short" value = "${orderDate}" /></p>
@@ -72,7 +59,7 @@
                                     </td>  
                                     <td>${items.getWeight()}</td>
                                     <td>${items.getQuantity()}</td>
-                                    <td>${items.getPriceString()}</td>
+                                    <td>${items.getPriceString() }</td>
 	                                <td>${items.getDiscountString()}</td>                             
                                     <td><span class="font-weight-semibold"> 
                                     		${items.getPrice()*items.getQuantity()} </span></td>
@@ -84,8 +71,7 @@
                       </div>
                     </div>
                     
-                    
-
+                  
                             <div class="div_table2">
                                 <div class="table-responsive">
                                     <table class="table">
@@ -112,33 +98,16 @@
                                             </tr>
                                         </tbody>
                                     </table>
-                                </div>
-                             </div>       
-                                
-
-                            	</div>
- 	</div>		   	 		
+                 </div>
+             </div>       
+        </div>
+ 	</div>
  	
- 		<div class="d_button" > <button  id="send" type="button" class="links"><b>
-		    <i class="fa fa-paper-plane-o mr-1"></i></b>Send invoice</button> 
-		</div>	
- 		
- 		<div class="footer_B">
-				 <span class="text-muted">By Befloral financial service </span>
-		</div>
-		
- </div>
-
-
-
-<script type="text/javascript">
-$(document).ready ( function(){
-	   if(${pdf}){
-	   document.getElementById("download").click();
-	   setTimeout (window.close, 650);
-	   }
-	});
-</script>
-
+ 		<div>
+ 			<form method="get" action="User">
+				<button class="links" style="margin-top: 20px" id="back"> Go Back</button>
+			</form>
+ 		</div>
+</div>
 
 </z:layout>

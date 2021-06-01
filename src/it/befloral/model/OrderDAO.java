@@ -144,6 +144,8 @@ public class OrderDAO implements GenericDAO<Order> {
 					order.setTrackNumber(rs.getString("trackNumber"));
 					order.setGift(rs.getBoolean("gift"));
 					order.setGiftMessage(rs.getString("giftMessage"));
+					order.setCreatedAt(rs.getTimestamp("createdAt").toLocalDateTime());
+					
 				}
 				do {
 					OrderItem item = new OrderItem();

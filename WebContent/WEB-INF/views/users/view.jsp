@@ -55,7 +55,7 @@
 									<li class="delivery-date">${order.getStatus()}</li>
 									<li class="bouquet-name"></li>
 									<li class="bouquet-price mobile-hidden">
-										${order.getTotalPaid() }&euro;
+										${order.getTotalPaidString() }&euro;
 										<span>, with discount</span>
 									</li>
 									<li class="order-number">Order no. ${order.getId()}</li>
@@ -67,7 +67,7 @@
 							</div>
 							<div class="flex">
 								<ul>
-									<li><a class="links" href="Orders?id=${order.getId()}">View Details</a></li>
+									<li><a class="links" href="Orders?action=details&&id=${order.getId()}">View Details</a></li>
 								</ul>
 
 							</div>
@@ -77,4 +77,8 @@
 			</div>
 		</div>
 	</div>
+	 
+
+	
+	
 </z:layout>

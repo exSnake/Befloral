@@ -1,0 +1,127 @@
+@charset "ISO-8859-1";
+
+
+.d_button{
+	padding-bottom: 20px;
+	padding-top :20px;
+	text-align: left; 
+	
+}  
+ 
+.pad{ 
+	padding-left: 60px; 
+	font: bold 100% sans-serif;
+	font-size: 18px;
+}
+
+
+
+.invoice {
+	font: bold 100% sans-serif; 
+	letter-spacing: 0.5em; 
+	text-align: center; 
+	text-transform: uppercase; 
+	background: #000; 
+	border-radius: 0.25em; 
+	color: #FFF; 
+	margin: 0 0 1em; 
+	padding: 0.7em 0; 
+	border: none; 
+	border-width: 0 0 1px; 
+	margin: 0 0 1em;
+	border-color: #999; 
+	border-bottom-style: solid;
+	margin-bottom: auto;
+	
+	} 
+
+.befloral_firm{
+	
+    font-family: "Playlist";
+    font-size: 31px;
+    font-weight: 100;
+    color: rgba(0, 0, 0, 1);
+    text-transform: none;
+    font-style: italic;
+    text-decoration: none;
+    line-height: 2.7em;
+    letter-spacing: 0.5px;
+
+}
+
+.information_befloral{
+	font: bold 120% Andale Mono; 
+	margin-top: -1px;
+	border: 13px inset #000000; 
+	background-image: linear-gradient(270deg, rgba(255, 255, 255, 1) 0%, rgba(248, 24, 215, 0.16) 71%);
+	color: #333333; 
+	line-height: 1.5;
+	letter-spacing: 0px;
+	word-spacing: 1px;
+	text-align: left;
+	text-decoration: none;
+	text-transform: capitalize ;
+	padding-left: 10px;
+		
+} 
+ 
+.billing_time{ 
+	text-align: right;
+	display: inline;  
+}
+
+.par_right{
+	padding-right: 30px;
+	line-height: 1.45;
+	letter-spacing: 0px;
+	word-spacing: 1px;
+}
+
+
+.information_invoice{
+	
+	font: bold 120% Andale Mono; 
+	margin-top: -1px;
+	border: 13px outset  #000000;
+	background-image: linear-gradient(270deg, rgba(255, 255, 255, 1) 0%, rgba(248, 24, 215, 0.16) 71%);
+	color: #333333;
+	line-height: 1.5;
+	letter-spacing: 0px;
+	word-spacing: 1px;
+	text-align: left;
+	text-decoration: none;
+	text-transform: capitalize ;
+	
+ 
+}
+  
+.time{
+	margin-left: 25px;
+	margin-top: 25px;
+}
+
+.div_table1{
+	margin-left: 25px;
+	margin-top: 25px;
+	
+} 
+
+.div_table2{
+	margin-top: 50px;	
+	display: flex;  
+	justify-content: flex-end;
+	align-self: auto;
+	
+	margin-right: 25px;
+	margin-bottom: 25px;
+}
+
+@media 
+only screen and (max-width: 600px), (min-device-width: 600px) and (max-device-width: 600px)  {
+	table, thead, tbody, th, td, tr { 
+		display: block; 
+	}
+}
+
+
+
