@@ -2,13 +2,13 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <z:layout pageTitle="Cart">
 	<c:if test="${!cart.isEmpty() }">
-		<h1 class="is-size-1"><i class="fa fa-shopping-cart"></i> Your Shopping Cart</h1>
+		<h1 class="is-size-1"><i class="fa fa-shopping-cart"></i> <span id="title">Your Shopping Cart</span></h1>
 	</c:if>
 	<c:if test="${cart.isEmpty() }">
 		<h1 class="is-size-1"><i class="fa fa-shopping-cart"></i> Your Cart is Empty</h1>
 	</c:if>
 	<c:if test="${!cart.isEmpty() }">
-		<table class="table is-fullwidth is-striped">
+		<table class="table is-fullwidth is-striped" id="tab_prd">
 			<thead>
 				<tr>
 					<th></th>
@@ -21,7 +21,7 @@
 			</thead>
 			<tbody>
 			<c:forEach items="${cart.getProducts()}" var="bean">
-				<tr>
+				<tr id="riga_${bean.getId()}">
 					<td>
 						<figure class="image is-128x128">
 							<img class="is-rounded" src="https://source.unsplash.com/120x120/?sig=${bean.getId()}&bouquet">
@@ -40,7 +40,7 @@
 						<form action="Cart" method="post">
 							<input type="hidden" id="delid_${bean.getId()}" name="id" value="${bean.getId()}">
 							<input type="hidden" id="delaction_${bean.getId()}" name="action" value="remove">
-							<button id="btndelete_${bean.getId()}" name="btnremove[]" class="button is-danger is-fullwidth mt-2">Delete</button>
+							<button id="btnremove_${bean.getId()}" name="btnremove[]" class="button is-danger is-fullwidth mt-2">Delete</button>
 						</form>
 					</td>
 				</tr>
@@ -51,7 +51,7 @@
 		<div class="field is-grouped">
 			<form action="Cart" method="post">
 				<input type="hidden" id="action_remove" name="action" value="removeAll">
-				<button class="button is-danger">Remove All</button>
+				<button class="button is-danger" id="btn_removeAll">Remove All</button>
 			</form>
 			
 			<form action="Login" method="get" >
@@ -94,7 +94,50 @@
 					}
 				});
 			});
+			
+			$("[name^=btnremove]").on("click", function(event) {
+				var id = $(this)[0].id.split("_")[1];
+				event.preventDefault();
+				$.ajax ({
+					type: "POST",
+					url: "Cart",
+					data: {"id": id, "action":"remove"},
+					success: function(result) {
+						$("#riga_"+id).remove();
+						 if($('#tab_prd >tbody >tr').length == 0) {
+							 $('#tab_prd').remove();
+							 $('.is-grouped').remove();
+							 $('#title').text("Your Cart is Empty");
+						 }
+					},
+					error: function(result){
+						alert("error");
+					}
+				});
+			});
+			
+			$("#btn_removeAll").on("click", function(event) {
+				var id = $(this)[0].id.split("_")[1];
+				event.preventDefault();
+				$.ajax ({
+					type: "POST",
+					url: "Cart",
+					data: {"id": id, "action":"removeAll"},
+					success: function(result) {
+						 $('#tab_prd').remove();
+						 $('.is-grouped').remove();
+						 $('#title').text("Your Cart is Empty");
+					},
+					error: function(result){
+						alert("error");
+					}
+				});
+			});
 		});
+			
+		
+		
+		
 	</script>	
 	
 </z:layout>
