@@ -68,7 +68,6 @@ public class UserDAO implements GenericDAO<User> {
 								addr.setInfo(rs.getString("info"));
 								addr.setAlias(rs.getString("alias"));
 								addr.setPreferred(rs.getBoolean("preferred"));
-								addr.setUser(bean);
 								bean.addAddress(addr);
 								//if exit is at the end of the stream or it's a new user.
 							} while(rs.next() && bean.getId() == rs.getInt("id"));
@@ -121,7 +120,6 @@ public class UserDAO implements GenericDAO<User> {
 						addr.setInfo(rs.getString("info"));
 						addr.setAlias(rs.getString("alias"));
 						addr.setPreferred(rs.getBoolean("preferred"));
-						addr.setUser(bean);
 						bean.addAddress(addr);
 					} while (rs.next());
 				}
@@ -201,7 +199,6 @@ public class UserDAO implements GenericDAO<User> {
 							addr.setInfo(rs.getString("info"));
 							addr.setAlias(rs.getString("alias"));
 							addr.setPreferred(rs.getBoolean("preferred"));
-							addr.setUser(bean);
 							bean.addAddress(addr);
 						} while (rs.next());
 					}

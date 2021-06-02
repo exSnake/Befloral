@@ -2,7 +2,8 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <link href="resources/css/user-profile.css" rel="stylesheet" type="text/css">
 <link href="resources/css/summary.css" rel="stylesheet" type="text/css">
-<z:layout pageTitle="Login">
+<z:layout pageTitle="Checkout">
+	<div id="notification" class="notification is-hidden"><button class="delete" onclick="closeNotification()">X</button><span id="notification-text">Test</span></div>
 	<h1>Order Summary</h1>
 	<div class="summary">
 		<div class="left">
@@ -14,7 +15,7 @@
 					<h2>Delivery Address</h2>
 				</div>
 				
-				<div class="body">
+				<div id="checkout-address" class="body">
 					<c:if test="${address != null}">
 						<p>${address.getFirstName() } ${address.getLastName() }</p>
 						<p>${address.getAddress()}</p>
@@ -26,9 +27,7 @@
 					</c:if>
 				</div>
 				<div class="actions">
-					<ul>
-						<li><a class="links" href="User?action=createAddress">Edit</a></li>
-					</ul>
+					<button id="btn-addressModal" class="button is-success">Select</button>
 				</div>
 			</div>
 			<hr>
@@ -115,9 +114,85 @@
 				</div>
 			</form>
 		</div>
+		
+		
 	</div>
+	<div id="addressModal" class="modal">
+			<div class="modal-background"></div>
+			<div class="modal-card">
+				<header class="modal-card-head">
+				  <p class="modal-card-title">Select an Address</p>
+				  <button id="btn-addressModalClose" class="delete" aria-label="close"></button>
+				</header>
+				<section id="body-addressModal" class="modal-card-body">
+					
+	 			</section>
+				<footer class="modal-card-foot">
+					<a class="button is-success" href="<c:url value="/User?action=createAddress"/>">Create New Address</a>
+					<button id="btn-addressModalCancel" class="button">Cancel</button>
+				</footer>
+			</div>
+		</div>
 	
 	<script>
+	$(document).ready(function() {
+		$('#btn-addressModal').on("click", function (){
+			$.get("Api/User", { action:"getAddresses" }, function(data) {
+				$('#body-addressModal').empty();
+				$(data).each((e, k) => {
+					var card="";
+					card += "					<header class=\"card-header\">";
+					card += "					    <p class=\"card-header-title\">";
+					card += "					      <i class=\"fa fa-home mr-2\"> <\/i> "+ k.alias;
+					card += "					    <\/p>";
+					card += "					<\/header>";
+					card += "					<div class=\"card-content\">";
+					card += "					  <div class=\"content\">";
+					card += "					  <div class=\"columns is-vcentered\">";
+					card += "					  	<div class=\"column is-four-fifths\">";
+					card += "						    " + k.firstName + " " + k.lastName;
+					card += "						    <br>";
+					card += "						    " + k.address;
+					card += "						    <br>";
+					card += "						    "+ k.postalCode +" "+ k.city +" ("+ k.province +")";
+					card += "					    <\/div>";
+					card += "					    <div class=\"column\">";
+					card += "					    	<button id='address_"+k.id+"' class=\"button is-success\">Select<\/button>";
+					card += "					    <\/div>";
+					card += "					  <\/div>";
+					card += "					  <\/div>";
+					card += "					<\/div>";
+					$('#body-addressModal').append(card);
+					
+					$('#address_'+k.id).on("click", function() {
+						$.post("Api/Orders", { action: "setAddress", address:JSON.stringify(k) }, function(data) {
+							var addr="";
+							addr += "						<p>"+k.firstName+" "+k.lastName+"<\/p>";
+							addr += "						<p>"+k.address+"<\/p>";
+							addr += "						<p>"+k.postalCode+" "+k.city+" ("+k.province+")<\/p>";
+							addr += "						<p><\/p>";
+							$('#checkout-address').empty();
+							$('#checkout-address').append(addr);
+							$('#addressModal').removeClass('is-active');
+						})
+						.fail(function() {
+							$("#notification-text").text("Error while adding address");
+							$("#notification").addClass("is-danger");
+							$("#notification").removeClass("is-hidden");
+						})
+					});
+					
+				});
+				
+			});
+			$('#addressModal').addClass("is-active");
+		});
+		
+		$('#btn-addressModalCancel, #btn-addressModalClose').on("click", function(){
+			$('#addressModal').removeClass("is-active");
+		});
+	});
+	
 	$("#isGift").change(function() {
 	    if(this.checked) {
 	    	$('#giftMessage').removeAttr("disabled");

@@ -18,5 +18,7 @@ INSERT INTO `reviewes` (`pid`, `uid`, `score`, `title`, `body`, `reply`) VALUES
 	(1,3,3, 'Flowers', 'Just flower, nothing more', null),
 	(3,2,2, 'Thats good', 'Just flower, nothing more', null),
 	(4,2,5, 'Roses Beautiful', 'Beautiful roses. I love them and would buy again.', null),
-	(4,3,1, 'No!!!', 'Im upset!!!', null)
+	(4,3,1, 'No!!!', 'Im upset!!!', null);
 
+INSERT INTO `migrations` (`name`) VALUES
+	('2021_05_30_13_53_23_create_reviewes_table');

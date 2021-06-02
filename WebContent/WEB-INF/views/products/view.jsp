@@ -3,7 +3,7 @@
 <z:layout pageTitle="Product View">
 <link href="<c:url value="/resources/css/product-view.css"/>" rel="stylesheet" type="text/css">
 	<!-- Page to view details of a product -->
-	<div id="notification" class="notification is-hidden"><button class="delete"></button>Test</div>
+	<div id="notification" class="notification is-hidden"><button class="delete" onclick="closeNotification()">X</button><span id="notification-text">Test</span></div>
 	<div class="products">
 		<div class="product">
 			<div class="left">
@@ -30,9 +30,11 @@
 					<form action="Cart" method="post">
 						<input type="hidden" name="action" value="add">
 						<input type="hidden" name="id" value="${bean.getId()}">
-						<button type="submit" class="btn btn-success" style="width:100%">Add to cart</button>
+						<button type="submit" class="button is-success" style="width:100%">Add to cart</button>
 					</form>
-					<button class="button is-primary mt-2" onclick="openModal()">Review</button>
+					<c:if test="${user != null}">
+						<button class="button is-primary mt-2" onclick="openModal()">Review</button>
+					</c:if>
 				</div>
 			</div>
 		</div>
@@ -40,7 +42,7 @@
 		<div class="additional-info">
 			<div class="reviews">
 				<c:forEach items="${prod.getReviewes()}" var="review"> 
-				<div class="single-review">
+				<div id="review_${review.getId()}" class="single-review">
 					<div class="rev-title">
 						<span class="rev-score"><c:forEach var="i" begin="1" end="${review.getScore()}" ><i class="fa fa-star" style="color: #56BFBA"></i></c:forEach></span>
 						<h3 class="has-text-weight-bold">${review.getTitle()}</h3>
@@ -105,6 +107,10 @@
 			$(".modal").removeClass("is-active");
 		}
 		
+		function closeNotification() {
+			$("#notification").addClass("is-hidden");
+		}
+		
 		function starClicked(star){
 			var score = parseInt(star.id.split("-")[0]);
 			$("#score").val(score);
@@ -119,20 +125,42 @@
 		}
 		
 		$(document).ready(function() {
+			
+			
+			let c;
 			$("#reviewSubmit").click(function() {
 				var pid = $("#pid").val();
 				var title = $("#title").val();
 				var body = $("#body").val();
 				var score = $("#score").val();
 				var action = $("#action").val();
-				$.post('Products', {"action":action,"title":title,"body":body,"score":score,"pid":pid},
-					function(resp) {
-						alert(resp);
-					})
-					.fail(function(resp){
-						alert(resp);
-					});
+				var did = undefined;
+				$.ajax ({
+					type: "POST",
+					url: "Products",
+					data: {"pid": pid, "action":action, "title":title,"body":body,"score":score },
+					dataType: "json",
+					success: function(data) {
+						closeModal();
+						$("#notification-text").text("Thanks for the review");
+						$("#notification").addClass("is-success");
+						$("#notification").removeClass("is-hidden");
+					},
+					error: function(data, s, v){
+						closeModal();
+						if(data.responseJSON.message.match(/duplicate/i)){
+							$("#notification-text").text("You've already made a review for this product");	
+						} else if (data.responseJSON.message.match(/unauthenticated/i)) {
+							$("#notification-text").text("You must login to make a review");
+						} else {
+							$("#notification-text").text(data.responseText.message);
+						}
+						$("#notification").addClass("is-danger");
+						$("#notification").removeClass("is-hidden");
+					}
 				});
+			});
+
 		});
 	</script>
 </z:layout>
