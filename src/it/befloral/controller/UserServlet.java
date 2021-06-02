@@ -74,7 +74,7 @@ public class UserServlet extends HttpServlet {
 				response.sendError(500);
 			}
 			
-		}
+		}else if(action.equals("viewWishlist"))
 		return;
 	}
 
