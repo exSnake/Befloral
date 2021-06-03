@@ -22,6 +22,12 @@ public class User implements Cloneable, Serializable {
 	private String role;
 	private boolean active;
 
+	
+	public boolean isFemale() {
+		return gender.equals("Female") ? true : false;
+	}
+	
+	
 	public int getId() {
 		return id;
 	}
