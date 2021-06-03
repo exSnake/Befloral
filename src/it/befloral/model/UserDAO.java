@@ -214,6 +214,19 @@ public class UserDAO implements GenericDAO<User> {
 				+ "   (`uid`, `firstName`, `lastName`, `address`, `postalCode`, `city`, `province`, `phone`, `info`, `alias`, `preferred`)"
 				+ "   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		
+		if(address.isPreferred()==true) {
+			String updateSQL= "UPDATE addresses SET preferred=null WHERE uid=?";
+			
+			try (var conn = ds.getConnection()) {
+				try (var stmt2 = conn.prepareStatement(updateSQL)) {
+				stmt2.setInt(1, user.getId());
+				System.out.println(stmt2);
+				stmt2.execute();
+				}
+			}
+		}
+		
+		
 		try (var conn = ds.getConnection()) {
 			try (var stmt = conn.prepareStatement(sql)) {
 				stmt.setInt(1, user.getId());

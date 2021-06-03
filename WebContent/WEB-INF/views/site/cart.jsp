@@ -61,6 +61,8 @@
 		</div>
 		</c:if>
 	</c:if>
+	
+	
 	<script>
 		let defaultQuantity = new Map();
 		$(document).ready(function() {

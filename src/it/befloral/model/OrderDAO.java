@@ -293,9 +293,10 @@ public class OrderDAO implements GenericDAO<Order> {
 
 	public Collection<Order> doRetriveByUser(User userBean) throws SQLException {
 		Collection<Order> orders = new LinkedList<Order>();
-		String selectSQL = "SELECT * FROM " + TABLE_NAME;
+		String selectSQL = "SELECT * FROM " + TABLE_NAME +" WHERE uid=?";
 		try (var conn = ds.getConnection()) {
 			try (var stmt = conn.prepareStatement(selectSQL)) {
+				stmt.setInt(1, userBean.getId());
 				ResultSet rs = stmt.executeQuery();
 				while (rs.next()) {
 					Order bean = new Order();
