@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+
+import it.befloral.beans.ResponseStatusMessage;
 import it.befloral.beans.Product;
 import it.befloral.beans.Review;
 import it.befloral.beans.User;
@@ -94,11 +97,21 @@ public class ProductServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		var pid = request.getParameter("id") == null ? 0 : Integer.parseInt(request.getParameter("id"));
 		var action = request.getParameter("action");
+
+		
 		if(action.equals("review")) {
-			if(request.getSession().getAttribute("user") == null)
-				response.sendRedirect(getServletContext().getContextPath() + "/Login");
-			else
+			if(request.getSession().getAttribute("user") == null) {
+				if(request.getHeader("x-requested-with") == null) {
+					response.sendRedirect(getServletContext().getContextPath() + "/Login");
+				} else {
+					response.setContentType("application/json; charset=UTF-8");
+					response.setStatus(401);
+					response.getWriter().print(new Gson().toJson(new ResponseStatusMessage(401,"unauthenticated")));
+					response.getWriter().flush();
+				}
+			} else {
 				doReview(request, response);
+			}
 		}
 	}
 
@@ -110,13 +123,15 @@ public class ProductServlet extends HttpServlet {
 		rw.setBody(request.getParameter("body"));
 		rw.setScore(Integer.parseInt(request.getParameter("score")));
 		rw.setUser(user);
-		rw.setProduct(new Product(Integer.parseInt(request.getParameter("pid"))));
+		rw.setProduct(new Product(Integer.parseInt(request.getParameter("pid"))));		
 		try {
 			rdao.doSave(rw);
-			response.getWriter().write("success");
+			response.setStatus(200);
+			response.getWriter().write(new Gson().toJson(new ResponseStatusMessage(200,"Review added successful")));
 		} catch (SQLException e) {
 			response.setStatus(500);
-			response.getWriter().write(e.getMessage());
+			response.getWriter().print(new Gson().toJson(new ResponseStatusMessage(500,e.getMessage())));
+			response.getWriter().flush();
 			return;
 		}
 	}

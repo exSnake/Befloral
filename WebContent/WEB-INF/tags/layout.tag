@@ -8,13 +8,15 @@
     <link href="http://fonts.cdnfonts.com/css/playlist" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
-   
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 	<link href="<c:url value="/resources/css/layout.css"/>" rel="stylesheet" type="text/css">
 	<title>${pageTitle}</title>
 </head>
 
 <body>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 	<!-- Navbar -->
 	
 	<div id="navbar" class="main-bar">
@@ -37,7 +39,7 @@
                 <li ${active.equals("Bouquet") ? "class='active'": ""}><a href="#">Bouquet</a></li>
                 <li ${active.equals("Cart") ? "class='active'": ""}><a href="<c:url value="/Cart"/>">
                 	<i class="fa fa-shopping-bag fa-2x"></i>
-                	<span>(${cart == null ? 0:cart.getTotalProductsQuantity() })</span>
+                	(<span id="cart-quantity">${cart == null ? 0:cart.getTotalProductsQuantity() }</span>)
                 </a>
                 <c:if test="${user == null && admin == null}">
                 	<li ${active.equals("Login") ? "class='active'": ""}><a href="<c:url value="/Login"/>">Login</a></li>

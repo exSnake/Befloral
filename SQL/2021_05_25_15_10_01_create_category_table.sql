@@ -21,9 +21,6 @@ INSERT INTO `categories` (`name`, `description`, `metaKeywords`) VALUES
 	('Seeds', 'A seed is an embryonic plant enclosed in a protective outer covering. The formation of the seed is part of the process of reproduction in seed plants, the spermatophytes, including the gymnosperm and angiosperm plants. ', 'seed plant gymnosperm plant plants seeds ');
 
 
-
-
-
 INSERT INTO `categories_products` (`pid`, `cid`) VALUES
 	(1, 1),
 	(2, 1),
@@ -35,6 +32,11 @@ INSERT INTO `categories_products` (`pid`, `cid`) VALUES
 	(8, 1),
 	(9, 1),
     (8,2);
+    
+INSERT INTO `migrations` (`name`) VALUES
+	('2021_05_25_15_10_01_create_category_table');
+	
+
 
 
 

@@ -132,7 +132,6 @@ public class UserServlet extends HttpServlet {
 			response.sendError(500);
 			return;
 		}
-		
 		if(action.equals("createAddress")) {
 			Address address = new Address();
 			address.setFirstName(request.getParameter("firstName"));
@@ -167,7 +166,7 @@ public class UserServlet extends HttpServlet {
 					return;
 				}
 			}
-			response.sendRedirect("User");
+			response.sendRedirect(getServletContext().getContextPath()+"/User?action=viewAddresses");
 			return;
 		} else if(action.equals("editAddress")) {
 				int id = Integer.parseInt(request.getParameter("id"));
@@ -183,7 +182,6 @@ public class UserServlet extends HttpServlet {
 				address.setInfo(request.getParameter("info"));
 				address.setAlias(request.getParameter("alias"));
 				address.setPreferred(request.getParameter("preferred") != null);
-				address.setUser((User)request.getSession().getAttribute("user"));
 				try {
 					model.doUpdate(address);
 					UserDAO u = new UserDAO();

@@ -19,7 +19,6 @@ public class Address {
 	private String info;
 	private String alias;
 	private boolean preferred;
-	private User user;
 	
 	public int getId() {
 		return this.id;
@@ -87,12 +86,6 @@ public class Address {
 	}
 	public void setPreferred(boolean preferred) {
 		this.preferred = preferred;
-	}
-	public User getUser() {
-		return user;
-	}
-	public void setUser(User user) {
-		this.user = user;
 	}
 	
 	@Override
