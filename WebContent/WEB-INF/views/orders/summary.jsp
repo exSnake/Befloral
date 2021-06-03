@@ -135,6 +135,9 @@
 		</div>
 	
 	<script>
+	function closeNotification() {
+		$("#notification").addClass("is-hidden");
+	}
 	$(document).ready(function() {
 		$('#btn-addressModal').on("click", function (){
 			$.get("Api/User", { action:"getAddresses" }, function(data) {

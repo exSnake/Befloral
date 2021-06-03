@@ -216,11 +216,6 @@ textarea {
     border-radius: .25rem;
 }
 
-label {
-    display: inline-block;
-    margin-bottom: .5rem;
-}
-
 .text-muted {
     color: #6c757d!important;
 }

@@ -1,6 +1,8 @@
 package it.befloral.controller;
 
 import java.io.IOException;
+import java.sql.SQLException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -39,6 +41,21 @@ public class UserApiServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if(action.equals("checkEmail")) {
+			UserDAO dao = new UserDAO();
+			try {
+				var u = dao.doRetriveByEmail(request.getParameter("email"));
+				response.setStatus(200);
+				response.getWriter().print(gson.toJson(new ResponseStatusMessage(200, u == null ? "free" : "taken")));
+				response.getWriter().flush();
+				return;
+			} catch (SQLException e) {
+				response.setStatus(500);
+				response.getWriter().print(gson.toJson(new ResponseStatusMessage(500, "error")));
+				response.getWriter().flush();
+				return;
+			}
+		}
 		User user = (User) request.getSession().getAttribute("user");
 		if(user == null) {
 			response.setStatus(401);
@@ -57,7 +74,9 @@ public class UserApiServlet extends HttpServlet {
 			response.getWriter().print(gson.toJson(user.getAddresses()));
 			response.getWriter().flush();
 			return;
-		}		
+		}
+		
+		
 	}
 
 	/**
