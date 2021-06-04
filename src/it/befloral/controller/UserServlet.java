@@ -74,7 +74,10 @@ public class UserServlet extends HttpServlet {
 				response.sendError(500);
 			}
 			
-		}else if(action.equals("viewWishlist"))
+		}else if(action.equals("wishList")) {
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/users/wishlist.jsp");
+			dispatcher.forward(request, response);
+		}
 		return;
 	}
 

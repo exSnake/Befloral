@@ -1,12 +1,51 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
-</head>
-<body>
-
-</body>
-</html>
+<%@taglib prefix="z" tagdir="/WEB-INF/tags"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<link href="resources/css/user-profile.css" rel="stylesheet" type="text/css">
+<z:layout pageTitle="Wishlist">
+<title>Lista dei desideri |Befloral </title>
+<h1 class="is-size-1 has-text-weight-semibold">Hi! ${user.getFirstName()} </h1>
+	<div class="user-wishlist">
+	<div class="product-list">
+		<c:forEach items="${products}" var="bean">
+			<div class="wrapper">
+				<div class="wrapper-container">
+					<div class="wrapper-top">
+						<img src="https://source.unsplash.com/300x400/?sig=${bean.getId()}&flower,${bean.getName().replace(' ', '+')}">
+					</div>
+					<div class="wrapper-bottom">
+						<div class="wrapper-left">
+							<div class="details">
+								<a href="Products?action=view&id=${bean.getId()}">
+									<p>${bean.getName()}</p>
+								</a>
+								<span>${bean.getPrice()}&euro;</span>
+							</div>
+							<div class="buy">
+								<form action="Cart" method="post">
+									<input type="hidden" id="id" name="id" value="${bean.getId()}">
+									<input type="hidden" id="action" name="action" value="add">
+									<button type="submit"><i class="material-icons">add_shopping_cart</i></button>
+								</form>
+							</div>
+						</div>
+						<div class="wrapper-right">
+							<div class="done"><i class="material-icons">done</i></div>
+							<div class="details">
+								<p>${bean.getName()}</p>
+								<span>Added to your cart</span>
+							</div>
+							<div class="remove"><i class="material-icons">clear</i></div>
+						</div>
+					</div>
+				</div>
+				<div class="inside">
+					<div class="icon"><i class="material-icons">info_outline</i></div>
+					<div class="contents">
+						<p>${bean.getDescription()}</p>
+					</div>
+				</div>
+			</div>
+		</c:forEach>
+	
+	</div>
+</z:layout>

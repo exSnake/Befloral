@@ -17,7 +17,7 @@ public class WishDAO implements GenericDAO<Wish> {
 	@Override
 	public Collection<Wish> doRetrieveAll(String order) throws SQLException {
 		Collection<Wish> wishs = new LinkedList<>();
-		var sql = "SELECT w.id as wid, w.uid,w.pid, w.price ad wprice FROM " + TABLE_NAME + " w LEFT JOIN products p ON p.id=w.pid" + " ORDER BY " + order;
+		var sql = "SELECT w.id as wid, w.uid,w.pid, w.price as wprice FROM " + TABLE_NAME + " w LEFT JOIN products p ON p.id=w.pid" + " ORDER BY " + order;
 		var product = new Product();
 		try (var conn = ds.getConnection()) {
 			try (var stmt = conn.prepareStatement(sql)) {
@@ -67,11 +67,11 @@ public class WishDAO implements GenericDAO<Wish> {
 		}
 		return wishs;
 	}
-// join e inserire product rinominare le tabelle Servlet WishList
+// join e inserire product rinominare le tabelle Servlet WishList e jsp
 	public Collection<Wish> doRetrieveByUser(String order, User user) throws SQLException {
 		Collection<Wish> wishs = new LinkedList<>();
-		var sql = "SELECT * FROM " + TABLE_NAME + " WHERE uid = ? ORDER BY " + order;
-		var pdao = new ProductDAO();
+		var sql = "SELECT w.id as wid, w.uid,w.pid, w.price as wprice FROM " + TABLE_NAME +"w LEFT JOIN products p ON p.id=w.pid"+ " WHERE w.uid = ? ORDER BY " + order;
+		var product = new Product();
 		try (var conn = ds.getConnection()) {
 			try (var stmt = conn.prepareStatement(sql)) {
 				stmt.setInt(1, user.getId());
@@ -79,9 +79,21 @@ public class WishDAO implements GenericDAO<Wish> {
 				while (rs.next()) {
 					var rw = new Wish();
 					rw.setId(rs.getInt("id"));
-					rw.setProd(pdao.doRetriveByKey(rs.getInt("pid")));
+					product.setId(rs.getInt("pid"));
+					product.setName(rs.getString("name"));
+					product.setDescription(rs.getString("description"));
+					product.setShortDescription(rs.getString("shortDescription"));
+					product.setMetaDescription(rs.getString("metaDescription"));
+					product.setMetaKeyword(rs.getString("metaKeyword"));
+					product.setPrice(rs.getDouble("price"));
+					product.setWeight(rs.getDouble("weight"));
+					product.setAvailable(rs.getBoolean("available"));
+					product.setDiscount(rs.getDouble("discount"));
+					product.setOnSale(rs.getInt("onSale"));
+					product.setQuantity(rs.getInt("quantity"));
+					rw.setProd(product);
 					rw.setPrice(rs.getDouble("price"));
-					rw.setUid(rs.getInt("pid"));
+					rw.setUid(rs.getInt("uid"));
 					wishs.add(rw);
 				}
 			}
@@ -89,11 +101,12 @@ public class WishDAO implements GenericDAO<Wish> {
 		return wishs;
 	}
 
+	//Stessa cosa per DoRetrivebyall
 	@Override
 	public Wish doRetriveByKey(int code) throws SQLException {
-		var sql = "SELECT * FROM " + TABLE_NAME + " WHERE id = ?";
+		var sql = "SELECT  w.id as wid, w.uid,w.pid, w.price as wprice FROM " + TABLE_NAME +" w LEFT JOIN products p ON p.id=w.pid"+ " WHERE wid = ?";
 		Wish rw = null;
-		var pdao = new ProductDAO();
+		var product = new Product();
 		try (var conn = ds.getConnection()) {
 			try (var stmt = conn.prepareStatement(sql)) {
 				stmt.setInt(1, code);
@@ -101,7 +114,19 @@ public class WishDAO implements GenericDAO<Wish> {
 				if (rs.next()) {
 					rw = new Wish();
 					rw.setId(rs.getInt("id"));
-					rw.setProd(pdao.doRetriveByKey(rs.getInt("pid")));
+					product.setId(rs.getInt("pid"));
+					product.setName(rs.getString("name"));
+					product.setDescription(rs.getString("description"));
+					product.setShortDescription(rs.getString("shortDescription"));
+					product.setMetaDescription(rs.getString("metaDescription"));
+					product.setMetaKeyword(rs.getString("metaKeyword"));
+					product.setPrice(rs.getDouble("price"));
+					product.setWeight(rs.getDouble("weight"));
+					product.setAvailable(rs.getBoolean("available"));
+					product.setDiscount(rs.getDouble("discount"));
+					product.setOnSale(rs.getInt("onSale"));
+					product.setQuantity(rs.getInt("quantity"));
+					rw.setProd(product);
 					rw.setUid(rs.getInt("uid"));
 					rw.setPrice(rs.getDouble("price"));
 				}
