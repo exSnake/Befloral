@@ -52,19 +52,15 @@ public class UserServlet extends HttpServlet {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		if(action == null) {
+		if(action == null || action.equals("viewOrders")) {
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/users/view.jsp");
 			dispatcher.forward(request, response);
-		}else if (action.equals("viewOrders")) {
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/users/view.jsp");
-			dispatcher.forward(request, response);
-		}else if (action.equals("viewData")) {
+		} else if (action.equals("viewData")) {
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/users/myData.jsp");
 			dispatcher.forward(request, response);
-		}else if (action.equals("invoiceDownload")) {
+		} else if (action.equals("invoiceDownload")) {
 			//TODO
 
-			
 		}else if (action.equals("invoiceView")) {
 			
 			try {
@@ -82,10 +78,6 @@ public class UserServlet extends HttpServlet {
 				request.setAttribute("orderToShow", toShow);
 				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/views/users/invoice.jsp");
 				dispatcher.forward(request, response);
-				
-
-				
-			
 			}catch (NumberFormatException e ) {
 				RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/users/view.jsp");
 				dispatcher.forward(request, response);
@@ -94,7 +86,6 @@ public class UserServlet extends HttpServlet {
 			}
 			
 		}else if (action.equals("viewAddresses")) {
-			System.out.println("addresses");
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/users/addresses.jsp");
 			dispatcher.forward(request, response);
 		} else if (action.equals("createAddress")) {
@@ -172,6 +163,7 @@ public class UserServlet extends HttpServlet {
 				int id = Integer.parseInt(request.getParameter("id"));
 				Address address = new Address();
 				address.setId(id);
+				address.setUid(user.getId());
 				address.setFirstName(request.getParameter("firstName"));
 				address.setLastName(request.getParameter("lastName"));
 				address.setAddress(request.getParameter("address"));
@@ -188,7 +180,6 @@ public class UserServlet extends HttpServlet {
 					User userLoad = (User) u.doRetriveByKey(((User)request.getSession().getAttribute("user")).getId());
 					request.getSession().removeAttribute("user");
 					request.getSession().setAttribute("user", userLoad);
-					
 					response.sendRedirect(getServletContext().getContextPath()+"/User");
 				} catch (SQLException e) {
 					e.printStackTrace();

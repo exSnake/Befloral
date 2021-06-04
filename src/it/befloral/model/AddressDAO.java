@@ -78,7 +78,7 @@ public class AddressDAO implements GenericDAO<Address> {
 			
 			try (var conn = ds.getConnection()) {
 				try (var stmt2 = conn.prepareStatement(updateSQL2)) {
-				stmt2.setInt(1, dao.getUser().getId());
+				stmt2.setInt(1, dao.getUid());
 				System.out.println(stmt2);
 				stmt2.execute();
 				}
@@ -119,7 +119,7 @@ public class AddressDAO implements GenericDAO<Address> {
 			
 			try (var conn = ds.getConnection()) {
 				try (var stmt2 = conn.prepareStatement(updateSQL2)) {
-				stmt2.setInt(1, dao.getUser().getId());
+				stmt2.setInt(1, dao.getUid());
 				System.out.println(stmt2);
 				stmt2.execute();
 				}

@@ -9,6 +9,7 @@ package it.befloral.beans;
  */
 public class Address {
 	private int id;
+	private int uid;
 	private String firstName;
 	private String lastName;
 	private String address;
@@ -25,6 +26,12 @@ public class Address {
 	}
 	public void setId(int id) {
 		this.id = id;
+	}
+	public int getUid() {
+		return uid;
+	}
+	public void setUid(int uid) {
+		this.uid = uid;
 	}
 	
 	public String getFirstName() {
@@ -98,4 +105,5 @@ public class Address {
 				this.getPhone(), this.getInfo()
 		);
 	}
+	
 }
