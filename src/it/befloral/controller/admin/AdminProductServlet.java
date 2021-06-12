@@ -2,6 +2,7 @@ package it.befloral.controller.admin;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Collection;
 
 import javax.servlet.RequestDispatcher;
@@ -11,8 +12,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import it.befloral.beans.Category;
 import it.befloral.beans.Order;
 import it.befloral.beans.Product;
+import it.befloral.model.CategoryDAO;
 import it.befloral.model.OrderDAO;
 import it.befloral.model.ProductDAO;
 
@@ -66,6 +69,14 @@ public class AdminProductServlet extends HttpServlet {
 	}
 
 	private void create(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		var cdao = new CategoryDAO();
+		try {
+			request.setAttribute("categories", cdao.doRetrieveAll("name"));
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/admin/products/create.jsp");
 		dispatcher.forward(request, response);
 		return;
@@ -79,7 +90,6 @@ public class AdminProductServlet extends HttpServlet {
 		
 		if(action == null) {
 		} else if(action.equals("create")) {
-
 			save(request,response);
 			return;
 		} else if (action.equals("put")) {
@@ -93,6 +103,7 @@ public class AdminProductServlet extends HttpServlet {
 	
 	private void save(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ProductDAO products = new ProductDAO();
+		//TODO Validate product form
 		Product product = new Product(request.getParameter("name"), request.getParameter("description"),
 				request.getParameter("shortDescription"), request.getParameter("metaDescription"),
 				request.getParameter("metaKeyword"), Double.parseDouble(request.getParameter("weight")),
@@ -101,6 +112,13 @@ public class AdminProductServlet extends HttpServlet {
 				Integer.parseInt(request.getParameter("quantity")),
 				Integer.parseInt(request.getParameter("onSale")),
 				(request.getParameter("available") == null ? false : true));
+		product.setTax(Integer.parseInt(request.getParameter("tax")));
+		String[] categories = request.getParameterValues("categories");
+		if(categories != null)
+			Arrays.asList(categories).forEach((e) -> {
+				product.addCategory(new Category(Integer.parseInt(e)));
+			});
+		System.out.println(product.getCategories().size());
 		try {			
 			products.doSave(product);
 			response.sendRedirect(request.getServletContext().getContextPath()+"/Admin/Products");
@@ -139,10 +157,12 @@ public class AdminProductServlet extends HttpServlet {
 	}
 	
 	private void doEdit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		ProductDAO model = new ProductDAO();
 		Product prod = null;
+		var model = new ProductDAO();
+		var cdao = new CategoryDAO();
 		try {
 			prod = model.doRetriveByKey(Integer.parseInt(request.getParameter("id")));
+			request.setAttribute("categories", cdao.doRetrieveAll("name"));
 		} catch(SQLException e) {
 			e.printStackTrace();
 			response.sendError(500);
@@ -174,6 +194,7 @@ public class AdminProductServlet extends HttpServlet {
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String error = null;
 		ProductDAO products = new ProductDAO();
+		//TODO Validate Product Form
 		Product product = new Product(Integer.parseInt(request.getParameter("id")), request.getParameter("name"),
 				request.getParameter("description"), request.getParameter("shortDescription"),
 				request.getParameter("metaDescription"), request.getParameter("metaKeyword"),
@@ -181,8 +202,12 @@ public class AdminProductServlet extends HttpServlet {
 				Double.parseDouble(request.getParameter("price")), Double.parseDouble(request.getParameter("discount")),
 				Integer.parseInt(request.getParameter("quantity")), Integer.parseInt(request.getParameter("onSale")),
 				(request.getParameter("available") == null ? false : true));
-		System.out.println("ciaooo");
-		
+		product.setTax(Integer.parseInt(request.getParameter("tax")));
+		String[] categories = request.getParameterValues("categories");
+		if(categories != null)
+			Arrays.asList(categories).forEach((e) -> {
+				product.addCategory(new Category(Integer.parseInt(e)));
+			});
 		try {
 			if (products.doUpdate(product) > 0) {
 				response.sendRedirect(request.getServletContext().getContextPath()+"/Admin/Products");

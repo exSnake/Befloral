@@ -32,8 +32,6 @@ public class Category {
 		this.productsId = productsId;
 	}
 
-
-
 	public int getId() {
 		return id;
 	}
@@ -59,11 +57,6 @@ public class Category {
 		this.metaKeywords = metaKeywords;
 	}
 
-	
-	
-	
-	
-	
 	public Category(int id, String name, String description, String metaKeywords, String metaTitle,
 			String metaDescription) {
 		super();
@@ -75,11 +68,10 @@ public class Category {
 		productsId= new ArrayList<Integer>();
 	}
 	
-	
-	
-	
-	
-	
+	public Category(int id) {
+		this.setId(id);
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -101,17 +93,7 @@ public class Category {
 		if (getClass() != obj.getClass())
 			return false;
 		Category other = (Category) obj;
-		if (description == null) {
-			if (other.description != null)
-				return false;
-		} else if (!description.equals(other.description))
-			return false;
 		if (id != other.id)
-			return false;
-		if (metaKeywords == null) {
-			if (other.metaKeywords != null)
-				return false;
-		} else if (!metaKeywords.equals(other.metaKeywords))
 			return false;
 		if (name == null) {
 			if (other.name != null)
@@ -121,17 +103,10 @@ public class Category {
 		return true;
 	}
 	
-	
-	
 	@Override
 	public String toString() {
 		return "Category [id=" + id + ", name=" + name + ", description=" + description + ", metaKeywords="
 				+ metaKeywords + "]";
 	}
 
-	
-	
-	
-	
-	
 }

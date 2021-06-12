@@ -41,48 +41,45 @@ public class LoginServlet extends HttpServlet {
 		User user = (User) request.getSession().getAttribute("user");
 		String action = request.getParameter("action");
 		
-		//chekout
-		if(action!= null && action.equals("checkout")){
-			//utente non loggato
-			if(user==null) {
-				request.getSession().setAttribute("tryLoggin", "try");
-				request.removeAttribute(action);		
-				
-				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/views/login/login.jsp");
-				dispatcher.forward(request, response);
-				return;
-				
-			}
-			//utente loggato
-			else {
-				request.setAttribute("action", "checkout");
-				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/Orders");
-				dispatcher.forward(request, response);
-				return;
-			}
-		}
-		
-		// Try to Register
-		if(user == null) {
-			if(action != null && action.equals("register")) {
-				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/views/login/register.jsp");
-				dispatcher.forward(request, response);
-				return;
-			} else {
-				// Login page if not logged in
-				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/views/login/login.jsp");
-				dispatcher.forward(request, response);
-				return;
-			}
-		} else {
+		if(action != null) {
 			if(action.equals("logout")) {
 				request.getSession().invalidate();
 				response.sendRedirect("Home");
 				return;
-			} else {
-				response.sendRedirect("User");
-				return;
 			}
+			if(action.equals("checkout")) {
+				//utente non loggato
+				if(user==null) {
+					request.getSession().setAttribute("tryLoggin", "try");
+					request.removeAttribute(action);		
+					
+					RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/views/login/login.jsp");
+					dispatcher.forward(request, response);
+					return;
+				}
+				//utente loggato
+				else {
+					request.setAttribute("action", "checkout");
+					RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/Orders");
+					dispatcher.forward(request, response);
+					return;
+				}
+			}
+			if(action.equals("register")) {
+				if(user == null) {
+					RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/views/login/register.jsp");
+					dispatcher.forward(request, response);
+					return;
+				}
+			}
+		}
+		if(user == null) {
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/views/login/login.jsp");
+			dispatcher.forward(request, response);
+			return;
+		} else {
+			response.sendRedirect("User");
+			return;
 		}
 	}
 

@@ -55,6 +55,7 @@ public class ProductDAO implements GenericDAO<Product> {
 					bean.setShortDescription(rs.getString("shortDescription"));
 					bean.setMetaDescription(rs.getString("metaDescription"));
 					bean.setMetaKeyword(rs.getString("metaKeyword"));
+					bean.setTax(rs.getInt("tax"));
 					bean.setPrice(rs.getDouble("price"));
 					bean.setWeight(rs.getDouble("weight"));
 					bean.setAvailable(rs.getBoolean("available"));
@@ -101,6 +102,7 @@ public class ProductDAO implements GenericDAO<Product> {
 					bean.setShortDescription(rs.getString("shortdescription"));
 					bean.setMetaDescription(rs.getString("metadescription"));
 					bean.setMetaKeyword(rs.getString("metakeyword"));
+					bean.setTax(rs.getInt("tax"));
 					bean.setPrice(rs.getDouble("price"));
 					bean.setWeight(rs.getDouble("weight"));
 					bean.setAvailable(rs.getBoolean("available"));
@@ -111,7 +113,7 @@ public class ProductDAO implements GenericDAO<Product> {
 						do {
 							Category c = new Category();
 							c.setId(rs.getInt("cid"));
-							c.setName("cname");
+							c.setName(rs.getString("cname"));
 							c.setDescription(rs.getString("cdescription"));
 							c.setMetaKeywords(rs.getString("cmetaKeywords"));
 							bean.addCategory(c);
@@ -134,9 +136,8 @@ public class ProductDAO implements GenericDAO<Product> {
 
 		String inserSQL = "INSERT INTO " + ProductDAO.TABLE_NAME + " (name,description,shortDescription,"
 				+ "metaDescription,metaKeyword,price,weight,available,"
-				+ "discount,onSale,quantity) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+				+ "discount,onSale,quantity,tax) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		String updateSQL = "INSERT INTO categories_products (pid,cid) VALUES (?,?) ON DUPLICATE KEY UPDATE pid=pid";
-		String deleteSQL_Category="Delete * from categories_products WHERE pid=?";
 		try {
 			conn = ds.getConnection();
 			conn.setAutoCommit(false);
@@ -152,6 +153,7 @@ public class ProductDAO implements GenericDAO<Product> {
 			stmt.setDouble(9, dao.getDiscount());
 			stmt.setInt(10, dao.getOnSale());
 			stmt.setInt(11, dao.getQuantity());
+			stmt.setInt(12, dao.getTax());
 			LOGGER.debug(stmt);
 			stmt.execute();
 			ResultSet res  = stmt.getGeneratedKeys();
@@ -188,9 +190,9 @@ public class ProductDAO implements GenericDAO<Product> {
 	public synchronized int doUpdate(Product dao) throws SQLException {
 		String updateSQL = "UPDATE products p  " + "SET p.name = ?," + "p.description = ?," + "p.shortDescription = ?,"
 				+ "p.metaDescription = ?," + "p.metaDescription = ?," + "p.price = ?," + "p.weight = ?,"
-				+ "p.available = ?," + "p.discount = ?," + "p.onSale = ?," + "p.quantity = ? " + "WHERE p.id = ? ";
+				+ "p.available = ?," + "p.discount = ?," + "p.onSale = ?," + "p.quantity = ?, " + "p.tax = ? " + "WHERE p.id = ? ";
 		String inserSQL = "INSERT INTO categories_products (pid,cid) VALUES (?,?) ON DUPLICATE KEY UPDATE pid=pid";
-		String deleteSQL_Category="Delete * from categories_products WHERE pid=?";
+		String deleteSQL_Category="DELETE FROM categories_products WHERE pid = ?";
 		
 		Connection conn = null;
 		PreparedStatement stmt = null;
@@ -212,24 +214,28 @@ public class ProductDAO implements GenericDAO<Product> {
 			stmt.setDouble(9, dao.getDiscount());
 			stmt.setInt(10, dao.getOnSale());
 			stmt.setInt(11, dao.getQuantity());
-			stmt.setInt(12, dao.getId());		
-			
-			stmt.executeUpdate();
+			stmt.setInt(12, dao.getTax());
+			stmt.setInt(13, dao.getId());		
+			LOGGER.debug(stmt);
+			result = stmt.executeUpdate();
 			
 			stmt2 = conn.prepareStatement(deleteSQL_Category);
+			stmt2.setInt(1, dao.getId());
+			LOGGER.debug(stmt2);
 			stmt2.execute();					
-				for (Category c : dao.getCategories()) {
-					stmt3 = conn.prepareStatement(inserSQL);
-					stmt3.setInt(1, dao.getId());
-					stmt3.setInt(2, c.getId());
-					stmt3.execute();
-				}	
-				conn.commit();
-			}catch (SQLException e) {
+			for (Category c : dao.getCategories()) {
+				stmt3 = conn.prepareStatement(inserSQL);
+				stmt3.setInt(1, dao.getId());
+				stmt3.setInt(2, c.getId());
+				LOGGER.debug(stmt3);
+				stmt3.execute();
+			}	
+			conn.commit();
+		} catch (SQLException e) {
 			e.printStackTrace();
 			conn.rollback();
-		} 
-		finally {
+			result = 0;
+		} finally {
 			try {
 				if (stmt != null)
 					stmt.close();

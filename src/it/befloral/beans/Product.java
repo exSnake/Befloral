@@ -29,6 +29,7 @@ public class Product implements Serializable {
 	private double price;
 	private double discount;
 	private double weight;
+	private int tax;
 
 	private int quantity;
 	private int onSale;
@@ -146,6 +147,14 @@ public class Product implements Serializable {
 
 	public void setWeight(double weight) {
 		this.weight = weight;
+	}
+
+	public int getTax() {
+		return tax;
+	}
+
+	public void setTax(int tax) {
+		this.tax = tax;
 	}
 
 	public String getPriceToString() {

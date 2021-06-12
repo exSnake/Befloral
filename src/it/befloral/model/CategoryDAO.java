@@ -2,6 +2,7 @@ package it.befloral.model;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -11,16 +12,19 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import it.befloral.beans.Address;
 import it.befloral.beans.Category;
 import it.befloral.beans.Order;
 import it.befloral.beans.Product;
 
-public class CategoryDAO implements GenericDAO<Category> {
-	
-	
+public class CategoryDAO implements GenericDAO<Category> {	
 	private static DataSource ds;
 	private static final String TABLE_NAME = "categories";
 	private static final String PIVOTE_TABLE_NAME = "categories_products";
+	private static final Logger LOGGER = LogManager.getLogger();
 
 	static {
 		try {
@@ -38,35 +42,31 @@ public class CategoryDAO implements GenericDAO<Category> {
 	public Collection<Category> doRetrieveAll(String order) throws SQLException {
 		
 		Collection<Category> cat = new LinkedList<>();
-		String selectSQL = "SELECT * FROM "+PIVOTE_TABLE_NAME+"AS b JOIN "+TABLE_NAME+" AS c ON c.id=bb.cid ";
+		String selectSQL = "SELECT * FROM "+ TABLE_NAME +" c LEFT JOIN "+ PIVOTE_TABLE_NAME +" cp ON c.id = cp.cid ";
 		
 		try (var conn = ds.getConnection()) {
 			try (var stmt = conn.prepareStatement(selectSQL)) {
+				LOGGER.debug(stmt);
 				ResultSet rs = stmt.executeQuery();
 				int lastCategoryid;
-				
 				if(rs.next()) {//se c'e almeno una riga
-					
 					do {
-					
-					Category bean = new Category();
-					bean.setId(rs.getInt("id"));
-					bean.setName("name");
-					bean.setDescription(rs.getString("description"));
-					bean.setMetaKeywords(rs.getString("metaKewords"));						
-			
-						do {						
-							if(bean.getId()==rs.getInt("id"))
+						Category bean = new Category();
+						bean.setId(rs.getInt("id"));
+						bean.setName(rs.getString("name"));
+						bean.setDescription(rs.getString("description"));
+						bean.setMetaKeywords(rs.getString("metaKeywords"));
+						if(rs.getInt("pid") != 0) {
+							do {
 								bean.addProductId(rs.getInt("pid"));
-							else break;
-						}while(rs.next());
-					
-					cat.add(bean);
-						continue;
-					}while(rs.next());
-					
-				}							
-					
+								//if exit is at the end of the stream or it's a new user.
+							} while(rs.next() && bean.getId() == rs.getInt("cid"));
+						} else {
+							rs.next();
+						}
+						cat.add(bean);
+					} while (!rs.isAfterLast());
+				}								
 			}
 		}
 		return cat;

@@ -8,5 +8,7 @@
 		<a href="<c:url value="/Admin/Products"/>">Manage Products</a>
 		<br>
 		<a href="<c:url value="/Admin?action=viewLogs"/>">View Logs</a>
+		<br>
+		<a class="user-logout" href="<c:url value="/Login?action=logout"/>" href="">Logout</a>
 	</div>
 </z:layout>

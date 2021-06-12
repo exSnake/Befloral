@@ -154,6 +154,7 @@ public class OrderDAO implements GenericDAO<Order> {
 					item.setName(rs.getString("name"));
 					item.setDescription(rs.getString("description"));
 					item.setShortDescription(rs.getString("shortDescription"));
+					item.setTax(rs.getInt("tax"));
 					item.setPrice(rs.getDouble("price"));
 					item.setWeight(rs.getDouble("weight"));
 					item.setDiscount(rs.getDouble("discount"));
@@ -170,8 +171,8 @@ public class OrderDAO implements GenericDAO<Order> {
 		String insertOrder = "INSERT INTO orders (`uid`, `destination`, `totalProducts`, `totalPaid`, `trackNumber`, `gift`, `giftMessage`) "
 				+ "VALUES (?, ?, ?, ?, ?, ?, ?)";
 		String insertItem = "INSERT INTO order_items "
-				+ "(`oid`, `name`, `description`, `shortDescription`, `price`, `weight`, `discount`, `quantity`) "
-				+ "VALUES (? , ?, ?, ?, ?, ?, ?, ?)";
+				+ "(`oid`, `name`, `description`, `shortDescription`, `price`, `weight`, `discount`, `quantity`, `tax`) "
+				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		var conn = ds.getConnection();
 		try (var stmt = conn.prepareStatement(insertOrder, Statement.RETURN_GENERATED_KEYS)) {
 			stmt.setInt(1, dao.getUser().getId());
@@ -197,7 +198,7 @@ public class OrderDAO implements GenericDAO<Order> {
 					stmt2.setDouble(6, item.getWeight());
 					stmt2.setDouble(7, item.getDiscount());
 					stmt2.setInt(8, item.getQuantity());
-
+					stmt2.setInt(9, item.getTax());
 					stmt2.execute();
 				}
 			}
@@ -235,7 +236,7 @@ public class OrderDAO implements GenericDAO<Order> {
 		String updateOrder = "UPDATE  orders SET(`destination` = ?, `totalProducts` = ?, `totalPaid` =?, `trackNumber` =?, `gift`=?, `giftMessage`=?) "
 				+ "WHERE `uid`=? and 'id' = ? ";
 		String updateItem = "UPDATE  order_items SET(`name` = ?, `description` = ?, `shortDescription` = ?"
-				+ ", `price` = ?, `weight` = ?, `discount` = ?, `quantity`= ? ) " + "WHERE 'id' = ? and 'oid' = ?  ";
+				+ ", `price` = ?, `weight` = ?, `discount` = ?, `quantity`= ?, `tax`=? ) " + "WHERE 'id' = ? and 'oid' = ?  ";
 		var conn = ds.getConnection();
 
 		try {
@@ -262,9 +263,10 @@ public class OrderDAO implements GenericDAO<Order> {
 				stmt2.setDouble(5, item.getWeight());
 				stmt2.setDouble(6, item.getDiscount());
 				stmt2.setInt(7, item.getQuantity());
-
-				stmt2.setInt(8, item.getId());
-				stmt2.setInt(9, dao.getId());
+				stmt2.setInt(8, item.getTax());
+				
+				stmt2.setInt(9, item.getId());
+				stmt2.setInt(10, dao.getId());
 
 				stmt2.execute();
 			}

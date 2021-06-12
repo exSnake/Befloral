@@ -52,7 +52,16 @@
 				<span class="input-group-text">&euro;</span>
 			</div>
 			<input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" name="price" id="price"
-				value="${bean.getPrice()}">
+				value="${bean.getPrice()}" required>
+		</div>
+		
+		<label for="tax">Tax</label>
+		<div class="input-group mb-3">
+			<div class="input-group-prepend">
+				<span class="input-group-text">%</span>
+			</div>
+			<input type="number" class="form-control" aria-label="Tax Amount" name="tax" id="tax"
+				value="${bean.getTax()}" required>
 		</div>
 
 		<div class="form-group">
@@ -83,6 +92,18 @@
 			<input type="number" class="form-control" name="quantity" id="quantity" aria-describedby="quantityHelp"
 				placeholder="120" value="${bean.getQuantity()}">
 			<small id="quantityHelp" class="form-text text-muted">Enter the number of available products</small>
+		</div>
+		
+		<div class="form-group">
+		<label for="categories">Categories</label>
+		<div class="select is-multiple">
+			
+		  <select multiple size="${categories.size()}" name="categories" id="categories">
+		    <c:forEach items="${categories}" var="cat">
+		    <option value="${cat.getId()}" ${bean.getCategories().contains(cat) ? "selected" : ""}>${cat.getName()}</option>
+		    </c:forEach>
+		  </select>
+		</div>
 		</div>
 
 		<div class="form-check mb-3">

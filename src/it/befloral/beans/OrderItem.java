@@ -8,6 +8,7 @@ public class OrderItem {
 	private String name;
 	private String description;
 	private String shortDescription;
+	private int tax;
 	private double price;
 	private double weight;
 	private double discount;
@@ -65,6 +66,14 @@ public class OrderItem {
 
 	public void setShortDescription(String shortDescription) {
 		this.shortDescription = shortDescription;
+	}
+
+	public int getTax() {
+		return tax;
+	}
+
+	public void setTax(int tax) {
+		this.tax = tax;
 	}
 
 	public double getPrice() {

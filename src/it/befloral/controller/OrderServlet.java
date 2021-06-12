@@ -142,6 +142,7 @@ public class OrderServlet extends HttpServlet {
 			bean.setQuantity(prod.getQuantity());
 			bean.setShortDescription(prod.getProduct().getShortDescription());
 			bean.setWeight(prod.getProduct().getWeight());
+			bean.setTax(prod.getProduct().getTax());
 			order.addItem(bean);
 		}
 		OrderDAO dao = new OrderDAO();
