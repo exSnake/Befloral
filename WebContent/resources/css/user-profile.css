@@ -1,3 +1,4 @@
+
 .flex {
 	display:flex;
 	
@@ -96,3 +97,33 @@
     margin: 0 auto;
     color: white !important;
 }
+
+ 
+	 .avatarImag{
+		border-radius: 50% ;
+		width: 160px;	
+	}
+	.spaceA{
+		padding-right: 30px ;
+		font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+	}
+	
+	.space{
+		padding-right: 30px ;
+	}
+	
+@media only screen and (max-width: 620px) {
+	.space{
+		padding-right: 12px;
+		display: block;
+	}
+}
+
+.data{
+	background:  white;
+	 border: 6px solid black;
+  padding: 20px;
+  border-radius: 60px;
+}
+
+

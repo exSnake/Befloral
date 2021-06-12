@@ -11,12 +11,13 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 	<link href="<c:url value="/resources/css/layout.css"/>" rel="stylesheet" type="text/css">
 	<title>${pageTitle}</title>
-</head>
+</head> 
 
 <body>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script src="https://kit.fontawesome.com/442bbb4090.js" crossorigin="anonymous"></script>
 	<!-- Navbar -->
 	
 	<div id="navbar" class="main-bar">
@@ -86,13 +87,14 @@
 			<a href="#facebook"><i class="fa fa-facebook fa-2x"></i></a>
 			<a class="ml-2" href="#twitter"><i class="fa fa-twitter fa-2x"></i></a>
 			<a class="ml-2" href="#instagram"><i class="fa fa-instagram fa-2x"></i></a>
+			<a class="ml-2" href="<c:url value="/Team"/>"><i class="fas fa-terminal fa-2x"></i></a>
 		</div>
-		<div class=footer-fill>
+		<div class=footer-fill> 
 
 		</div>
-		<!-- Copyright -->
+		<!-- Copyright -->  
 		<div class="footer-right">
-			<a class="anchorBefloral" href="/befloral">@2021 Copyright: Leanelda Group</a>
+			<a class="anchorBefloral" href="/Home">@2021 Copyright: Leanelda Group</a>
 		</div>
 	</div>
 	<!-- Footer -->

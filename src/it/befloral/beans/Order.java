@@ -1,8 +1,10 @@
 package it.befloral.beans;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 
 public class Order {
 	private int id;
@@ -17,10 +19,20 @@ public class Order {
 	private User user;
 	private LocalDateTime createdAt;
 
+
+	
 	public LocalDateTime getCreatedAt() {
 		return createdAt;
 	}
+	
+	public Date getCreateDate() {
+		return Date.from(createdAt.atZone(ZoneId.systemDefault()).toInstant());
+	}
 
+	public String getTotalPaidString() {
+		return String.format("%.2f", totalPaid);
+	}
+	
 	public void setCreatedAt(LocalDateTime createdAt) {
 		this.createdAt = createdAt;
 	}
@@ -50,7 +62,8 @@ public class Order {
 	}
 
 	public String getDestination() {
-		return destination;
+		return destination.replace(",", "\n");
+
 	}
 
 	public void setDestination(String destination) {

@@ -14,6 +14,11 @@ public class OrderItem {
 	private int quantity;
 	private LocalDateTime createdAt;
 
+	
+	public String getPriceString() {
+		return String.format("%.2f", price);
+	}
+	
 	public LocalDateTime getCreatedAt() {
 		return createdAt;
 	}
@@ -80,6 +85,9 @@ public class OrderItem {
 
 	public double getDiscount() {
 		return discount;
+	}
+	public String getDiscountString() {
+		return String.format("%.0f", getDiscount())+"%";
 	}
 
 	public void setDiscount(double discount) {

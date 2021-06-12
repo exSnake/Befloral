@@ -49,13 +49,13 @@ public class CartProduct {
 	public int getId() {
 		return this.product.getId();
 	}
-
-	public String getTotalPriceToString() {
-		return String.format("%.2f", getTotalPrice());
+ 
+	public String getTotalPriceToString() {  
+		return String.format("%.0f", getTotalPrice())+"%";
 	}
 
 	public double getTotalPrice() {
-		return this.product.getPrice() * this.getQuantity();
+		return (double) this.product.getPrice() *this.getQuantity();
 	}
 
 }

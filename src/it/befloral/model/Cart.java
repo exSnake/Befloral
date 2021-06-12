@@ -49,7 +49,7 @@ public class Cart {
 	}
 
 	public double getTotalPrice() {
-		var sum = 0;
+		double sum = 0;
 		for (CartProduct prod : products) {
 			sum += prod.getTotalPrice();
 		}

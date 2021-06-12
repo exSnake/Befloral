@@ -55,14 +55,10 @@ public class UserServlet extends HttpServlet {
 		if(action == null || action.equals("viewOrders")) {
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/users/view.jsp");
 			dispatcher.forward(request, response);
-		} else if (action.equals("viewData")) {
+		}else if (action.equals("viewData")) {
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/users/myData.jsp");
 			dispatcher.forward(request, response);
-		} else if (action.equals("invoiceDownload")) {
-			//TODO
-
-		}else if (action.equals("invoiceView")) {
-			
+		}else if (action.equals("invoiceDownload")) {
 			try {
 				var orderId = (int) Integer.parseInt(request.getParameter("orderId"));
 				Order toShow=null;
@@ -76,6 +72,7 @@ public class UserServlet extends HttpServlet {
 				toShow = o.doRetriveByKey(toShow.getId());
 				
 				request.setAttribute("orderToShow", toShow);
+				request.setAttribute("pdf", true);
 				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/views/users/invoice.jsp");
 				dispatcher.forward(request, response);
 			}catch (NumberFormatException e ) {
@@ -84,7 +81,29 @@ public class UserServlet extends HttpServlet {
 			}catch (Exception e) {
 				e.printStackTrace();
 			}
-			
+		} else if (action.equals("invoiceView")) {
+			try {
+				var orderId = (int) Integer.parseInt(request.getParameter("orderId"));
+				Order toShow=null;
+				Collection<Order> list = (Collection<Order>) request.getSession().getAttribute("orders");
+				for (Order order : list) {if(order.getId()==orderId) {toShow=order;break; }}
+				if(toShow==null) {				
+					RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/users/view.jsp");
+					dispatcher.forward(request, response);
+				}
+				OrderDAO o = new OrderDAO();
+				toShow = o.doRetriveByKey(toShow.getId());
+				
+				request.setAttribute("orderToShow", toShow);
+				request.setAttribute("pdf", false);
+				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/views/users/invoice.jsp");
+				dispatcher.forward(request, response);
+			}catch (NumberFormatException e ) {
+				RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/users/view.jsp");
+				dispatcher.forward(request, response);
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
 		}else if (action.equals("viewAddresses")) {
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/users/addresses.jsp");
 			dispatcher.forward(request, response);
