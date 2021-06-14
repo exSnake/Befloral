@@ -3,6 +3,25 @@
 <link href="resources/css/product.css" rel="stylesheet" type="text/css">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <z:layout pageTitle="Products List">
+	<div class="field searchbar">
+	  <div class="control has-icons-left has-icons-right">
+	  	<div id="dropdownsearch" class="dropdown is-active">
+	  	  <div class="dropdown-trigger">
+	  	    <input id="search" name="search" class="input" type="text" placeholder="Search...">
+	  	    <span class="icon is-small is-left">
+		      <i class="fas fa-search"></i>
+		    </span>
+	  	  </div>
+	  	  <div id="dropdownmenu" class="dropdown-menu">
+	  	    
+	  	  </div>
+	  	</div>
+	  </div>
+	</div>
+	<c:if test="${products.size() == 0}">
+		<p class="">Nessun risultato trovato, prova a controllare l'ortografia finché non implementiamo il mismatch della De Bonis</p>
+	</c:if>
+		
 	<div class="product-list">
 		<c:forEach items="${products}" var="bean">
 			<div class="product-wrapper">
@@ -13,7 +32,7 @@
 			    <div class="product-bottom">
 			      <div class="product-left">
 			        <div class="product-details">
-			          <h1 class="title">${bean.getName()}</h1>
+			          <h1 class="title"><a href="<c:url value="/Products?action=view&id=${bean.getId()}"/>">${bean.getName()}</a></h1>
 			          <p class="subtitle">&euro; ${bean.getPrice()}</p>
 			        </div>
 			        <div id="productadd_${bean.getId()}" class="product-buy"><i class="material-icons">add_shopping_cart</i></div>
@@ -72,6 +91,45 @@
 	</div>
 	
 	<script>
+	$("#dropdownmenu").on("click", "a", function() {
+		$("#search").val(this.text);
+		$("#dropdownsearch").removeClass("is-active");
+	})
+
+	var _changeSearch = null;
+	$(document).ready(function(e) {
+		$("#search").on("keyup", function(){
+			clearInterval(_changeSearch);
+			
+			_changeSearch = setInterval(function() {
+				//Funzione richiamata quando si scrive in Search e
+				//abbiamo finito di scrivere (viene richiamata dopo x secondi, vedi intervallo setInterval)
+				//var suggestions = JSON.parse('[{"name": "Lorem"},{"name": "eu"},{"name": "non"},{"name": "ullamco"},{"name": "duis"},{"name": "consequat"},{"name": "enim"},{"name": "dolore"},{"name": "esse"},{"name": "Lorem"},{"name": "commodo"},{"name": "et"},{"name": "laboris"},{"name": "magna"},{"name": "labore"}]');
+				var textToSearch = $("#search").val();
+				if(textToSearch.length > 3) {
+					$.get("Api/Products", { action: "search", val: textToSearch }, function(data) {
+						$("#dropdownmenu").empty();
+						if(data.length > 0) {
+							data.forEach((e) => {
+								var myvar = '<div class="dropdown-content"><a class="dropdown-item" href="Products?action=search&searchVal='+ e.name + '">' + e.name + '</a></div>';
+								$("#dropdownmenu").append(myvar);
+							})
+							$("#dropdownsearch").addClass("is-active");
+						}
+					})
+				}
+		        clearInterval(_changeSearch)
+		    }, 1000);
+		});
+		
+		$("#search").on('keypress',function(e) {
+		    if(e.which == 13) {
+		    	location.href = 'Products?action=search&searchVal=' + $("#search").val()
+		    }
+		});
+	})
+	
+	
 	
 	
 	$(".product-buy").on("click", function() {

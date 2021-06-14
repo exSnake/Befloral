@@ -46,7 +46,7 @@
 		<div class="form-group mt-2">
 			<label for="birthdayview">Birthday</label>
 			<input type="text" class="form-control input" name="birthdayview" id="birthdayview" aria-describedby="nameHelp"	placeholder="Enter Your Birthday" required>
-			<input id="birthday" type="hidden"/>
+			<input id="birthday" name="birthday" type="hidden"/>
 			<p class="help is-danger is-hidden">Insert a Valid Birthday (You must have at least 14 years)</p>
 		</div>
 
@@ -95,6 +95,7 @@
 			}
 			var res = checkIfEmailExists($("#email").val());
 			if(res.responseJSON.message == "taken"){
+				error = true;
 				$("#notification").removeClass("is-hidden");
 				$("#notification-text").empty()
 				$("#notification-text").text("Account already exists for this email");

@@ -271,4 +271,53 @@ public class ProductDAO implements GenericDAO<Product> {
 		return (result != 0);
 	}
 
+	public synchronized Collection<Product> doSearchByName(String value) throws SQLException{
+		Collection<Product> products = new LinkedList<>();
+		String selectSQL = "SELECT s.*, c.name AS cname, c.id AS cid, c.description AS cdescription ,c.metaKeywords AS cmetaKeywords"
+				+ "	 FROM ( " + TABLE_NAME +  " AS s  LEFT JOIN categories_products cp ON cp.pid=s.id )"
+				+ "		 LEFT JOIN categories c ON cp.cid=c.id WHERE s.name LIKE ? OR c.name LIKE ? ORDER BY name";
+
+		try(var connection = ds.getConnection()) {
+			try (var preparedStatement = connection.prepareStatement(selectSQL)) {
+				preparedStatement.setString(1, "%"+value+"%");
+				preparedStatement.setString(2, "%"+value+"%");
+				LOGGER.debug(preparedStatement);
+				ResultSet rs = preparedStatement.executeQuery();
+				if (!rs.next())
+					return products;	
+				do {
+					Product bean = new Product();
+					bean.setId(rs.getInt("id"));
+					bean.setName(rs.getString("name"));
+					bean.setDescription(rs.getString("description"));
+					bean.setShortDescription(rs.getString("shortDescription"));
+					bean.setMetaDescription(rs.getString("metaDescription"));
+					bean.setMetaKeyword(rs.getString("metaKeyword"));
+					bean.setTax(rs.getInt("tax"));
+					bean.setPrice(rs.getDouble("price"));
+					bean.setWeight(rs.getDouble("weight"));
+					bean.setAvailable(rs.getBoolean("available"));
+					bean.setDiscount(rs.getDouble("discount"));
+					bean.setOnSale(rs.getInt("onSale"));
+					bean.setQuantity(rs.getInt("quantity"));
+					if (rs.getString("cname") != null) {
+						do {
+							Category c = new Category();
+							c.setId(rs.getInt("cid"));
+							c.setName("cname");
+							c.setDescription(rs.getString("cdescription"));
+							c.setMetaKeywords(rs.getString("cmetaKeywords"));
+							bean.addCategory(c);
+						} while (rs.next() && rs.getInt("id") == bean.getId());
+					}
+					else {
+						rs.next();
+					}
+					products.add(bean);				
+				} while (!rs.isAfterLast());
+			}
+		}
+		return products;
+	}
+
 }

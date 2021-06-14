@@ -220,9 +220,13 @@ textarea {
     color: #6c757d!important;
 }
 
+.searchbar {
+	padding: 0px 25px;
+}
+
+/*
 .control {
     width: 100%;
-    padding: 0.4em 0.7em;
     line-height: 1.5;
     color: #212529;
     background-color: #FFF;
@@ -231,7 +235,7 @@ textarea {
     border-radius: 0.35em;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15 ease-in-out;
     box-sizing: border-box;
-}
+}*/
 
 .bordered {
     margin-left: 0;

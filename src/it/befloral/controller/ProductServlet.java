@@ -18,7 +18,6 @@ import it.befloral.beans.ResponseStatusMessage;
 import it.befloral.beans.Product;
 import it.befloral.beans.Review;
 import it.befloral.beans.User;
-import it.befloral.model.GenericDAO;
 import it.befloral.model.ProductDAO;
 import it.befloral.model.ReviewDAO;
 
@@ -28,7 +27,7 @@ import it.befloral.model.ReviewDAO;
 @WebServlet("/Products")
 public class ProductServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	static GenericDAO<Product> model = new ProductDAO();
+	static ProductDAO model = new ProductDAO();
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -44,10 +43,18 @@ public class ProductServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {	
 		request.setAttribute("active", "Products");
+		if(request.getParameter("active") != null) {
+			request.setAttribute("active", request.getParameter("active"));
+		}
 		var action = request.getParameter("action");
 		if (action != null) {
 			if (action.equals("view")) {
 				doView(request, response);
+				return;
+			}
+			if (action.equals("search")) {
+				doSearch(request, response);
+				return;
 			}
 		} else {
 			index(request, response);
@@ -63,6 +70,27 @@ public class ProductServlet extends HttpServlet {
 		Collection<Product> products;
 		try {
 			products = model.doRetrieveAll(sort);
+			for (Product p : products) {
+				p.setImagePath(new File(realPath + p.getId() + ".jpg").exists() ? imageRoot + p.getId() + ".jpg"
+						: imageRoot + "error.png");
+			}
+			request.setAttribute("products", products);
+			RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/views/products/index.jsp");
+			dispatcher.forward(request, response);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			response.sendError(500);
+		}		
+	}
+	
+	private void doSearch(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.removeAttribute("products");
+		String searchVal = request.getParameter("searchVal");
+		var imageRoot = getServletContext().getContextPath() + "/resources/images/products/";
+		var realPath = getServletContext().getRealPath("/resources/images/products/");
+		Collection<Product> products;
+		try {
+			products = model.doSearchByName(searchVal);
 			for (Product p : products) {
 				p.setImagePath(new File(realPath + p.getId() + ".jpg").exists() ? imageRoot + p.getId() + ".jpg"
 						: imageRoot + "error.png");
