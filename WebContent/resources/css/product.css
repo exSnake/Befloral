@@ -208,6 +208,10 @@ html, body {
   font-size: 13px;
 }
 
+.tit {
+	font-size: 1.95rem !important ;
+}
+
 .material-icons {
 	font-family: 'Material Icons';
     font-weight: normal;

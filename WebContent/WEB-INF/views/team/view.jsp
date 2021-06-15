@@ -22,8 +22,8 @@
 				<div class="col">
                         <div class="col-md-4 col-sm-4">
                             <div class="team-member">
-                                <div class="team-img">
-                                    <img src="https://i.pinimg.com/originals/f5/35/fc/f535fcb021cd231ab658ba6d7cb94d6e.jpg" alt="team member" class="img-responsive">
+                                <div class="team-img"> 
+                                    <img src="${pageContext.request.contextPath}/resources/images/team/ilCapo.jpg" alt="team member" class="img-responsive img-team">
                                 </div>
                                 <div class="team-hover">
                                     <div class="desk">
@@ -47,8 +47,8 @@
                         <div class="col-md-4 col-sm-4">
                             <div class="team-member">
                                 <div class="team-img">
-                                    <img src="https://granatacento.com/wp-content/uploads/2020/03/vikingo.jpg" alt="team member" class="img-responsive">
-                                </div>
+                                    <img src="${pageContext.request.contextPath}/resources/images/team/monacoUSA.jpg" alt="team member" class="img-responsive img-team">
+                                </div> 
                                 <div class="team-hover">
                                     <div class="desk">
                                         <h4>Hello!</h4>
@@ -71,7 +71,7 @@
                         <div class="col-md-4 col-sm-4">
                             <div class="team-member">
                                 <div class="team-img">
-                                    <img src="https://www.adnkronos.com/resources/0226-111cf36130d5-0d494cadc930-1000/vin_diesel_grasso_fb.jpg" alt="team member" class="img-responsive">
+                                    <img src="${pageContext.request.contextPath}/resources/images/team/aniello.jpg" alt="team member" class="img-responsive img-team">
                                 </div>
                                 <div class="team-hover">
                                     <div class="desk">
@@ -94,7 +94,7 @@
                         <div class="col-md-4 col-sm-4">
                             <div class="team-member">
                                 <div class="team-img">
-                                    <img src="https://images-na.ssl-images-amazon.com/images/I/41esJXFMCaL._AC_SX466_.jpg" alt="team member" class="img-responsive">
+                                    <img src="${pageContext.request.contextPath}/resources/images/team/mazza.jpg" alt="team member" class="img-responsive img-team">
                                 </div>
                                 <div class="team-hover">
                                     <div class="desk">

@@ -1,21 +1,35 @@
 <%@taglib prefix="z" tagdir="/WEB-INF/tags"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <z:layout pageTitle="Product View">
+
 <link href="<c:url value="/resources/css/product-view.css"/>" rel="stylesheet" type="text/css">
+<script src="https://cdn.jsdelivr.net/npm/smooth-zoom@latest/dist/zoom.browser.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/script/okZoom.js"></script>
+
+
+
+<!-- <script src="node_modules/smooth-zoom/dist/zoom.browser.js"></script> 	 -->
+ 
 	<!-- Page to view details of a product -->
 	<div id="notification" class="notification is-hidden"><button class="delete" onclick="closeNotification()">X</button><span id="notification-text">Test</span></div>
 	<div class="products">
 		<div class="product">
 			<div class="left">
 				<div class="images-small">
-					<img src="https://source.unsplash.com/100x100/?sig=${prod.getId() + 0}&flower,${prod.getName().replace(' ', '+')}">
-					<img src="https://source.unsplash.com/100x100/?sig=${prod.getId() + 1}&flower,${prod.getName().replace(' ', '+')}">
-					<img src="https://source.unsplash.com/100x100/?sig=${prod.getId() + 2}&flower,${prod.getName().replace(' ', '+')}">
-					<img src="https://source.unsplash.com/100x100/?sig=${prod.getId() + 3}&flower,${prod.getName().replace(' ', '+')}">
-					<img src="https://source.unsplash.com/100x100/?sig=${prod.getId() + 4}&flower,${prod.getName().replace(' ', '+')}">
-				</div>
+					<c:forEach var = "i" begin = "1" end = "5" step="1" >
+						<figure class="image is-square is-96x96 border-img">
+							<img id="pic-${i}>" src="https://source.unsplash.com/1152x1152/?sig=${prod.getId() + i}&flower,${prod.getName().replace(' ', '+')}"
+							   onclick="onClick(document.getElementById('big-img').src=this.src) " 
+							   onmouseover="onHover(document.getElementById('big-img').src=this.src)"
+							>
+						 </figure> 
+					</c:forEach> 
+
+					
+				</div> 
 				<div class="images-big">
-					<img src="https://source.unsplash.com/600x600/?sig=${prod.getId()}&flower,${prod.getName().replace(' ', '+')}">
+					<img id="big-img" src="https://source.unsplash.com/1152x1152/?sig=${prod.getId()}&flower,${prod.getName().replace(' ', '+')}">
 				</div>
 			</div>
 			<div class="right">
@@ -162,5 +176,33 @@
 			});
 
 		});
+		///aaaaaaaaaaaaaaaaaaaaaaaaaa
+
+		/*
+		Zoom(".images-big", {
+	    originalizer: (src) => src.replace(/-[0-9]+\.jpg/, ".jpg"),
+	    background: "auto",
+		});	
+		*/
+		$(document).ready(function(){
+			$('#big-img').okzoom({
+				  width: 250,  
+				  height: 250,  
+				  round: true,
+				  background: "#fff",
+				  //backgroundRepeat: "repeat",
+				  shadow: "0 0 5px #000",
+				  border: "1px solid black"
+				});			
+		})
+		  
+ 		function onHover(id) { 
+			var imgBig = document.getElementById("big-img").getAttribute('src');
+			imgBig.src = "https://www.pcprofessionale.it/wp-content/uploads/2018/12/Colori-negativi.jpg";
+		}
+		    
+			  
+		
+		
 	</script>
 </z:layout>

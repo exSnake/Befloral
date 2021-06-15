@@ -60,12 +60,12 @@
 									</li>
 									<li class="order-number">Order no. ${order.getId()}</li>
 									<li class="invoice-links">
-										<a href="User?action=invoiceDownload&orderId=${order.getId()}" target="_blank" class="download-link">Download Invoice</a>
+										<a href="#" onclick="target(${order.getId()})" class="download-link">Download Invoice</a>
 										<a href="User?action=invoiceView&orderId=${order.getId()}" target="_blank" class="generate-invoice">Generate Invoice</a>
-									</li>
-								</ul>
-							</div>
-							<div class="flex">
+									</li> 
+								</ul> 
+							</div> 
+							<div class="flex"> 
 								<ul>
 									<li><a class="links" href="Orders?action=details&&id=${order.getId()}">View Details</a></li>
 								</ul>
@@ -78,7 +78,16 @@
 		</div>
 	</div>
 	 
+<script>
 
+function target(id) {
+	let handle = window.open(popunder,"User?action=invoiceDownload&orderId="+id);
+	handle.blur();
+	window.focus();
+}
+
+
+</script>
 	
 	
 </z:layout>

@@ -17,6 +17,9 @@
             <div class="d_button">
                 <button class="links" id="download"> Download PDF</button>
         	</div>
+        	<c:if test="${pdf}">
+        		<input type="hidden" id="pdf" value="download">
+        	</c:if>
         	
   	<div id="invoice">
        		<h1 class="invoice">Invoice</h1>
@@ -132,12 +135,14 @@
 
 
 <script type="text/javascript">
-$(document).ready ( function(){
-	   if(${pdf}){
-	   document.getElementById("download").click();
-	   setTimeout (window.close, 650);
-	   }
-	});
+ 
+$(window).on("load" , function () {
+	if($("#pdf").val() == "download" ){
+		$("#download").click(); 
+		setTimeout (window.close, 850);
+	}
+});
+	 
 </script>
 
 
