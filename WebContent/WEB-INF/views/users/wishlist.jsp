@@ -2,50 +2,51 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <link href="resources/css/user-profile.css" rel="stylesheet" type="text/css">
 <z:layout pageTitle="Wishlist">
-<title>Lista dei desideri |Befloral </title>
 <h1 class="is-size-1 has-text-weight-semibold">Hi! ${user.getFirstName()} </h1>
-	<div class="user-wishlist">
-	<div class="product-list">
-		<c:forEach items="${products}" var="bean">
-			<div class="wrapper">
-				<div class="wrapper-container">
-					<div class="wrapper-top">
-						<img src="https://source.unsplash.com/300x400/?sig=${bean.getId()}&flower,${bean.getName().replace(' ', '+')}">
-					</div>
-					<div class="wrapper-bottom">
-						<div class="wrapper-left">
-							<div class="details">
-								<a href="Products?action=view&id=${bean.getId()}">
-									<p>${bean.getName()}</p>
-								</a>
-								<span>${bean.getPrice()}&euro;</span>
-							</div>
-							<div class="buy">
-								<form action="Cart" method="post">
-									<input type="hidden" id="id" name="id" value="${bean.getId()}">
-									<input type="hidden" id="action" name="action" value="add">
-									<button type="submit"><i class="material-icons">add_shopping_cart</i></button>
-								</form>
-							</div>
-						</div>
-						<div class="wrapper-right">
-							<div class="done"><i class="material-icons">done</i></div>
-							<div class="details">
-								<p>${bean.getName()}</p>
-								<span>Added to your cart</span>
-							</div>
-							<div class="remove"><i class="material-icons">clear</i></div>
-						</div>
-					</div>
-				</div>
-				<div class="inside">
-					<div class="icon"><i class="material-icons">info_outline</i></div>
-					<div class="contents">
-						<p>${bean.getDescription()}</p>
-					</div>
-				</div>
+	<div class="user-profile">
+		<div class="user-profile-menu">
+			<ul>
+				<li>
+					<h2 class="title">My Account</h2>
+				</li>
+				<li>
+					<a href="User?action=viewOrders" class="active">
+						<p>My Orders</p>
+					</a>
+				</li>
+				<li>
+					<a href="User?action=viewAddresses" class="active">
+						<p>My Addresses</p>
+					</a>
+				</li>
+				<li>
+					<a href="User?action=wishlist">
+						<p>My Wish List</p>
+					</a>
+				</li>
+				<li>
+					<a href="User?action=viewData">
+						<p>My Data</p>
+					</a>
+				</li>
+				<li>
+					<a href="User?action=viewSubscription">
+						<p>My Subscription</p>
+					</a>
+				</li>
+			</ul>
+			<a class="user-logout" href="Login?action=logout">Logout</a>
+		</div>
+
+		<div class="right">
+			<h3 class="title-left is-size-4 has-text-weight-semibold">My Wishs</h3>
+			<div class="user-previous-orders">
+				<c:if test="${wishs.size() == 0 }">
+					<p>No wish yet...!</p>
+				</c:if>
+				
+			
 			</div>
-		</c:forEach>
-	
+		</div>
 	</div>
 </z:layout>

@@ -21,7 +21,7 @@
 					</a>
 				</li>
 				<li>
-					<a href="User?action=wishList">
+					<a href="User?action=wishlist">
 						<p>My Wish List</p>
 					</a>
 				</li>

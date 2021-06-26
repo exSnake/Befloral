@@ -4,6 +4,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.LinkedList;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import it.befloral.beans.Product;
@@ -13,7 +17,15 @@ import it.befloral.beans.Wish;
 public class WishDAO implements GenericDAO<Wish> {
 	private static DataSource ds;
 	private static final String TABLE_NAME = "wishs";
-
+	static {
+		try {
+			Context initCtx = new InitialContext();
+			Context envCtx = (Context) initCtx.lookup("java:comp/env");
+			ds = (DataSource) envCtx.lookup("jdbc/befloral");
+		} catch (NamingException e) {
+			System.out.println("Error:" + e.getMessage());
+		}
+	}
 	@Override
 	public Collection<Wish> doRetrieveAll(String order) throws SQLException {
 		Collection<Wish> wishs = new LinkedList<>();
@@ -38,7 +50,7 @@ public class WishDAO implements GenericDAO<Wish> {
 					product.setDiscount(rs.getDouble("discount"));
 					product.setOnSale(rs.getInt("onSale"));
 					product.setQuantity(rs.getInt("quantity"));
-					rw.setProd(product);
+					rw.setPid(product.getId());
 					rw.setPrice(rs.getDouble("wprice"));
 					wishs.add(rw);
 				}
@@ -59,7 +71,7 @@ public class WishDAO implements GenericDAO<Wish> {
 					var rw = new Wish();
 					rw.setId(rs.getInt("id"));
 					rw.setUid(rs.getInt("uid"));
-					rw.setProd(prod);
+					rw.setPid(prod.getId());
 					rw.setPrice(rs.getDouble("price"));
 					wishs.add(rw);
 				}
@@ -68,7 +80,7 @@ public class WishDAO implements GenericDAO<Wish> {
 		return wishs;
 	}
 // join e inserire product rinominare le tabelle Servlet WishList e jsp
-	public Collection<Wish> doRetrieveByUser(String order, User user) throws SQLException {
+	public Collection<Wish> doRetrieveByUser( User user) throws SQLException {
 		Collection<Wish> wishs = new LinkedList<>();
 		var sql = "SELECT w.id as wid, w.uid,w.pid, w.price as wprice FROM " + TABLE_NAME +"w LEFT JOIN products p ON p.id=w.pid"+ " WHERE w.uid = ? ORDER BY " + order;
 		var product = new Product();
@@ -91,7 +103,7 @@ public class WishDAO implements GenericDAO<Wish> {
 					product.setDiscount(rs.getDouble("discount"));
 					product.setOnSale(rs.getInt("onSale"));
 					product.setQuantity(rs.getInt("quantity"));
-					rw.setProd(product);
+					rw.setPid(product.getId());
 					rw.setPrice(rs.getDouble("price"));
 					rw.setUid(rs.getInt("uid"));
 					wishs.add(rw);
@@ -126,7 +138,7 @@ public class WishDAO implements GenericDAO<Wish> {
 					product.setDiscount(rs.getDouble("discount"));
 					product.setOnSale(rs.getInt("onSale"));
 					product.setQuantity(rs.getInt("quantity"));
-					rw.setProd(product);
+					rw.setPid(product.getId());
 					rw.setUid(rs.getInt("uid"));
 					rw.setPrice(rs.getDouble("price"));
 				}
@@ -137,12 +149,12 @@ public class WishDAO implements GenericDAO<Wish> {
 
 	@Override
 	public void doSave(Wish dao) throws SQLException {
-		var sql = "INSERT INTO " + TABLE_NAME + " (`pid`, `uid`, `price`) VALUES (?, ?, ?)";
+		var sql = "INSERT INTO " + TABLE_NAME + " (`id`,`pid`, `uid`, `price`) VALUES (?, ?, ?, ?)";
 		try (var conn = ds.getConnection()) {
 			try (var stmt = conn.prepareStatement(sql)) {
 				stmt.setInt(1, dao.getId());
 				stmt.setInt(2, dao.getUid());
-				stmt.setInt(3, dao.getProd().getId());
+				stmt.setInt(3, dao.getPid());
 				stmt.setDouble(4, dao.getPrice());
 				stmt.executeUpdate();
 			}

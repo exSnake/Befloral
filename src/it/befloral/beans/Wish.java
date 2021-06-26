@@ -5,7 +5,7 @@ public class Wish {
 	
 	private int id;
 	private int uid;
-	private Product prod;
+	private int pid;
 	private double price;
 	
 	public int getId() {
@@ -24,12 +24,12 @@ public class Wish {
 		this.uid = uid;
 	}
 
-	public Product getProd() {
-		return prod;
+	public int getPid() {
+		return pid;
 	}
 
-	public void setProd(Product prod) {
-		this.prod = prod;
+	public void setPid(int pid) {
+		this.pid = pid;
 	}
 
 	public double getPrice() {

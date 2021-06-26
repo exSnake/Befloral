@@ -29,10 +29,18 @@
 				<div class="product-action mt-4">
 					<form action="Cart" method="post">
 						<input type="hidden" name="action" value="add">
-						<input type="hidden" name="id" value="${bean.getId()}">
+						<input type="hidden" name="id" value="${prod.getId()}">
 						<button type="submit" class="btn btn-success" style="width:100%">Add to cart</button>
 					</form>
 					<button class="button is-primary mt-2" onclick="openModal()">Review</button>
+					<div class="wishs">
+				<form action="Products" method="post">
+						<input type="hidden" name="action" value="addWishlist">
+						<input type="hidden" name="pid" value="${prod.getId()}">
+						<input type="hidden" name="price" value="${prod.getPrice()}">
+						<button type="submit" class="btn btn-success" style="width:100%">Add to Wishlist</button>
+				</form>
+				</div>
 				</div>
 			</div>
 		</div>

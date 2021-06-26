@@ -15,9 +15,11 @@ import javax.servlet.http.HttpServletResponse;
 import it.befloral.beans.Product;
 import it.befloral.beans.Review;
 import it.befloral.beans.User;
+import it.befloral.beans.Wish;
 import it.befloral.model.GenericDAO;
 import it.befloral.model.ProductDAO;
 import it.befloral.model.ReviewDAO;
+import it.befloral.model.WishDAO;
 
 /**
  * Servlet implementation class ProductServlet
@@ -92,13 +94,37 @@ public class ProductServlet extends HttpServlet {
 	 *      response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		var pid = request.getParameter("id") == null ? 0 : Integer.parseInt(request.getParameter("id"));
 		var action = request.getParameter("action");
 		if(action.equals("review")) {
+			var pid = request.getParameter("id") == null ? 0 : Integer.parseInt(request.getParameter("id"));
 			if(request.getSession().getAttribute("user") == null)
 				response.sendRedirect(getServletContext().getContextPath() + "/Login");
 			else
 				doReview(request, response);
+		} else if (action.equals("addWishlist") ) {
+			if (request.getSession().getAttribute("user") == null) {
+				response.sendRedirect(getServletContext().getContextPath()+ "/Login");
+			} else {
+				doAddWishlist(request,response);
+				response.sendRedirect(getServletContext().getContextPath() + "/User?action=wishlist");
+				return;
+			}
+		}
+	}
+
+	private void doAddWishlist(HttpServletRequest request, HttpServletResponse response) {
+		User user = (User) request.getSession().getAttribute("user");
+		Wish wish= new Wish();
+		WishDAO wishDAO = new WishDAO();
+		wish.setPid(Integer.parseInt(request.getParameter("pid")));
+		wish.setPrice(Double.parseDouble(request.getParameter("price")));
+		wish.setUid(user.getId());
+		try {
+			wishDAO.doSave(wish);
+			request.getSession().setAttribute("wishs", wishDAO.doRetrieveByProduct(, null));
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
